@@ -1,0 +1,242 @@
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 > #backgroundBox {
+  background-color: transparent;
+  background-image: none;
+  position: absolute;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 > #alignmentBox {
+  position: relative;
+  margin: 0 auto;
+  width: 1024px;
+  min-width: 1024px;
+  min-height: 768px;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Image_1 {
+  position: absolute;
+  top: -1px;
+  left: 0px;
+  width: 1024px;
+  height: 768px;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  transform: rotate(0deg);
+  box-shadow: none;
+  cursor: pointer;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Callout_1 .shapert-clipping {
+  left: 0px;
+  top: 0px;
+  width: 132px;
+  height: 216px;
+  position: absolute;
+  overflow: hidden;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Callout_1 .content {
+  width: 132px;
+  height: 216px;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Callout_1 {
+  position: absolute;
+  top: 526px;
+  left: 780px;
+  width: 132px;
+  height: 288px;
+  background-color: #FFFFFF;
+  background-image: none;
+  border-top-width: 2px;
+  border-top-style: solid;
+  border-top-color: #404040;
+  border-right-width: 2px;
+  border-right-style: solid;
+  border-right-color: #404040;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: #404040;
+  border-left-width: 2px;
+  border-left-style: solid;
+  border-left-color: #404040;
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  transform: rotate(270deg);
+  box-shadow: none;
+  text-shadow: none;
+  line-height: 18px;
+  font-size: 10.0pt;
+  font-family: 'Arial',Arial;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #shapewrapper-s-Callout_1 .valign {
+  vertical-align: middle;
+  text-align: center;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #shapewrapper-s-Callout_1 span {
+  color: #333333;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Arial',Arial;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-weight: 400;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #shapewrapper-s-Callout_1 span#rtr-s-Callout_1_0 {
+  color: #333333;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Arial',Arial;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0px;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Category_1 span {
+  color: #000000;
+  text-align: left;
+  text-decoration: none;
+  font-family: 'Arial',Arial;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-weight: 400;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Category_1 {
+  position: absolute;
+  top: 609px;
+  left: 707px;
+  padding-left: 5px;
+  width: 197px;
+  height: 124px;
+  background-color: #FFFFFF;
+  background-image: none;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #DDDDDD;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: #DDDDDD;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #DDDDDD;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: #DDDDDD;
+  box-shadow: none;
+  text-shadow: none;
+  text-align: left;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Button_2 {
+  position: absolute;
+  top: 655px;
+  left: 932px;
+  width: 76px;
+  height: 23px;
+  background-color: transparent;
+  background-image: none;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #CDCDCD;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: #CDCDCD;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #CDCDCD;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: #CDCDCD;
+  border-radius: 4px 4px 4px 4px;
+  padding-top: 2px;
+  padding-right: 2px;
+  padding-bottom: 2px;
+  padding-left: 2px;
+  opacity: 0.5;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  transform: rotate(0deg);
+  box-shadow: none;
+  text-shadow: none;
+  cursor: pointer;
+  font-size: 10.0pt;
+  font-family: 'Arial',Arial;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Button_2 .valign {
+  vertical-align: middle;
+  text-align: center;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Button_2 span {
+  color: #EFEFEF;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Arial',Arial;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-weight: 400;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Button_2 span#rtr-s-Button_2_0 {
+  color: #EFEFEF;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Arial',Arial;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0px;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Button_3 {
+  position: absolute;
+  top: 670px;
+  left: 16px;
+  width: 62px;
+  height: 23px;
+  background-color: transparent;
+  background-image: none;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #CDCDCD;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: #CDCDCD;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #CDCDCD;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: #CDCDCD;
+  border-radius: 4px 4px 4px 4px;
+  padding-top: 2px;
+  padding-right: 2px;
+  padding-bottom: 2px;
+  padding-left: 2px;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  transform: rotate(0deg);
+  box-shadow: none;
+  text-shadow: none;
+  cursor: pointer;
+  font-size: 10.0pt;
+  font-family: 'Arial',Arial;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Button_3 .valign {
+  vertical-align: middle;
+  text-align: center;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Button_3 span {
+  color: #FFFFFF;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Arial',Arial;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-weight: 400;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 #s-Button_3 span#rtr-s-Button_3_0 {
+  color: #FFFFFF;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Arial',Arial;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0px;
+}
+#s-2cc5f335-0af7-488a-b55e-0a5c60cae180 > #loadMark {
+  width: 1px;
+  visibility: hidden;
+  display: none;
+}
