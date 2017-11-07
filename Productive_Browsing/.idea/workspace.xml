@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1aac047-8bcc-4e52-a169-27f66dd4287c" name="Default" comment="Fake Firebase added (Does no mentionable work, still works)">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/connect_firebase.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/stylesheets/style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/views/index.ejs" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Project Idea Presentation/Productive-Browsing.pptx" afterPath="$PROJECT_DIR$/../Project Idea Presentation/Productive-Browsing.pptx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.gitignore" afterPath="$PROJECT_DIR$/../.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/extension_home.js" afterPath="$PROJECT_DIR$/routes/extension_home.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Project Prototype/Prototype HTML/debug.log" afterPath="$PROJECT_DIR$/../Project Prototype/Prototype HTML/debug.log" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -70,8 +59,8 @@
       <file leaf-file-name="extension_home.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/extension_home.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="7" lean-forward="false" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+            <state relative-caret-position="289">
+              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -230,7 +219,7 @@
       <option name="presentableId" value="Default" />
       <updated>1510050235286</updated>
       <workItem from="1510050259410" duration="174000" />
-      <workItem from="1510057906680" duration="14283000" />
+      <workItem from="1510057906680" duration="14381000" />
     </task>
     <task id="LOCAL-00001" summary="The work that was already done in the express framework">
       <created>1510071411317</created>
@@ -239,11 +228,18 @@
       <option name="project" value="LOCAL" />
       <updated>1510071411317</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fake Firebase added (Does no mentionable work, still works)">
+      <created>1510090038824</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1510090038824</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14457000" />
+    <option name="totallyTimeSpent" value="14555000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
@@ -375,8 +371,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/extension_home.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="7" lean-forward="false" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+        <state relative-caret-position="289">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding />
         </state>
       </provider>
