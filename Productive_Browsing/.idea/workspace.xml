@@ -1,95 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c1aac047-8bcc-4e52-a169-27f66dd4287c" name="Default" comment="The work that was already done in the express framework">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/extension_home_js.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/extension_home_css.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/routes/extension_home.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/extension_home.ejs" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/.idea/ProductiveBrowsing.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/.idea/workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/.idea/workspace.xml___jb_tmp___" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/FrontEnd/background.jpeg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/FrontEnd/extension.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/FrontEnd/extension_css.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/FrontEnd/extension_js.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/connect/HISTORY.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/connect/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/connect/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/connect/SECURITY.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/connect/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/connect/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/.coveralls.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/.eslintrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/.travis.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/CHANGELOG.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/Makefile" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/component.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/karma.conf.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/node.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/src/browser.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/src/debug.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/src/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/src/inspector-log.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/debug/src/node.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/ee-first/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/ee-first/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/ee-first/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/ee-first/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/encodeurl/HISTORY.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/encodeurl/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/encodeurl/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/encodeurl/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/encodeurl/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/escape-html/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/escape-html/Readme.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/escape-html/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/escape-html/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/finalhandler/HISTORY.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/finalhandler/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/finalhandler/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/finalhandler/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/finalhandler/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/ms/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/ms/license.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/ms/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/ms/readme.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/on-finished/HISTORY.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/on-finished/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/on-finished/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/on-finished/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/on-finished/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/parseurl/HISTORY.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/parseurl/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/parseurl/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/parseurl/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/parseurl/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/statuses/HISTORY.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/statuses/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/statuses/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/statuses/codes.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/statuses/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/statuses/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/unpipe/HISTORY.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/unpipe/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/unpipe/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/unpipe/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/unpipe/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/utils-merge/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/utils-merge/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/utils-merge/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/utils-merge/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ProductiveBrowsing/node_modules/utils-merge/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/routes/users.js" afterPath="" />
+    <list default="true" id="c1aac047-8bcc-4e52-a169-27f66dd4287c" name="Default" comment="Fake Firebase added (Does no mentionable work, still works)">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/connect_firebase.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/stylesheets/style.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/index.ejs" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Project Idea Presentation/Productive-Browsing.pptx" afterPath="$PROJECT_DIR$/../Project Idea Presentation/Productive-Browsing.pptx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.gitignore" afterPath="$PROJECT_DIR$/../.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/error.ejs" afterPath="$PROJECT_DIR$/views/error.ejs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/extension_home.js" afterPath="$PROJECT_DIR$/routes/extension_home.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Project Prototype/Prototype HTML/debug.log" afterPath="$PROJECT_DIR$/../Project Prototype/Prototype HTML/debug.log" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -106,18 +30,18 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="23" column="27" lean-forward="false" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
+            <state relative-caret-position="204">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <file leaf-file-name="connect_firebase.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/connect_firebase.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <caret line="9" column="23" lean-forward="true" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -126,8 +50,8 @@
       <file leaf-file-name="extension_home.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/extension_home.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+            <state relative-caret-position="187">
+              <caret line="11" column="36" lean-forward="false" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -136,18 +60,8 @@
       <file leaf-file-name="extension_home_js.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/javascripts/extension_home_js.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
-              <caret line="52" column="50" lean-forward="false" selection-start-line="52" selection-start-column="50" selection-end-line="52" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/index.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state relative-caret-position="136">
+              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -156,8 +70,8 @@
       <file leaf-file-name="extension_home.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/extension_home.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="35" lean-forward="false" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="35" />
+            <state relative-caret-position="136">
+              <caret line="8" column="7" lean-forward="false" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -173,6 +87,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>server</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -181,11 +100,12 @@
       <list>
         <option value="$PROJECT_DIR$/views/error.ejs" />
         <option value="$PROJECT_DIR$/public/stylesheets/extension_home.css" />
-        <option value="$PROJECT_DIR$/routes/extension_home.js" />
         <option value="$PROJECT_DIR$/views/index.ejs" />
-        <option value="$PROJECT_DIR$/views/extension_home.ejs" />
         <option value="$PROJECT_DIR$/public/javascripts/extension_home_js.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/server/connect_firebase.js" />
+        <option value="$PROJECT_DIR$/views/extension_home.ejs" />
+        <option value="$PROJECT_DIR$/routes/extension_home.js" />
       </list>
     </option>
   </component>
@@ -248,13 +168,12 @@
             <path>
               <item name="Productive_Browsing" type="b2602c69:ProjectViewProjectNode" />
               <item name="Productive_Browsing" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="stylesheets" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Productive_Browsing" type="b2602c69:ProjectViewProjectNode" />
               <item name="Productive_Browsing" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Productive_Browsing" type="b2602c69:ProjectViewProjectNode" />
@@ -277,6 +196,12 @@
     <property name="javascript.nodejs.core.library.configured.version" value="8.9.0" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\BUET\CSE\L3T2\CSE 324\Productive-Browsing\Productive_Browsing\public\javascripts" />
+      <recent name="F:\BUET\CSE\L3T2\CSE 324\Productive-Browsing\Productive_Browsing\server" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -305,34 +230,42 @@
       <option name="presentableId" value="Default" />
       <updated>1510050235286</updated>
       <workItem from="1510050259410" duration="174000" />
-      <workItem from="1510057906680" duration="6816000" />
+      <workItem from="1510057906680" duration="14283000" />
     </task>
+    <task id="LOCAL-00001" summary="The work that was already done in the express framework">
+      <created>1510071411317</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1510071411317</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6990000" />
+    <option name="totallyTimeSpent" value="14457000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24963397" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2532943" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24597365" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39940387" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -344,7 +277,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="The work that was already done in the express framework" />
-    <option name="LAST_COMMIT_MESSAGE" value="The work that was already done in the express framework" />
+    <MESSAGE value="Fake Firebase added (Does no mentionable work, still works)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fake Firebase added (Does no mentionable work, still works)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -399,34 +333,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/extension_home.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        <state relative-caret-position="187">
+          <caret line="11" column="36" lean-forward="false" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/extension_home_js.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="52" column="50" lean-forward="false" selection-start-line="52" selection-start-column="50" selection-end-line="52" selection-end-column="50" />
+        <state relative-caret-position="136">
+          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
+    <entry file="file://$PROJECT_DIR$/server/connect_firebase.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="23" column="27" lean-forward="false" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
+        <state relative-caret-position="153">
+          <caret line="9" column="23" lean-forward="true" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/productive-browsing-firebase-adminsdk-v616k-45e6bfc484.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/extension_home.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="35" lean-forward="false" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="35" />
+        <state relative-caret-position="136">
+          <caret line="8" column="7" lean-forward="false" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
           <folding />
         </state>
       </provider>

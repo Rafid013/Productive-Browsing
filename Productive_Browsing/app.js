@@ -5,7 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
+
 var extension_home = require('./routes/extension_home');
+
+
 
 var app = express();
 
