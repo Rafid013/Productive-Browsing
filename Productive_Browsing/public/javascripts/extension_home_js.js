@@ -1,4 +1,6 @@
 var type = 0;
+var events_today = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Stuffs to somke"]
+
 function showTime(){
     var date = new Date();
     var h = date.getHours(); // 0 - 23
@@ -7,11 +9,11 @@ function showTime(){
     var session = "AM";
 
 
-    if(h === 0 && type === 0){
+    if(h == 0 && type ==0){
         h = 12;
     }
 
-    if(h > 12 && type === 0){
+    if(h > 12 && type ==0){
         h = h - 12;
         session = "PM";
     }
@@ -21,9 +23,9 @@ function showTime(){
     s = (s < 10) ? "0" + s : s;
 
     var time = h + ":" + m + ":" + s;
-    if(type === 0)
+    if(type==0)
     {
-        time = time + " " + session;
+        time = time + " "+session;
     }
     document.getElementById("MyClockDisplay").innerText = time;
     document.getElementById("MyClockDisplay").textContent = time;
@@ -32,13 +34,13 @@ function showTime(){
 }
 
 function toggle() {
-    if(type === 0)
+    if(type==0)
     {
-        type = 1;
+        type=1;
     }
     else
     {
-        type = 0;
+        type=0;
     }
 }
 
@@ -48,10 +50,24 @@ function selectBackground() {
 }
 function fileInput() {
     var image = document.getElementById('finput').files[0];
-    //these are dummy code. this file will be uploaded in the server. and then it will be set as background
+    //these are dummy code. this file will be uploded in the server. and then it will be set as background
     var element = document.getElementById('homepage_body');
     element.style.backgroundImage = "url('/images/background.jpeg')";
     element.style.backgroundSize = "cover";
 }
 
+
+function Scroll_Events() {
+    var events = "";
+    events = events_today.join(", ");
+    document.getElementById("ShowEventScroll").textContent = events;
+}
+
+function add_new_task()
+{
+    alert('Form submitted!');
+    return false;
+}
+
+Scroll_Events();
 showTime();
