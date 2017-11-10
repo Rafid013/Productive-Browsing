@@ -1,5 +1,5 @@
 var type = 0;
-var events_today = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Stuffs to somke"]
+var events_today = ["Stuffs to do", "Places to go", "People to meet", "Chicks to fuck", "Joints to smoke"];
 
 function showTime(){
     var date = new Date();
@@ -9,11 +9,11 @@ function showTime(){
     var session = "AM";
 
 
-    if(h == 0 && type ==0){
+    if(h === 0 && type === 0){
         h = 12;
     }
 
-    if(h > 12 && type ==0){
+    if(h > 12 && type === 0){
         h = h - 12;
         session = "PM";
     }
@@ -23,7 +23,7 @@ function showTime(){
     s = (s < 10) ? "0" + s : s;
 
     var time = h + ":" + m + ":" + s;
-    if(type==0)
+    if(type === 0)
     {
         time = time + " "+session;
     }
@@ -34,7 +34,7 @@ function showTime(){
 }
 
 function toggle() {
-    if(type==0)
+    if(type === 0)
     {
         type=1;
     }
@@ -71,3 +71,4 @@ function add_new_task()
 
 Scroll_Events();
 showTime();
+module.exports = events_today;
