@@ -1,0 +1,59 @@
+body{
+	background-color: #6d7c62;
+	color: white;
+}
+.clock{
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	font-size: 7.5vw;
+	cursor: pointer;
+}
+.change_background{
+	position: absolute;
+	top:0%;
+	left:50%;
+	transform: translateX(-50%);
+}
+#Things_To_DO{
+	position: absolute;
+	top:12%;
+	left:50%;
+	transform: translateX(-50%);
+	font-size: 3.5vw;
+}
+
+#ShowEventScroll
+{
+	position: absolute;
+	top:18%;
+	left:50%;
+	transform: translateX(-50%);
+	font-size: 3vw;	
+	line-height: 3vw;
+	width: 50%;
+}
+#Task_Input
+{
+	position: absolute;
+	top:60%;
+	left:50%;
+	transform: translateX(-50%);
+	color: black;
+	width: 40%
+	
+}
+#input_submit
+{
+	position: absolute;
+	left:50%;
+	transform: translateX(-50%);
+}
+#date_time_div
+{
+	position: absolute;
+	left:50%;
+	transform: translateX(-50%);
+	width:60%;
+}
