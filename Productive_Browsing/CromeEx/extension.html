@@ -9,7 +9,7 @@
 
 <body id="homepage_body">
   <div id="MyClockDisplay" class="clock"></div>
-  <marquee id="ShowEventScroll"" behavior="scroll" direction="left" scrollamount="7"></marquee>
+  <marquee id="ShowEventScroll" behavior="scroll" direction="left" scrollamount="7"></marquee>
     <script type="text/javascript" src="extension_js.js">
     </script>
     <div class="change_background">
@@ -17,7 +17,7 @@
       <i id="edit_icon" class="large write square icon"></i>
     </div>
     <div id="Things_To_DO">Stuffs to do Today</div>
-  <form id="Task_Input" class="ui form">
+  <form id="Task_Input" class="ui form" action="localhost:3000\server\" method="post">
       <input type="text" name="Text" value="" placeholder="To Do">
       <div class="two fields" >
         <input type="date" name="Date">
