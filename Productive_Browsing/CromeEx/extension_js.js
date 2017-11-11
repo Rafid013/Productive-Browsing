@@ -1,5 +1,5 @@
 var type = 0;
-var events_today = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Stuffs to somke"]
+var events_today = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Stuffs to smoke"];
 
 
 function showTime(){
@@ -59,15 +59,18 @@ function fileInput() {
 
 
 function Scroll_Events() {
-	var events = "";
-	events = events_today.join(", ");
-	document.getElementById("ShowEventScroll").textContent = events;
+	document.getElementById("ShowEventScroll").textContent =  events_today.join(", ");
 }
 
 function add_new_task()
 {
-	alert('Form submitted!');
-    return false;
+	var tmp = {
+		task : document.getElementById('to_do').value,
+		date : document.getElementById('date').value,
+		time : document.getElementById('time').value
+	};
+	chrome.runtime.sendMessage(tmp);
+
 }
 
 function load()

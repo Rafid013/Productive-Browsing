@@ -9,9 +9,9 @@ router.get('/', function (req, res) {
     res.render('extension_home', { title: 'Productive Browsing' });
 });
 
-router.post('/', function (req, res) {
+router.post('/test', function (req, res) {
    console.log("RAF");
-    res.render('extension_home', { title: 'Productive Browsing' });
+   // res.render('extension_home', { title: 'Productive Browsing' });
 });
 
 module.exports = router;

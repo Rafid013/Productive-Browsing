@@ -12,10 +12,15 @@
   "chrome_url_overrides":{
     "newtab": "extension.html"
   },
-  
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
   "permissions": [
     "tabs",
     "activeTab",
-    "storage"
+    "storage",
+    "http://localhost:3000/"
   ]
 }
