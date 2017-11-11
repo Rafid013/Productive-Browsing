@@ -1,6 +1,7 @@
 var type = 0;
 var events_today = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Stuffs to somke"]
-
+var events_ToDo_List = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Stuffs to somke"]
+var curTask ="";
 
 function showTime(){
 	var date = new Date();
@@ -66,16 +67,72 @@ function Scroll_Events() {
 
 function add_new_task()
 {
-	alert('Form submitted!');
+	var form= document.getElementById("Task_Input");
+	var task = form.Text.value;
+	alert(task);
     return false;
 }
 
 function load()
 {
+	populateToDoList();
 	document.getElementById("MyClockDisplay").onclick=toggle;
 	document.getElementById("finput").onchange=fileInput;
 	document.getElementById("edit_icon").onclick=selectBackground;
 	document.getElementById("Task_Input").onsubmit=add_new_task;
+	document.getElementById("show_hide").onclick=toggle_visibility;
+}
+
+//adding elements in to do list
+function newElement() 
+{
+  var li = document.createElement("li");
+  var inputValue = curTask;
+  var t = document.createTextNode(inputValue);
+  li.appendChild(t);
+  if (inputValue === '') {
+    alert("You must write something!");
+  } else {
+    document.getElementById("task_list_ul").appendChild(li);
+  }
+
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "close";
+  span.appendChild(txt);
+  li.appendChild(span);
+}
+
+function populateToDoList()
+{
+	for (var i = 0; i < events_ToDo_List.length; i++) 
+	{
+		curTask = events_ToDo_List[i];
+		newElement();
+	}
+
+	var close = document.getElementsByClassName("close");
+	for (var i = 0; i < close.length; i++) 
+	{
+  		close[i].onclick = function() {
+    	var div = this.parentElement;
+    	div.style.display = "none";
+    	}
+	}
+	var list = document.querySelector('ul');
+	list.addEventListener('click', function(ev) {
+  		if (ev.target.tagName === 'LI') {
+    		ev.target.classList.toggle('checked');
+  		}
+	}, false);
+}
+
+function toggle_visibility() {	
+  var e = document.getElementById("task_list_ul");
+  if(e.style.display == 'none')
+    e.style.display = 'block';
+  else
+    e.style.display = 'none';
 }
 
 window.onload = load;

@@ -18,12 +18,19 @@
     </div>
     <div id="Things_To_DO">Stuffs to do Today</div>
   <form id="Task_Input" class="ui form">
-      <input type="text" name="Text" value="" placeholder="To Do">
+      <input id="task_name" type="text" name="Text" value="" placeholder="To Do">
       <div class="two fields" >
         <input type="date" name="Date">
           <input type="time" name="Time">
       </div>
         <input id="input_submit" type="submit" name="Submit" value="ADD">
-  </form> 
+  </form>
+  <div id="task_list" class="ui dropdown">
+     <div id="show_hide">
+       <div class="text">To-Do List <span><i class="dropdown icon"></i></span></div>
+     </div>
+     <ul hidden="true" id="task_list_ul">
+     </ul>
+  </div>
 </body>
 </html>
