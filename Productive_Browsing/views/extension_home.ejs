@@ -17,7 +17,7 @@
     <i class="large write square icon" onclick="selectBackground()"></i>
 </div>
 <div id="Things_To_DO">Stuffs to do Today</div>
-<form id="Task_Input" class="ui form" onsubmit="add_new_task()">
+<form id="Task_Input" class="ui form" onsubmit="add_new_task()", action="/test" method="post">
     <input type="text" name="Text" value="" placeholder="To Do">
     <div class="two fields" >
         <input type="date" name="Date">

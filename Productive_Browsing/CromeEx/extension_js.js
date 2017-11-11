@@ -10,11 +10,11 @@ function showTime(){
 	var session = "AM";
 
    
-	if(h == 0 && type ==0){
+	if(h === 0 && type === 0){
 		h = 12;
 	}
 
-	if(h > 12 && type ==0){
+	if(h > 12 && type === 0){
 		h = h - 12;
 		session = "PM";
 	}
@@ -24,7 +24,7 @@ function showTime(){
 	s = (s < 10) ? "0" + s : s;
 
 	var time = h + ":" + m + ":" + s;
-	if(type==0)
+	if(type === 0)
 	{
 		time = time + " "+session;	
 	}
@@ -35,7 +35,7 @@ function showTime(){
 }
 
 function toggle() {
-	if(type==0)
+	if(type === 0)
 	{
 		type=1;
 	}
