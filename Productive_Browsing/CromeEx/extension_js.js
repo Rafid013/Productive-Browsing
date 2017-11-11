@@ -1,6 +1,6 @@
 var type = 0;
-var events_today = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Stuffs to somke"]
-var events_ToDo_List = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Stuffs to somke"]
+var events_today = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Joints to smoke"];
+var events_ToDo_List = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Joints to smoke"];
 var curTask ="";
 
 function showTime(){
@@ -11,11 +11,11 @@ function showTime(){
 	var session = "AM";
 
    
-	if(h == 0 && type ==0){
+	if(h === 0 && type === 0){
 		h = 12;
 	}
 
-	if(h > 12 && type ==0){
+	if(h > 12 && type === 0){
 		h = h - 12;
 		session = "PM";
 	}
@@ -25,7 +25,7 @@ function showTime(){
 	s = (s < 10) ? "0" + s : s;
 
 	var time = h + ":" + m + ":" + s;
-	if(type==0)
+	if(type === 0)
 	{
 		time = time + " "+session;	
 	}
@@ -36,7 +36,7 @@ function showTime(){
 }
 
 function toggle() {
-	if(type==0)
+	if(type === 0)
 	{
 		type=1;
 	}
@@ -60,9 +60,7 @@ function fileInput() {
 
 
 function Scroll_Events() {
-	var events = "";
-	events = events_today.join(", ");
-	document.getElementById("ShowEventScroll").textContent = events;
+	document.getElementById("ShowEventScroll").textContent =  events_today.join(", ");
 }
 
 function add_new_task()
@@ -70,7 +68,13 @@ function add_new_task()
 	var form= document.getElementById("Task_Input");
 	var task = form.Text.value;
 	alert(task);
-    return false;
+	var tmp = {
+		task : document.getElementById('to_do').value,
+		date : document.getElementById('date').value,
+		time : document.getElementById('time').value
+	};
+	chrome.runtime.sendMessage(tmp);
+	return false;
 }
 
 function load()
@@ -105,14 +109,15 @@ function newElement()
 
 function populateToDoList()
 {
-	for (var i = 0; i < events_ToDo_List.length; i++) 
+	var i;
+	for (i = 0; i < events_ToDo_List.length; i++)
 	{
 		curTask = events_ToDo_List[i];
 		newElement();
 	}
 
 	var close = document.getElementsByClassName("close");
-	for (var i = 0; i < close.length; i++) 
+	for (i = 0; i < close.length; i++)
 	{
   		close[i].onclick = function() {
     	var div = this.parentElement;
@@ -129,7 +134,7 @@ function populateToDoList()
 
 function toggle_visibility() {	
   var e = document.getElementById("task_list_ul");
-  if(e.style.display == 'none')
+  if(e.style.display === 'none')
     e.style.display = 'block';
   else
     e.style.display = 'none';
