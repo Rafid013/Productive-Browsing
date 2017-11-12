@@ -1,11 +1,10 @@
 var firebase = require('../server/connect_firebase');
-var db = firebase.database();
-var ref = db.ref('USERS');
-var userRef = ref.orderByChild("Name").equalTo("Sabbir");
+var ref = firebase.database.ref('USERS');
+var userRef = ref.orderByChild("Name").equalTo("Taskin");
 userRef.on("child_added", function (dataSnapshot) {
     console.log(dataSnapshot.val().Name);
     var tmp = {
-      Name : 'Taskin'
+      Name : 'Mashrafe'
     };
     ref.child(dataSnapshot.key).update(tmp);
 });

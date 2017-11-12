@@ -7,4 +7,10 @@ admin.initializeApp({
     databaseURL: "https://productive-browsing.firebaseio.com"
 });
 
-module.exports = admin;
+var database = admin.database();
+var auth = admin.auth();
+
+module.exports = {
+    database : database,
+    auth : auth
+};
