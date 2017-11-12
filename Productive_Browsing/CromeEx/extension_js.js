@@ -52,7 +52,7 @@ function selectBackground() {
 }
 function fileInput() {
 	var image = document.getElementById('finput').files[0];
-	//these are dummy code. this file will be uploded in the server. and then it will be set as background
+	//these are dummy code. this file will be uploaded in the server. and then it will be set as background
 	var element = document.getElementById('homepage_body');
 	element.style.backgroundImage = "url('background.jpeg')";
 	element.style.backgroundSize = "cover";
