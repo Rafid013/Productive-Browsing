@@ -1,9 +1,9 @@
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
-    alert(req.task);
     var tmp = {
       task : req.task,
       date : req.date,
-      time : req.time
+      time : req.time,
+      type : req.type
     };
     var senderToServer = new XMLHttpRequest();
     senderToServer.onreadystatechange = function () {

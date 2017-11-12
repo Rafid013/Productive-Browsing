@@ -71,10 +71,10 @@ function add_new_task()
 	var tmp = {
 		task : document.getElementById('to_do').value,
 		date : document.getElementById('date').value,
-		time : document.getElementById('time').value
+		time : document.getElementById('time').value,
+        type : "add_task"
 	};
 	chrome.runtime.sendMessage(tmp);
-	return false;
 }
 
 function load()

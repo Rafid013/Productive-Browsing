@@ -1,7 +1,8 @@
 var firebase = require('../server/connect_firebase');
-var ref = firebase.db.ref('USERS');
+var db = firebase.database();
+var ref = db.ref('USERS');
 ref.push({
-    Name : "Rafid"
+    Name : "Sabbir"
 });
 
 
