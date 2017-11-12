@@ -7,9 +7,10 @@ router.post('/', function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.write("HELLO");
     res.end();*/
-    if(req.body.type === "sign_up") {
-        sign_up.cr
+    if (req.body.type === "sign_up") {
+        var sign_up_message = sign_up(req.body.name, req.body.email, req.body.password);
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.write(sign_up_message);
+        res.end();
     }
 });
-
-module.exports = router;

@@ -1,0 +1,5 @@
+1. auth/invalid-display-name //if the name box is empty when submitting, make sure that the sent string is null, not empty
+2. auth/invalid-email
+3. auth/invalid-password     //The password must be a string with at least 6 characters
+4. auth/email-already-exists //The email address is already in use by another account
+5. auth/internal-error       //এটা আমি বুঝি নাই, কিন্তু রাখা লাগবে মনে হয়, তাই আলাদা একটা রেখে ইন্টারনাল এরর দিবি
