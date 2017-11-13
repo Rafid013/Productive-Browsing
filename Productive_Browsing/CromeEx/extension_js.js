@@ -1,6 +1,8 @@
 var type = 0;
-var events_today = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Joints to smoke"];
+var events_today;
 var events_ToDo_List = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Joints to smoke"];
+var date_of_current_list;
+var date_today;
 var curTask ="";
 
 function showTime(){
@@ -52,6 +54,14 @@ function selectBackground() {
 }
 function fileInput() {
 	var image = document.getElementById('finput').files[0];
+    var tmp= {
+        type : "upload image",
+        file: image
+    }
+    //chrome.runtime.sendMessage(tmp);
+    chrome.runtime.sendMessage(tmp, function(response) {
+        //get image form server as url link
+    });
 	//these are dummy code. this file will be uploaded in the server. and then it will be set as background
 	var element = document.getElementById('homepage_body');
 	element.style.backgroundImage = "url('background.jpeg')";
@@ -60,26 +70,44 @@ function fileInput() {
 
 
 function Scroll_Events() {
-	document.getElementById("ShowEventScroll").textContent =  events_today.join(", ");
+    var line = events_today.join(", ");
+	document.getElementById("ShowEventScroll").textContent = line ;
 }
 
 function add_new_task()
 {
 	var form= document.getElementById("Task_Input");
 	var task = form.Text.value;
-	alert(task);
 	var tmp = {
 		task : document.getElementById('to_do').value,
 		date : document.getElementById('date').value,
 		time : document.getElementById('time').value,
         type : "add_task"
 	};
+	if(tmp.date=="")
+    {
+        tmp.date = date_today;
+    }
 	chrome.runtime.sendMessage(tmp);
 }
 
 function load()
 {
-	populateToDoList();
+    var tmp= {
+        type : "get_to_do"
+    }
+    //chrome.runtime.sendMessage(tmp);
+    chrome.runtime.sendMessage(tmp, function(response) {
+        events_today = response;
+        Scroll_Events();
+        events_ToDo_List = response;
+        populateToDoList();
+    });
+    var date = new Date();
+    date_of_current_list=(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+    date_today =(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+    var e = document.getElementById("task_list_ul");
+    e.style.display = 'none';
 	document.getElementById("MyClockDisplay").onclick=toggle;
 	document.getElementById("finput").onchange=fileInput;
 	document.getElementById("edit_icon").onclick=selectBackground;
@@ -109,6 +137,11 @@ function newElement()
 
 function populateToDoList()
 {
+    var ul=document.getElementById("task_list_ul");
+    while (ul.firstChild) {
+        ul.removeChild(ul.firstChild);
+    }
+
 	var i;
 	for (i = 0; i < events_ToDo_List.length; i++)
 	{
@@ -120,14 +153,29 @@ function populateToDoList()
 	for (i = 0; i < close.length; i++)
 	{
   		close[i].onclick = function() {
-    	var div = this.parentElement;
-    	div.style.display = "none";
+    	    var div = this.parentElement;
+    	    div.style.display = "none";
+            var tmp = {
+                task : div.textContent.substring(0,div.textContent.lastIndexOf(" ")),
+                date : date_of_current_list,
+                time : div.textContent.substring(div.textContent.lastIndexOf(" ")+1,div.textContent.length-1),
+                type : "delete to do"
+            };
+            chrome.runtime.sendMessage(tmp);
     	}
 	}
 	var list = document.querySelector('ul');
 	list.addEventListener('click', function(ev) {
   		if (ev.target.tagName === 'LI') {
     		ev.target.classList.toggle('checked');
+    		var div = ev.target;
+            var tmp = {
+                task : div.textContent.substring(0,div.textContent.lastIndexOf(" ")),
+                date : date_of_current_list,
+                time : div.textContent.substring(div.textContent.lastIndexOf(" ")+1,div.textContent.length-1),
+                type : "to do completed"
+            };
+            chrome.runtime.sendMessage(tmp);
   		}
 	}, false);
 }
@@ -142,5 +190,4 @@ function toggle_visibility() {
 
 window.onload = load;
 
-Scroll_Events();
 showTime();

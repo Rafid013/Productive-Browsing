@@ -2,15 +2,15 @@ When:
     signing in,         type = "sign_in",
     marking site,       type = "mark_site",
     remove marked site, type = "de_marked site",
-    upload image,       type = "up_image",
+        upload image,       type = "up_image",
     delete image,       type = "del_image",
-    add to do,          type = "add_task",
-    to do completed,    type = "task_done",
-    delete to do,       type = "delete_task",
+        add to do,          type = "add_task",
+        to do completed,    type = "task_done",
+        delete to do,       type = "delete_task",
     update to do,       type = "update_task",
     delete account,     type = "account_delete",
     change name,        type = "change_name",
-    get to_do_list,     type = "get_to_do"        //in this case the response will be the list, if the sending the full
+        get to_do_list,     type = "get_to_do"        //in this case the response will be the list, if the sending the full
                                                     list at once is not possible there will be a header and a trailer
                                                     indicating the start and end of messages (to be defined later)
 
