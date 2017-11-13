@@ -8,13 +8,13 @@ firebase.initializeApp(config);
 
 function sign_in(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(function (userRecord) {
-        console.log(userRecord.displayName + "\n" + userRecord.email);
-        return {
-          token : userRecord.uid,
-          message : "success"
-        };
-    }).catch(function (error) {
+        .then(function (userRecord) {
+            console.log(userRecord.displayName + "\n" + userRecord.email);
+            return {
+                token : userRecord.uid,
+                message : "success"
+            };
+        }).catch(function (error) {
         console.log(error.message + "\n" + error.code);
         return {
             token : null,
@@ -23,6 +23,6 @@ function sign_in(email, password) {
     })
 }
 
-
-sign_in("haisamrafid@gmail.com", "rafid123");
-module.exports = sign_in;
+function sign_up(name, email, password) {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+}

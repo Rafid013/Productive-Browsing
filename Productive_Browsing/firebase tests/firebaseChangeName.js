@@ -1,4 +1,4 @@
-var firebase = require('../server/connect_firebase');
+var firebase = require('../server/connect_firebase-admin');
 var ref = firebase.database.ref('USERS');
 var userRef = ref.orderByChild("Name").equalTo("Taskin");
 userRef.on("child_added", function (dataSnapshot) {
