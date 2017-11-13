@@ -113,6 +113,7 @@ function load()
 	document.getElementById("edit_icon").onclick=selectBackground;
 	document.getElementById("Task_Input").onsubmit=add_new_task;
 	document.getElementById("show_hide").onclick=toggle_visibility;
+    document.getElementById("log_out").onclick=log_out;
 }
 
 //adding elements in to do list
@@ -186,6 +187,12 @@ function toggle_visibility() {
     e.style.display = 'block';
   else
     e.style.display = 'none';
+  return false;
+}
+
+function log_out() {
+    window.location.href = "logIn.html";
+    return false;
 }
 
 window.onload = load;

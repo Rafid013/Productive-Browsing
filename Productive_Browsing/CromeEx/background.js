@@ -1,3 +1,4 @@
+
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
     /*var tmp = {
       task : req.task,
@@ -35,6 +36,28 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     else if(req.type=="upload image")
     {
         //upload req.file in server and send the url as response
+    }
+
+    else if(req.type == "isSignedIn")
+    {
+        var tmp = "false";
+        res(tmp);
+    }
+
+    else if(req.type == "sign_in")
+    {
+        //check if sign in is successful or not
+        alert(req.email);
+        var tmp = "false";
+        res(tmp);
+    }
+
+    else if(req.type == "regiser")
+    {
+        //create new ID
+        var tmp = "true";
+        alert(req.name);
+        res(tmp);
     }
 
     var senderToServer = new XMLHttpRequest();

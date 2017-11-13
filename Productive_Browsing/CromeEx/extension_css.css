@@ -16,6 +16,19 @@ body{
 	left:50%;
 	transform: translateX(-50%);
 }
+
+#log_out
+{
+    .color = white;
+    position: absolute;
+    top:0%;
+    left:100%;
+    transform: translateX(-100%);
+    cursor: pointer;
+}
+#log_out:hover {
+    text-decoration: underline;
+}
 #Things_To_DO{
 	position: absolute;
 	top:12%;

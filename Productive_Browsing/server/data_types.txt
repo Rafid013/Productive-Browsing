@@ -1,5 +1,7 @@
 When:
+    is Signed in        type = "isSignedIn"
     signing in,         type = "sign_in",
+    Register            type = "regiser"
     marking site,       type = "mark_site",
     remove marked site, type = "de_marked site",
         upload image,       type = "up_image",
