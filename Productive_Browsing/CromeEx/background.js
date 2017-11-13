@@ -1,10 +1,11 @@
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
-    var tmp = {
+    /*var tmp = {
       task : req.task,
       date : req.date,
       time : req.time,
       type : req.type
-    };
+    };*/
+    tmp = req;
     var senderToServer = new XMLHttpRequest();
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
