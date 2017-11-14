@@ -8,9 +8,21 @@ admin.initializeApp({
 });
 
 var database = admin.database();
-var auth = admin.auth();
+var ref = database.ref('USERS');
+
+function add_UID(uid) {
+    ref.push({
+        UID : uid
+    })
+}
+
+function mark_site(uid, site) {
+    
+}
+
 
 module.exports = {
-    database : database,
-    auth : auth
+    admin : admin,
+    add_UID : add_UID,
+    mark_site : mark_site
 };
