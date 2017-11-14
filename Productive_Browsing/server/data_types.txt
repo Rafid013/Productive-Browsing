@@ -2,7 +2,7 @@ When:
     signing up,         type = "sign_up",
     signing in,         type = "sign_in",
     marking site,       type = "mark_site",
-    remove marked site, type = "de_mark site",
+    remove marked site, type = "de_mark_site",
     upload image,       type = "up_image",
     delete image,       type = "del_image",
     add to do,          type = "add_task",

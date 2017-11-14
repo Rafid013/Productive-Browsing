@@ -97,6 +97,7 @@ function delete_user(email, password, callback) {
                 console.log("User deleted");
                 console.log("Name: " + data.name);
                 callback({
+                    name : data.name,
                     uid : data.uid,
                     message : "success"
                 })
