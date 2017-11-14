@@ -1,5 +1,22 @@
 window.onload = load;
 
+var tmp= {
+    type : "isSignedIn"
+}
+//chrome.runtime.sendMessage(tmp);
+//eikhane wiat kore na nonblocking statement . ejonnoi problem
+chrome.runtime.sendMessage(tmp, function(response) {
+    isLoggedIn = response;
+    //for now hard coded and returning true
+    if(isLoggedIn==="true")
+    {
+        window.location.href = "extension.html";
+    }
+    else
+    {
+    }
+});
+
 function logInPage()
 {
 	var a = document.getElementById("logIn_Form");
@@ -56,7 +73,7 @@ function registered()
 }
 
 function load() {
-    var tmp= {
+    /*var tmp= {
         type : "isSignedIn"
     }
     //chrome.runtime.sendMessage(tmp);
@@ -69,7 +86,7 @@ function load() {
         else
         {
         }
-    });
+    });*/
 
 	document.getElementById("rgister_Form").style.display = 'none';
 	document.getElementById("go_to_login").onclick=logInPage;
