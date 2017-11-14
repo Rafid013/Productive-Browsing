@@ -1,5 +1,4 @@
 window.onload = load;
-var isLoggedIn = "false";
 
 function logInPage()
 {
@@ -57,7 +56,6 @@ function registered()
 }
 
 function load() {
-
     var tmp= {
         type : "isSignedIn"
     }
@@ -67,6 +65,9 @@ function load() {
         if(isLoggedIn==="true")
         {
             window.location.href = "extension.html";
+        }
+        else
+        {
         }
     });
 

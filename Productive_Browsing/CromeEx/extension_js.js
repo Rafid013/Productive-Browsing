@@ -191,6 +191,10 @@ function toggle_visibility() {
 }
 
 function log_out() {
+    var tmp = {
+        type : "signed_out"
+    };
+    chrome.runtime.sendMessage(tmp);
     window.location.href = "logIn.html";
     return false;
 }

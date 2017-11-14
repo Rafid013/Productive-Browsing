@@ -2,8 +2,10 @@ When:
     is Signed in        type = "isSignedIn"
     signing in,         type = "sign_in",
     Register            type = "regiser"
+    is site marked      type = "isMarked"
+    log out             type = "signed_out"
     marking site,       type = "mark_site",
-    remove marked site, type = "de_marked site",
+    remove marked site, type = "un_mark_site",
         upload image,       type = "up_image",
     delete image,       type = "del_image",
         add to do,          type = "add_task",

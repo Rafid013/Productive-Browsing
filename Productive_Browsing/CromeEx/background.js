@@ -40,7 +40,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
     else if(req.type == "isSignedIn")
     {
-        var tmp = "false";
+        var tmp = "true";
         res(tmp);
     }
 
@@ -58,6 +58,26 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         var tmp = "true";
         alert(req.name);
         res(tmp);
+    }
+    else if(req.type == "isMarked")
+    {
+        //check if the domain is marked as time killer and send back status
+        var    a      = document.createElement('a');
+        a.href = req.url;
+        var tmp = "false";
+        res(tmp);
+    }
+    else if(req.type == "signed_out")
+    {
+
+    }
+    else if(req.type == "mark_site")
+    {
+
+    }
+    else if(req.type == "un_mark_site")
+    {
+
     }
 
     var senderToServer = new XMLHttpRequest();

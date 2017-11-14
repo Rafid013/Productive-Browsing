@@ -28,6 +28,7 @@ body{
 }
 #log_out:hover {
     text-decoration: underline;
+	cursor: pointer;
 }
 #Things_To_DO{
 	position: absolute;
