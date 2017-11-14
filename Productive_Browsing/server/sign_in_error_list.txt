@@ -7,4 +7,4 @@
 একটা JSON data পাঠানো হবে, সেটার at least ২ টা field, uid and message
 
 if message == "success", then uid থাকবে যেটা সেভ করে রাখতে হবে
-else uid null, handle error, error code in message field
+else handle error, error code in message field

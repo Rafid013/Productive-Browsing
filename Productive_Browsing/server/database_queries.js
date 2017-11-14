@@ -16,6 +16,13 @@ function add_UID(uid) {
     })
 }
 
+function delete_UID(uid) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.on("child_added", function (dataSnapshot) {
+        ref.child(dataSnapshot.key).set(null);
+    });
+}
+
 function mark_site(uid, site) {
     
 }
@@ -24,5 +31,6 @@ function mark_site(uid, site) {
 module.exports = {
     admin : admin,
     add_UID : add_UID,
-    mark_site : mark_site
+    mark_site : mark_site,
+    delete_UID : delete_UID
 };
