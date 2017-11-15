@@ -1,0 +1,11 @@
+1. auth/invalid-email        //The email address is improperly formatted.
+2. auth/invalid-password     //The password must be a string with at least 6 characters
+3. auth/email-already-exists //The email address is already in use by another account
+4. auth/internal-error       //The Authentication server encountered an unexpected error while trying to process the request
+
+
+
+একটা JSON data পাঠানো হবে, সেটার at least ২ টা field, uid and message
+
+if message == "success", then uid থাকবে যেটা সেভ করে রাখতে হবে
+else handle error, error code in message field
