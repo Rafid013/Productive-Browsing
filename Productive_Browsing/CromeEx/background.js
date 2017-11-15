@@ -87,8 +87,9 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
     var senderToServer = new XMLHttpRequest();
     senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4) {
+        if (senderToServer.readyState === 4) {
             alert(JSON.parse(senderToServer.responseText));
+        }
     };
     senderToServer.open("POST", 'http://localhost:3000/', true);
     senderToServer.setRequestHeader("Content-Type", "application/json");
