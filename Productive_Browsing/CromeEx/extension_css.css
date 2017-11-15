@@ -16,6 +16,26 @@ body{
 	left:50%;
 	transform: translateX(-50%);
 }
+
+#log_out
+{
+    .color = white;
+    position: absolute;
+    top:0%;
+    left:100%;
+    font-size: 18px;
+    transform: translateX(-100%);
+    cursor: pointer;
+}
+#show_hide:hover
+{
+    text-decoration: underline;
+    cursor: pointer;
+}
+#log_out:hover {
+    text-decoration: underline;
+	cursor: pointer;
+}
 #Things_To_DO{
 	position: absolute;
 	top:12%;
@@ -36,19 +56,21 @@ body{
 }
 #Task_Input
 {
-	position: absolute;
-	top:60%;
-	left:50%;
-	transform: translateX(-50%);
-	color: black;
-	width: 40%
-	
+    position: absolute;
+    top:60%;
+    left:50%;
+    transform: translateX(-50%);
+    color: black;
 }
 #input_submit
 {
-	position: absolute;
-	left:50%;
-	transform: translateX(-50%);
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    text-decoration: underline;
+    background-color: rgba(0,0,0,0);
+    color: white;
+    border: none;
 }
 #date_time_div
 {
@@ -60,7 +82,6 @@ body{
 #task_list
 {
 	position: absolute;
-	top: 30%;
 	left: 80%;
     font-size: 18px;
 }
@@ -68,6 +89,7 @@ body{
 ul {
     margin: 0;
     padding: 0;
+    list-style-type: none;
 }
 
 /* Style the list items */
@@ -129,3 +151,46 @@ ul li.checked::before {
     background-color: #f44336;
     color: white;
 }
+
+#to_do{
+    width:200%;
+    transform: translateX(-25%);
+    text-decoration: underline;
+    background-color: rgba(0,0,0,0);
+    color: white;
+    border: none;
+    font-size: 24px;
+    text-align: center;
+}
+#to_do::placeholder
+{
+    opacity: 0.5;
+    text-align: center;
+    text-decoration: underline;
+    color:white;
+    font-size: 24px;
+}
+
+#date{
+    text-decoration: underline;
+    background-color: rgba(0,0,0,0);
+    color: white;
+    border: none;
+}
+
+#time{
+    text-decoration: underline;
+    background-color: rgba(0,0,0,0);
+    color: white;
+    border: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+
+

@@ -1,0 +1,30 @@
+<!doctype html>
+
+<html>
+<head>
+  <title>New Tab</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="logIn_css.css"><script type="text/javascript" src="logIn_js.js"></script>
+</head>
+
+<body id="login_body">
+
+  <div class="login-page">
+  <div class="form">
+    <form id="rgister_Form" class="register-form">
+      <input id="reg_name" type="text" placeholder="name" required />
+      <input id="reg_password" type="password" placeholder="password" required />
+      <input id="reg_email" type="text" placeholder="email address" required />
+      <input type="submit" id="Submit_reg_form" name="Submit_reg_form" value="Create">
+      <p class="message">Already registered? <a id="go_to_login" href="#">Sign In</a></p>
+    </form>
+    <form  id="logIn_Form" class="login-form">
+      <input id="login_email" type="text" placeholder="email address" required />
+      <input id="login_password" type="password" placeholder="password" required />
+      <input type="submit" id="Submit_login_form" name="" value="LogIn">
+      <p class="message">Not registered? <a id="go_to_register" href="#">Create an account</a></p>
+    </form>
+  </div>
+  </div>
+</body>
+</html>
