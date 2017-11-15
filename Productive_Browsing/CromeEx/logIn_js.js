@@ -14,6 +14,9 @@ chrome.runtime.sendMessage(tmp, function(response) {
     }
     else
     {
+        var body = document.getElementById("login_body");
+        body.style.display="block";
+        body.style.backgroundColor ="#76b852";
     }
 });
 

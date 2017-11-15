@@ -38,6 +38,11 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         //upload req.file in server and send the url as response
     }
 
+    else if(req.type == "del_image")
+    {
+        //delete image and send default image url as response
+    }
+
     else if(req.type == "isSignedIn")
     {
         var tmp = "true";
@@ -62,8 +67,8 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     else if(req.type == "isMarked")
     {
         //check if the domain is marked as time killer and send back status
-        var    a      = document.createElement('a');
-        a.href = req.url;
+        var a= document.createElement('a');
+        a.href = req.url; // getting domain name from url
         var tmp = "false";
         res(tmp);
     }

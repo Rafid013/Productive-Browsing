@@ -77,7 +77,8 @@ function Scroll_Events() {
 function add_new_task()
 {
 	var form= document.getElementById("Task_Input");
-	var task = form.Text.value;
+	var task = document.getElementById('to_do').value;
+	alert(task);
 	var tmp = {
 		task : document.getElementById('to_do').value,
 		date : document.getElementById('date').value,
@@ -89,10 +90,13 @@ function add_new_task()
         tmp.date = date_today;
     }
 	chrome.runtime.sendMessage(tmp);
+	form.reset();
+	return false;
 }
 
 function load()
 {
+    showTime();
     var tmp= {
         type : "get_to_do"
     }
@@ -111,6 +115,7 @@ function load()
 	document.getElementById("MyClockDisplay").onclick=toggle;
 	document.getElementById("finput").onchange=fileInput;
 	document.getElementById("edit_icon").onclick=selectBackground;
+    document.getElementById("remove_icon").onclick=delete_background;
 	document.getElementById("Task_Input").onsubmit=add_new_task;
 	document.getElementById("show_hide").onclick=toggle_visibility;
     document.getElementById("log_out").onclick=log_out;
@@ -199,6 +204,19 @@ function log_out() {
     return false;
 }
 
+function delete_background() {
+    var tmp= {
+        type : "del_image",
+    }
+    //chrome.runtime.sendMessage(tmp);
+    chrome.runtime.sendMessage(tmp, function(response) {
+        //get image form server as url link
+    });
+    //these are dummy code. this file will be uploaded in the server. and then it will be set as background
+    var element = document.getElementById('homepage_body');
+    element.style.backgroundImage = "url('background.jpeg')";
+    element.style.backgroundSize = "cover";
+}
+
 window.onload = load;
 
-showTime();

@@ -4,36 +4,37 @@
 <head>
   <title>New Tab</title>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
-  <link rel="stylesheet" type="text/css" href="extension_css.css">
+  <link rel="stylesheet" type="text/css" href="extension_css.css"><script type="text/javascript" src="extension_js.js"></script>
 </head>
 
 <body id="homepage_body">
     <div id="log_out">
         Logout
     </div>
-  <div id="MyClockDisplay" class="clock"></div>
-  <marquee id="ShowEventScroll" behavior="scroll" direction="left" scrollamount="7"></marquee>
-    <script type="text/javascript" src="extension_js.js">
-    </script>
+    <div id="MyClockDisplay" class="clock"></div>
+    <marquee id="ShowEventScroll" behavior="scroll" direction="left" scrollamount="7"></marquee>
     <div class="change_background">
-      <div hidden="true"><input type="file" id="finput" accept=".gif,.jpg,.jpeg,.png"></div>
-      <i id="edit_icon" class="large write square icon"></i>
+        <div hidden="true"><input type="file" id="finput" accept=".gif,.jpg,.jpeg,.png"></div>
+        <i id="edit_icon" class="large write square icon"></i>
+        <i id="remove_icon" class="large remove icon"></i>
+        <i id="configure profile"class="large configure icon"></i>
     </div>
     <div id="Things_To_DO">Stuffs to do Today</div>
-  <form id="Task_Input" class="ui form">
-      <input id="to_do" type="text" name="Text" value="" placeholder="To Do" required>
-      <div class="two fields" >
-          <input id="date" type="date" name="Date">
-          <input id="time" type="time" name="Time">
-      </div>
+
+    <form  id="Task_Input">
+        <input id="to_do" type="text" value="" placeholder="To Do..." required >
+        <div>
+            <span><input id="date" type="date" name="Date"></span>
+            <span><input type="time" id="time" value="23:59:00"></span>
+        </div>
         <input id="input_submit" type="submit" name="Submit" value="ADD">
-  </form>
-  <div id="task_list" class="ui dropdown">
-     <div id="show_hide">
-       <div class="text">To-Do List <span><i class="dropdown icon"></i></span></div>
-     </div>
-     <ul id="task_list_ul">
-     </ul>
-  </div>
+    </form>
+    <div id="task_list" class="ui dropdown">
+        <div id="show_hide">
+            To-Do List
+        </div>
+        <ul id="task_list_ul">
+        </ul>
+    </div>
 </body>
 </html>
