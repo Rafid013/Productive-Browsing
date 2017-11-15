@@ -46,6 +46,8 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     else if(req.type == "isSignedIn")
     {
         var tmp = "true";
+        alert("fghg");
+
         res(tmp);
     }
 
@@ -57,7 +59,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         res(tmp);
     }
 
-    else if(req.type == "regiser")
+    else if(req.type == "register")
     {
         //create new ID
         var tmp = "true";

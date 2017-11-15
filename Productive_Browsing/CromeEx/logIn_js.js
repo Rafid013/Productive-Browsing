@@ -14,6 +14,7 @@ chrome.runtime.sendMessage(tmp, function(response) {
     }
     else
     {
+        alert("fhbfh");
         var body = document.getElementById("login_body");
         body.style.display="block";
         body.style.backgroundColor ="#76b852";
@@ -61,7 +62,7 @@ function registered()
         name : document.getElementById("reg_name").value,
         email : document.getElementById("reg_password").value,
         password : document.getElementById("reg_email").value,
-        type : "regiser"
+        type : "register"
     };
     chrome.runtime.sendMessage(tmp, function(response) {
         //if ok load home page
