@@ -10,7 +10,7 @@
     "default_popup": "popup.html"
   },
   "chrome_url_overrides":{
-    "newtab": "logIn.html"
+    "newtab": "extension.html"
   },
 
   "background": {

@@ -8,6 +8,25 @@
 </head>
 
 <body id="homepage_body">
+    <div id="signup_page" class="login-page">
+    <div class="form">
+        <form id="rgister_Form" class="register-form">
+            <input id="reg_name" type="text" placeholder="name" required />
+            <input id="reg_password" type="password" placeholder="password" required />
+            <input id="reg_email" type="text" placeholder="email address" required />
+            <input type="submit" id="Submit_reg_form" name="Submit_reg_form" value="Create">
+            <p class="message">Already registered? <a id="go_to_login" href="#">Sign In</a></p>
+        </form>
+        <form  id="logIn_Form" class="login-form">
+            <input id="login_email" type="text" placeholder="email address" required />
+            <input id="login_password" type="password" placeholder="password" required />
+            <input type="submit" id="Submit_login_form" name="" value="LogIn">
+            <p class="message">Not registered? <a id="go_to_register" href="#">Create an account</a></p>
+        </form>
+    </div>
+    </div>
+
+    <div id="home_page">
     <div id="log_out">
         Logout
     </div>
@@ -15,8 +34,8 @@
     <marquee id="ShowEventScroll" behavior="scroll" direction="left" scrollamount="7"></marquee>
     <div class="change_background">
         <div hidden="true"><input type="file" id="finput" accept=".gif,.jpg,.jpeg,.png"></div>
-        <i id="edit_icon" class="large write square icon"></i>
         <i id="remove_icon" class="large remove icon"></i>
+        <i id="edit_icon" class="large write square icon"></i>
         <i id="configure profile"class="large configure icon"></i>
     </div>
     <div id="Things_To_DO">Stuffs to do Today</div>
@@ -35,6 +54,7 @@
         </div>
         <ul id="task_list_ul">
         </ul>
+    </div>
     </div>
 </body>
 </html>
