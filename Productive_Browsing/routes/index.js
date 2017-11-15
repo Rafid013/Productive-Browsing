@@ -15,11 +15,11 @@ router.post('/', function (req, res) {
                     else {
                         auth.delete_user(req.body.email, req.body.password, function (data1){
                            console.log(data1);
+                            res.json({
+                                message : msg
+                            });
+                            res.end();
                         });
-                        res.json({
-                           message : msg
-                        });
-                        res.end();
                     }
                 });
             }
@@ -58,13 +58,28 @@ router.post('/', function (req, res) {
 
     }
     else if(req.body.type === "add_task") {
-
+        db.add_task(req.body.uid, req.body.task, function (msg) {
+            res.json({
+                message : msg
+            });
+            res.end();
+        });
     }
     else if(req.body.type === "task_done") {
-
+        db.mark_task(req.body.uid, req.body.task, function (msg) {
+            res.json({
+                message : msg
+            });
+            res.end();
+        });
     }
     else if(req.body.type === "delete_task") {
-
+        db.mark_task(req.body.uid, req.body.task, function (msg) {
+            res.json({
+                message : msg
+            });
+            res.end();
+        })
     }
     else if(req.body.type === "update_task") {
 
@@ -79,12 +94,13 @@ router.post('/', function (req, res) {
                     }
                     else {
                         auth.sign_up(data.name, data.email, data.password, function (data1) {
-                           console.log(data1);
+                            console.log(data1);
+                            res.json({
+                                uid : data1.uid,
+                                message : msg
+                            });
+                            res.end();
                         });
-                        res.json({
-                            message : msg
-                        });
-                        res.end();
                     }
                 });
             }
@@ -92,16 +108,19 @@ router.post('/', function (req, res) {
                 res.json(data);
                 res.end();
             }
-        })
+        });
     }
     else if(req.body.type === "change_name") {
         auth.change_name(req.body.email, req.body.password, req.body.name, function (data) {
             res.json(data);
             res.end();
-        })
+        });
     }
     else if(req.body.type === "get_to_do") {
-
+        db.get_to_do(req.body.uid, function (list) {
+            res.json(list);
+            res.end();
+        })
     }
 });
 
