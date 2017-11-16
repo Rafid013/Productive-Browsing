@@ -233,7 +233,8 @@ function log_out() {
     var body = document.getElementById("homepage_body");
     body.style.background = "none";
     body.style.backgroundColor ="#76b852";
-    body.style.color = "white";
+    body.style.color = "black";
+    logInPage();
     document.getElementById("signup_page").style.display="block";
     document.getElementById("home_page").style.display="none";
     return false;

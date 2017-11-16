@@ -45,7 +45,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
     else if(req.type == "isSignedIn")
     {
-        var tmp = "false";
+        var tmp = "true";
 
         res(tmp);
     }
