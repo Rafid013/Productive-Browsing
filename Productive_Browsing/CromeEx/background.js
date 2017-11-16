@@ -1,3 +1,32 @@
+var favourite_links=[];
+var events_today = ["Get a Haircut 12PM","Finish Offline 11AM","Date with Rupanzel 8:30PM","Read a Book 6AM","Joints to smoke 3AM"];
+var isloggenIn="false";
+
+chrome.contextMenus.create({
+    "title": "Add this link to your Favourite Links",
+    "contexts": ["link"],
+    "onclick" : fav_link
+});
+
+chrome.contextMenus.create({
+    "title": "Add this page to your Favourite Links",
+    "contexts": ["page"],
+    "onclick" : fav_page
+});
+function fav_link(data) {
+    const index = favourite_links.indexOf(data.linkUrl);
+    if (index === -1) {
+        favourite_links.push(data.linkUrl);
+    }
+    console.log(favourite_links);
+}
+function fav_page(data,tab) {
+    const index = favourite_links.indexOf(tab.url);
+    if (index == -1) {
+        favourite_links.push(tab.url);
+    }
+    console.log(favourite_links);
+}
 
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
     /*var tmp = {
@@ -13,7 +42,6 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         //get to do list of today from server and send as response
         //In the server append time with each task. When a task is marked as done or deleted task and time will
         //I will send task time and date separately
-        var events_today = ["Get a Haircut 12PM","Finish Offline 11AM","Date with Rupanzel 8:30PM","Read a Book 6AM","Joints to smoke 3AM"];
         res(events_today);
     }
 
@@ -21,8 +49,13 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     {
         //delete task from databse
         //this is test and works fine
-        var str = req.task+" "+req.date+" "+req.time;
-        alert(str);
+        var str = req.task+" "+req.time;
+        const index = events_today.indexOf(str);
+        if (index != -1) {
+            events_today.splice(index, 1);
+            alert(str);
+        }
+        res(events_today);
     }
 
     else if(req.type =="to do completed")
@@ -45,9 +78,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
     else if(req.type == "isSignedIn")
     {
-        var tmp = "true";
-
-        res(tmp);
+        res(isloggenIn);
     }
 
     else if(req.type == "sign_in")
@@ -61,9 +92,8 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     else if(req.type == "register")
     {
         //create new ID
-        var tmp = "true";
-        alert(req.name);
-        res(tmp);
+        isloggenIn="true";
+        res(isloggenIn);
     }
     else if(req.type == "isMarked")
     {
@@ -75,7 +105,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     }
     else if(req.type == "signed_out")
     {
-
+        isloggenIn="false";
     }
     else if(req.type == "mark_site")
     {
@@ -86,7 +116,37 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
     }
 
-    var senderToServer = new XMLHttpRequest();
+    else if(req.type =="delete_fev_link")
+    {
+        //delete link in req.link
+        const index = favourite_links.indexOf(req.link);
+        if (index != -1) {
+            favourite_links.splice(index, 1);
+        }
+        res(favourite_links);
+    }
+
+    else if(req.type == "open_new_tab")
+    {
+        //open new tab of the link in req.link
+        chrome.tabs.create({url:req.link},function (response) {
+        });
+    }
+
+    else if(req.type =="get_fev_links")
+    {
+        res(favourite_links);
+    }
+
+    else if(req.type=="add_task")
+    {
+        var str = req.task+" "+req.time;
+        events_today.push(str);
+        res(events_today);
+    }
+
+
+   /* var senderToServer = new XMLHttpRequest();
     senderToServer.onreadystatechange = function () {
         if (senderToServer.readyState === 4) {
             alert(JSON.parse(senderToServer.responseText));
@@ -94,6 +154,6 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     };
     senderToServer.open("POST", 'http://localhost:3000/', true);
     senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(tmp));
+    senderToServer.send(JSON.stringify(tmp));*/
 
 });

@@ -163,6 +163,11 @@ body{
     text-decoration: underline;
 	cursor: pointer;
 }
+#show_hide_fav:hover
+{
+    text-decoration: underline;
+    cursor: pointer;
+}
 #Things_To_DO{
 	position: absolute;
 	top:12%;
@@ -213,6 +218,13 @@ body{
     font-size: 18px;
 }
 
+#favourite_list
+{
+    position: absolute;
+    left: 20%;
+    font-size: 18px;
+}
+
 ul {
     margin: 0;
     padding: 0;
@@ -227,7 +239,8 @@ ul li {
     background: #688e8a;
     font-size: 18px;
     transition: 0.2s;
-
+    overflow: hidden;
+    word-break:break-all;
     /* make the list items unselectable */
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -242,7 +255,7 @@ ul li:nth-child(odd) {
 
 /* Darker background-color on hover */
 ul li:hover {
-    background: #ddd;
+    background: #686c72;
 }
 
 /* When clicked on, add a background color and strike out text */
@@ -275,6 +288,18 @@ ul li.checked::before {
 }
 
 .close:hover {
+    background-color: #f44336;
+    color: white;
+}
+
+.close_fev {
+    /*position: absolute;
+    right: 0;
+    top: 0;*/
+    padding: 12px 16px 12px 16px;
+}
+
+.close_fev:hover {
     background-color: #f44336;
     color: white;
 }

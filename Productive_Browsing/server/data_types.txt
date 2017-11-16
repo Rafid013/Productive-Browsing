@@ -14,7 +14,13 @@ When:
     update to do,       type = "update_task",
     delete account,     type = "account_delete",
     change name,        type = "change_name",
-    get to_do_list,     type = "get_to_do"        //in this case the response will be the list, if the sending the full
+    get to_do_list,     type = "get_to_do"
+    get favourite link  type = "get_fev_links"
+    update fev llinks   type = "update_fev_links"
+    delete fev link     type = "delete_fev_link"
+    add fev link        type = "add_fev_links" //occurs on background.js
+    open new tab        type = "open_new_tab"
+                                                   //in this case the response will be the list, if the sending the full
                                                   list at once is not possible there will be a header and a trailer
                                                   indicating the start and end of messages (to be defined later)
 

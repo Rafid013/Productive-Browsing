@@ -2,8 +2,10 @@ var type = 0;
 var events_today;
 var events_ToDo_List = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Joints to smoke"];
 var date_of_current_list;
+var favourite_links;
 var date_today;
 var curTask ="";
+var curLink ="";
 
 var tmp= {
     type : "isSignedIn"
@@ -103,18 +105,43 @@ function add_new_task()
 {
 	var form= document.getElementById("Task_Input");
 	var task = document.getElementById('to_do').value;
-	alert(task);
+	var time = document.getElementById('time').value;
+    time = time.split(':'); // convert to array
+// fetch
+    var hours = Number(time[0]);
+    var minutes = Number(time[1]);
+// calculate
+    var timeValue;
+
+    if (hours > 0 && hours <= 12)
+    {
+        timeValue= "" + hours;
+    } else if (hours > 12)
+    {
+        timeValue= "" + (hours - 12);
+    }
+    else if (hours == 0)
+    {
+        timeValue= "12";
+    }
+
+    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
+    timeValue += (hours >= 12) ? "PM" : "AM";  // get AM/PM
+	//alert(timeValue);
 	var tmp = {
 		task : document.getElementById('to_do').value,
 		date : document.getElementById('date').value,
-		time : document.getElementById('time').value,
+		time : timeValue,
         type : "add_task"
 	};
 	if(tmp.date=="")
     {
         tmp.date = date_today;
     }
-	chrome.runtime.sendMessage(tmp);
+    chrome.runtime.sendMessage(tmp, function(response) {
+        events_ToDo_List = response;
+        populateToDoList();
+    });
 	form.reset();
 	return false;
 }
@@ -132,10 +159,21 @@ function load()
         events_ToDo_List = response;
         populateToDoList();
     });
+    var tmp1= {
+        type : "get_fev_links"
+    }
+    //chrome.runtime.sendMessage(tmp);
+    chrome.runtime.sendMessage(tmp1, function(response) {
+        favourite_links = response;
+        populateFavouriteLinks();
+    });
+
     var date = new Date();
     date_of_current_list=(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
     date_today =(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
     var e = document.getElementById("task_list_ul");
+    e.style.display = 'none';
+    e = document.getElementById("favourite_list_ul");
     e.style.display = 'none';
 	document.getElementById("MyClockDisplay").onclick=toggle;
 	document.getElementById("finput").onchange=fileInput;
@@ -143,6 +181,7 @@ function load()
     document.getElementById("remove_icon").onclick=delete_background;
 	document.getElementById("Task_Input").onsubmit=add_new_task;
 	document.getElementById("show_hide").onclick=toggle_visibility;
+    document.getElementById("show_hide_fav").onclick=toggle_visibility_fav;
     document.getElementById("log_out").onclick=log_out;
     document.getElementById("rgister_Form").style.display = 'none';
     document.getElementById("go_to_login").onclick=logInPage;
@@ -171,6 +210,67 @@ function newElement()
   li.appendChild(span);
 }
 
+function newFevLink()
+{
+    var li = document.createElement("li");
+    var inputValue = curLink;
+    var t = document.createTextNode(inputValue);
+    li.appendChild(t);
+    if (inputValue === '') {
+        alert("You must write something!");
+    } else {
+        document.getElementById("favourite_list_ul").appendChild(li);
+    }
+
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close_fev";
+    span.appendChild(txt);
+    li.appendChild(span);
+}
+
+function populateFavouriteLinks() {
+    var ul=document.getElementById("favourite_list_ul");
+    while (ul.firstChild) {
+        ul.removeChild(ul.firstChild);
+    }
+
+    var i;
+    for (i = 0; i < favourite_links.length; i++)
+    {
+        curLink = favourite_links[i];
+        newFevLink();
+    }
+
+    var close = document.getElementsByClassName("close_fev");
+    for (i = 0; i < close.length; i++)
+    {
+        close[i].onclick = function() {
+            var div = this.parentElement;
+            //div.style.display = "none";
+            var tmp = {
+                link : div.textContent.substring(0,div.textContent.length-1),
+                type : "delete_fev_link"
+            };
+            chrome.runtime.sendMessage(tmp, function(response) {
+                favourite_links = response;
+                populateFavouriteLinks();
+            });
+        }
+    }
+    //var list = document.querySelector('ul');
+    ul.addEventListener('click', function(ev) {
+        if (ev.target.tagName === 'LI') {
+            var div = ev.target;
+            var tmp = {
+                link : div.textContent.substring(0,div.textContent.length-1),
+                type : "open_new_tab"
+            };
+            chrome.runtime.sendMessage(tmp);
+        }
+    }, false);
+}
+
 function populateToDoList()
 {
     var ul=document.getElementById("task_list_ul");
@@ -190,18 +290,21 @@ function populateToDoList()
 	{
   		close[i].onclick = function() {
     	    var div = this.parentElement;
-    	    div.style.display = "none";
+    	    //div.style.display = "none";
             var tmp = {
                 task : div.textContent.substring(0,div.textContent.lastIndexOf(" ")),
                 date : date_of_current_list,
                 time : div.textContent.substring(div.textContent.lastIndexOf(" ")+1,div.textContent.length-1),
                 type : "delete to do"
             };
-            chrome.runtime.sendMessage(tmp);
+            chrome.runtime.sendMessage(tmp, function(response) {
+                events_ToDo_List = response;
+                populateToDoList();
+            });
     	}
 	}
-	var list = document.querySelector('ul');
-	list.addEventListener('click', function(ev) {
+	//var list = document.querySelector('ul');
+	ul.addEventListener('click', function(ev) {
   		if (ev.target.tagName === 'LI') {
     		ev.target.classList.toggle('checked');
     		var div = ev.target;
@@ -223,6 +326,15 @@ function toggle_visibility() {
   else
     e.style.display = 'none';
   return false;
+}
+
+function toggle_visibility_fav() {
+    var e = document.getElementById("favourite_list_ul");
+    if(e.style.display === 'none')
+        e.style.display = 'block';
+    else
+        e.style.display = 'none';
+    return false;
 }
 
 function log_out() {
