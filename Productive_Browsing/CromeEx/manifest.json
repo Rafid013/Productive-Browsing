@@ -21,8 +21,20 @@
   },
 
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": true
   },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": ["time_tracker.js"]
+      //"run_at": "document_end"         // pay attention to this line
+    }
+  ],
 
   "permissions": [
     "tabs",

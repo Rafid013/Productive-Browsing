@@ -2,6 +2,143 @@ var favourite_links=[];
 var events_today = ["Get a Haircut 12PM","Finish Offline 11AM","Date with Rupanzel 8:30PM","Read a Book 6AM","Joints to smoke 3AM"];
 var isloggenIn="false";
 
+
+var activeTabIds=[];
+var lastTab;
+var lasturl;
+var start_time;
+var end_time;
+
+chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+
+    // since only one tab should be active and in the current window at once
+    // the return variable should only have one entry
+    var activeTab = arrayOfTabs[0];
+    lastTab = activeTab.id;
+    var a= document.createElement('a');
+    a.href = activeTab.url;// or do whatever you need
+    lasturl=a.hostname;
+    start_time = performance.now();
+});
+
+
+chrome.windows.onRemoved.addListener(window_close_handler);
+chrome.tabs.onUpdated.addListener(start_tab);
+chrome.tabs.onRemoved.addListener(close_tab);
+chrome.tabs.onActivated.addListener(activateHandler)
+
+function start_tab(tabId, changeInfo, tab) {
+    var b= document.createElement('a');
+    b.href = tab.url;// or do whatever you need
+    var currUrl=b.hostname;
+    if(tabId!=lastTab)
+    {
+        lastTab=tabId;
+        end_time = performance.now();
+        var total_time = (end_time-start_time)/1000;
+        total_time = round(total_time,2);
+        console.log(lastTab);
+        console.log(lasturl);
+        console.log(total_time);
+        lasturl=currUrl;
+        start_time = end_time;
+    }
+    else if(lasturl!=currUrl)
+    {
+        end_time = performance.now();
+        var total_time = (end_time-start_time)/1000;
+        total_time = round(total_time,2);
+        console.log(lastTab);
+        console.log(lasturl);
+        console.log(total_time);
+        lasturl=currUrl;
+        start_time = end_time;
+    }
+    //start_time = performance.now();
+}
+
+function close_tab(tabId , removeInfo) {
+
+    /*chrome.tabs.query({windowType:"normal"}, function(tabs) {
+            if(tabs.length===1)
+            {
+                end_time = performance.now();
+                var total_time = (end_time-start_time)/1000;
+                total_time = round(total_time,2);
+                console.log(lastTab);
+                console.log(lasturl);
+                console.log(total_time);
+            }
+    });*/
+    //end_time = performance.now();
+    //console.log("Call to doSomething took " + (end_time - start_time) + " milliseconds.")
+}
+
+function activateHandler(activeInfo) {
+    if(activeInfo.tabId!=lastTab)
+    {
+        end_time = performance.now();
+        var total_time = (end_time-start_time)/1000;
+        total_time = round(total_time,2);
+        console.log(lastTab);
+        console.log(lasturl);
+        console.log(total_time);
+        lastTab=activeInfo.tabId;
+        start_time = end_time;
+        chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+
+            // since only one tab should be active and in the current window at once
+            // the return variable should only have one entry
+            var activeTab = arrayOfTabs[0];
+            var a= document.createElement('a');
+            a.href = activeTab.url;// or do whatever you need
+            lasturl=a.hostname;
+        });
+    }
+}
+
+function window_close_handler() {
+    end_time = performance.now();
+    var total_time = (end_time-start_time)/1000;
+    total_time = round(total_time,2);
+    console.log(lastTab);
+    console.log(lasturl);
+    console.log(total_time);
+}
+
+
+chrome.windows.onFocusChanged.addListener(function(windowId) {
+    if (windowId === -1) {
+        window_close_handler();
+        console.log("out of focus");
+    } else {
+        chrome.windows.get(windowId, function(chromeWindow) {
+            if (chromeWindow.state == "minimized") {
+                //window_close_handler();
+                console.log("minimized");
+            } else {
+                chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+                    console.log("maximized");
+                    // since only one tab should be active and in the current window at once
+                    // the return variable should only have one entry
+                    var activeTab = arrayOfTabs[0];
+                    lastTab = activeTab.id;
+                    var a= document.createElement('a');
+                    a.href = activeTab.url;// or do whatever you need
+                    lasturl=a.hostname;
+                    start_time = performance.now();
+                });
+                // Window is not minimized (maximized, fullscreen or normal)
+            }
+        });
+    }
+});
+
+function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+
+
 chrome.contextMenus.create({
     "title": "Add this link to your Favourite Links",
     "contexts": ["link"],
