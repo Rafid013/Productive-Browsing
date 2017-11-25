@@ -31,7 +31,8 @@ router.post('/', function (req, res) {
     }
     else if(req.body.type === "sign_in") {
         auth.sign_in(req.body.email, req.body.password, function (data) {
-            res.json(data);
+            res.writeHead(200);
+            res.write(JSON.stringify(data));
             res.end();
         });
     }
@@ -58,15 +59,14 @@ router.post('/', function (req, res) {
 
     }
     else if(req.body.type === "add_task") {
-        db.add_task(req.body.uid, req.body.task, function (msg) {
-            res.json({
-                message : msg
-            });
+        db.add_task(req.body.uid, req.body.task, req.body.date, req.body.time, function (msg) {
+            res.writeHead(200);
+            res.write(msg);
             res.end();
         });
     }
     else if(req.body.type === "task_done") {
-        db.mark_task(req.body.uid, req.body.task, function (msg) {
+        db.mark_task(req.body.uid, req.body.task, req.body.date, req.body.time, function (msg) {
             res.json({
                 message : msg
             });
@@ -74,7 +74,7 @@ router.post('/', function (req, res) {
         });
     }
     else if(req.body.type === "delete_task") {
-        db.mark_task(req.body.uid, req.body.task, function (msg) {
+        db.mark_task(req.body.uid, req.body.task, req.body.date, req.body.time, function (msg) {
             res.json({
                 message : msg
             });
@@ -118,7 +118,8 @@ router.post('/', function (req, res) {
     }
     else if(req.body.type === "get_to_do") {
         db.get_to_do(req.body.uid, function (list) {
-            res.json(list);
+            res.writeHead(200);
+            res.write(JSON.stringify(list));
             res.end();
         })
     }

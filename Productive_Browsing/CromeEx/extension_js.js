@@ -1,36 +1,35 @@
 var type = 0;
-var events_today;
-var events_ToDo_List = ["Stuffs to do ","Places to go","People to meet","Chicks to fuck","Joints to smoke"];
+var events_today = [];
+var events_ToDo_List = [];
 var date_of_current_list;
 var favourite_links;
 var date_today;
-var curTask ="";
-var curLink ="";
+var curTask = "";
+var curLink = "";
 
-var tmp= {
-    type : "isSignedIn"
+function checkLoggedIn() {
+    //check if UID is stored
+    //if stored return true
+    //else false
+    return false;
 }
-//chrome.runtime.sendMessage(tmp);
-//eikhane wiat kore na nonblocking statement . ejonnoi problem
-chrome.runtime.sendMessage(tmp, function(response) {
-    isLoggedIn = response;
-    //for now hard coded and returning true
+
+function loadPage() {
     var body = document.getElementById("homepage_body");
     body.style.display="block";
-    if(isLoggedIn==="true")
-    {
+    if(checkLoggedIn()) {
         body.style.backgroundColor ="#6d7c62";
         body.style.color = "white";
         document.getElementById("signup_page").style.display="none";
         document.getElementById("home_page").style.display="block";
     }
-    else
-    {
+    else {
         body.style.backgroundColor ="#76b852";
         document.getElementById("signup_page").style.display="block";
         document.getElementById("home_page").style.display="none";
     }
-});
+}
+
 
 function showTime(){
 	var date = new Date();
@@ -67,11 +66,11 @@ function showTime(){
 function toggle() {
 	if(type === 0)
 	{
-		type=1;
+		type = 1;
 	}
 	else
 	{
-		type=0;
+		type = 0;
 	} 
 }
 
@@ -81,14 +80,10 @@ function selectBackground() {
 }
 function fileInput() {
 	var image = document.getElementById('finput').files[0];
-    var tmp= {
+    var tmp = {
         type : "upload image",
         file: image
-    }
-    //chrome.runtime.sendMessage(tmp);
-    chrome.runtime.sendMessage(tmp, function(response) {
-        //get image form server as url link
-    });
+    };
 	//these are dummy code. this file will be uploaded in the server. and then it will be set as background
 	var element = document.getElementById('homepage_body');
 	element.style.backgroundImage = "url('background.jpeg')";
@@ -97,71 +92,111 @@ function fileInput() {
 
 
 function Scroll_Events() {
-    var line = events_today.join(", ");
-	document.getElementById("ShowEventScroll").textContent = line ;
+	document.getElementById("ShowEventScroll").textContent = events_today.join(", ");
 }
 
 function add_new_task()
 {
-	var form= document.getElementById("Task_Input");
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+	var form = document.getElementById("Task_Input");
 	var task = document.getElementById('to_do').value;
 	var time = document.getElementById('time').value;
     time = time.split(':'); // convert to array
-// fetch
+    // fetch
     var hours = Number(time[0]);
     var minutes = Number(time[1]);
-// calculate
+    // calculate
     var timeValue;
 
     if (hours > 0 && hours <= 12)
     {
-        timeValue= "" + hours;
+        timeValue = "" + hours;
     } else if (hours > 12)
     {
-        timeValue= "" + (hours - 12);
+        timeValue = "" + (hours - 12);
     }
-    else if (hours == 0)
+    else if (hours === 0)
     {
-        timeValue= "12";
+        timeValue = "12";
     }
 
     timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
     timeValue += (hours >= 12) ? "PM" : "AM";  // get AM/PM
 	//alert(timeValue);
-	var tmp = {
-		task : document.getElementById('to_do').value,
-		date : document.getElementById('date').value,
-		time : timeValue,
+
+    //
+    // read uid here, uid will be stored from the moment a user logs in or registers
+    //
+
+	var dataToSend = {
+	    uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+		task : task,
+        date : document.getElementById('date').value,
+        time : timeValue,
         type : "add_task"
 	};
-	if(tmp.date=="")
+	if(dataToSend.date === "")
     {
-        tmp.date = date_today;
+        dataToSend.date = date_today;
     }
-    chrome.runtime.sendMessage(tmp, function(response) {
-        events_ToDo_List = response;
-        populateToDoList();
-    });
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            alert(senderToServer.responseText);
+            if(senderToServer.responseText === "success") {
+                //if(dataToSend.date === date_today) events_ToDo_List.push(dataToSend.task + " " + dataToSend.time);
+                events_today.push(task);
+                Scroll_Events();
+                events_ToDo_List.push(task + " " + dataToSend.time);
+                populateToDoList();
+            }
+            else {
+                //to be implemented
+            }
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(dataToSend));
 	form.reset();
 	return false;
 }
 
 function load()
 {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    loadPage();
     showTime();
-    var tmp= {
+
+    //
+    // read uid here, uid will be stored from the moment a user logs in or registers
+    //
+
+    var dataToSend = {
+        uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
         type : "get_to_do"
-    }
-    //chrome.runtime.sendMessage(tmp);
-    chrome.runtime.sendMessage(tmp, function(response) {
-        events_today = response;
-        Scroll_Events();
-        events_ToDo_List = response;
-        populateToDoList();
-    });
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            var event_list_server = JSON.parse(senderToServer.responseText);
+            var list_size = event_list_server.length;
+            for(var i = 0; i < list_size; ++i) {
+                var data = event_list_server[i].task.split(",");
+                var task = data[0];
+                var date = data[1];
+                var time = data[2];
+                events_today.push(task);
+                events_ToDo_List.push(task + " " + time);
+            }
+            Scroll_Events();
+            populateToDoList();
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(dataToSend));
     var tmp1= {
         type : "get_fev_links"
-    }
+    };
     //chrome.runtime.sendMessage(tmp);
     chrome.runtime.sendMessage(tmp1, function(response) {
         favourite_links = response;
@@ -175,19 +210,19 @@ function load()
     e.style.display = 'none';
     e = document.getElementById("favourite_list_ul");
     e.style.display = 'none';
-	document.getElementById("MyClockDisplay").onclick=toggle;
-	document.getElementById("finput").onchange=fileInput;
-	document.getElementById("edit_icon").onclick=selectBackground;
-    document.getElementById("remove_icon").onclick=delete_background;
-	document.getElementById("Task_Input").onsubmit=add_new_task;
-	document.getElementById("show_hide").onclick=toggle_visibility;
-    document.getElementById("show_hide_fav").onclick=toggle_visibility_fav;
-    document.getElementById("log_out").onclick=log_out;
-    document.getElementById("rgister_Form").style.display = 'none';
-    document.getElementById("go_to_login").onclick=logInPage;
-    document.getElementById("go_to_register").onclick=RegisterPage;
-    document.getElementById("logIn_Form").onsubmit=loggedIn;
-    document.getElementById("rgister_Form").onsubmit=registered;
+    document.getElementById("MyClockDisplay").onclick = toggle;
+    document.getElementById("finput").onchange = fileInput;
+    document.getElementById("edit_icon").onclick = selectBackground;
+    document.getElementById("remove_icon").onclick = delete_background;
+    document.getElementById("Task_Input").onsubmit = add_new_task;
+    document.getElementById("show_hide").onclick = toggle_visibility;
+    document.getElementById("show_hide_fav").onclick = toggle_visibility_fav;
+    document.getElementById("log_out").onclick = log_out;
+    document.getElementById("register_Form").style.display = 'none';
+    document.getElementById("go_to_login").onclick = logInPage;
+    document.getElementById("go_to_register").onclick = RegisterPage;
+    document.getElementById("logIn_Form").onsubmit = logIn;
+    document.getElementById("register_Form").onsubmit = registered;
 }
 
 //adding elements in to do list
@@ -338,10 +373,9 @@ function toggle_visibility_fav() {
 }
 
 function log_out() {
-    var tmp = {
-        type : "signed_out"
-    };
-    chrome.runtime.sendMessage(tmp);
+
+    //delete UID from chrome storage
+
     var body = document.getElementById("homepage_body");
     body.style.background = "none";
     body.style.backgroundColor ="#76b852";
@@ -354,8 +388,8 @@ function log_out() {
 
 function delete_background() {
     var tmp= {
-        type : "del_image",
-    }
+        type : "del_image"
+    };
     //chrome.runtime.sendMessage(tmp);
     chrome.runtime.sendMessage(tmp, function(response) {
         //get image form server as url link
@@ -369,7 +403,7 @@ function delete_background() {
 function logInPage()
 {
     var a = document.getElementById("logIn_Form");
-    var b = document.getElementById("rgister_Form");
+    var b = document.getElementById("register_Form");
     a.style.display = 'block';
     b.style.display = 'none';
 }
@@ -377,19 +411,43 @@ function logInPage()
 function RegisterPage()
 {
     var a = document.getElementById("logIn_Form");
-    var b = document.getElementById("rgister_Form");
+    var b = document.getElementById("register_Form");
     b.style.display = 'block';
     a.style.display = 'none';
 }
 
-function loggedIn()
+function logIn()
 {
-    var tmp = {
+    var dataToSend = {
         email : document.getElementById("login_email").value,
         password : document.getElementById("login_password").value,
         type : "sign_in"
     };
-    chrome.runtime.sendMessage(tmp, function(response) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            var receivedData = JSON.parse(senderToServer.responseText);
+            if(receivedData.message === "success") {
+                var name = receivedData.name;
+                var uid = receivedData.uid;
+                //store name and uid
+                alert(name);
+                alert(uid);
+                var body = document.getElementById("homepage_body");
+                body.style.backgroundColor ="#6d7c62";
+                body.style.color = "white";
+                document.getElementById("signup_page").style.display="none";
+                document.getElementById("home_page").style.display="block";
+            }
+            else {
+                //to be implemented
+            }
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(dataToSend));
+    /*chrome.runtime.sendMessage(tmp, function(response) {
         //if ok load home page
         isLoggedIn = response;
         if(isLoggedIn==="true")
@@ -400,7 +458,7 @@ function loggedIn()
             document.getElementById("signup_page").style.display="none";
             document.getElementById("home_page").style.display="block";
         }
-    });
+    });*/
     document.getElementById("logIn_Form").reset();
     return false;
 }

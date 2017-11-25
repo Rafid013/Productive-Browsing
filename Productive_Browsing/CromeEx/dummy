@@ -1,0 +1,9 @@
+var senderToServer = new XMLHttpRequest();
+senderToServer.open("POST", 'http://localhost:3000/', true);
+senderToServer.onreadystatechange = function () {
+    if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+
+    }
+};
+senderToServer.setRequestHeader("Content-Type", "application/json");
+senderToServer.send(JSON.stringify(dataToSend));

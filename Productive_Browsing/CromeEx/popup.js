@@ -14,9 +14,9 @@ function load() {
     unmark_div.style.display ="none";
     var tmp= {
         type : "isSignedIn"
-    }
+    };
     chrome.runtime.sendMessage(tmp, function(response) {
-        isLoggedIn = response;
+        var isLoggedIn = response;
         if(isLoggedIn==="true")
         {
             toolbar.style.display = "block";

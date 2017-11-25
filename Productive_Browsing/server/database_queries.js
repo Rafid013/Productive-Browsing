@@ -86,11 +86,11 @@ function de_mark_site(uid, site, callback) {
     });
 }
 
-function add_task(uid, task, callback) {
+function add_task(uid, task, date, time, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added", function (dataSnapshot) {
         var tmp = {
-            task : task.activity + ':' + task.date + ':' + task.time,
+            task : task + ',' + date + ',' + time,
             done : false
         };
         ref.child(dataSnapshot.key).child('To_Do_List').push(tmp, function (error) {
@@ -100,18 +100,18 @@ function add_task(uid, task, callback) {
                 callback(error.code);
             }
             else {
-                console.log("Task: " + task.activity + " added for uid: " + uid);
+                console.log("Task: " + task+ " added for uid: " + uid);
                 callback("success");
             }
         });
     });
 }
 
-function mark_task(uid, task, callback) {
+function mark_task(uid, task, date, time, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added", function (dataSnapshot) {
         var tmp = {
-            task : task.activity + ':' + task.date + ':' + task.time,
+            task : task + ',' + date + ',' + time,
             done : false
         };
         var taskRef = ref.child(dataSnapshot.key).child('To_Do_List').orderByChild("task").equalTo(tmp.task);
@@ -123,7 +123,7 @@ function mark_task(uid, task, callback) {
                     callback(error.code);
                 }
                 else {
-                    console.log("Task: " + task.activity + " marked \'done\' for uid: " + uid);
+                    console.log("Task: " + task + " marked \'done\' for uid: " + uid);
                     callback("success");
                 }
             });
@@ -132,11 +132,12 @@ function mark_task(uid, task, callback) {
 }
 
 
-function delete_task(uid, task, callback) {
+function delete_task(uid, task, date, time, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added", function (dataSnapshot) {
         var tmp = {
-            task : task.activity + ":" + task.date + ":" + task.time
+            task : task + ',' + date + ',' + time,
+            done : false
         };
         var taskRef = ref.child(dataSnapshot.key).child('To_Do_List').orderByChild("task").equalTo(tmp.task);
         taskRef.once("child_added", function (dataSnapshot1) {
@@ -147,7 +148,7 @@ function delete_task(uid, task, callback) {
                     callback(error.code);
                 }
                 else {
-                    console.log("Task: " + task.activity + " deleted for uid: " + uid);
+                    console.log("Task: " + task + " deleted for uid: " + uid);
                     callback("success");
                 }
             });
