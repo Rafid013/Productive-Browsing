@@ -2,7 +2,7 @@ var type = 0;
 var events_today = [];
 var events_ToDo_List = [];
 var date_of_current_list;
-var favourite_links;
+var favourite_links = [];
 var date_today;
 var curTask = "";
 var curLink = "";
@@ -12,6 +12,127 @@ function checkLoggedIn() {
     //if stored return true
     //else false
     return false;
+}
+
+function delete_fav_link_from_server(uid, link) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var delete_fav_link_req = {
+      link : link,
+      type : "delete_fav_link"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            if(senderToServer.responseText === "success") {
+                var del_index = favourite_links.indexOf(link);
+                if(del_index > -1) favourite_links.splice(del_index, 1);
+                populateFavouriteLinks();
+            }
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(delete_fav_link_req));
+}
+
+
+function add_task_to_server(uid, task, date, time) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var add_task_req = {
+        uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+        task : task,
+        date : date,
+        time : time,
+        type : "add_task"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            alert(senderToServer.responseText);
+            if(senderToServer.responseText === "success") {
+                //if(dataToSend.date === date_today) events_ToDo_List.push(dataToSend.task + " " + dataToSend.time);
+                events_today.push(task);
+                Scroll_Events();
+                events_ToDo_List.push(task + " " + time);
+                populateToDoList();
+            }
+            else {
+                //to be implemented
+            }
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(add_task_req));
+}
+
+function delete_task_from_server(uid, task, date, time) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var delete_task_req = {
+        uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+        task : task,
+        date : date,
+        time : time,
+        type : "delete_task"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            alert(senderToServer.responseText);
+            if(senderToServer.responseText === "success") {
+                //if(dataToSend.date === date_today) events_ToDo_List.push(dataToSend.task + " " + dataToSend.time);
+                var del_index = events_ToDo_List.indexOf(task + " " + time);
+                if(del_index > -1) events_ToDo_List.splice(del_index, 1);
+            }
+            else {
+                //to be implemented
+            }
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(delete_task_req));
+}
+
+function get_fav_link_from_server(uid) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var get_fav_link_req = {
+        uid : uid,
+        type : "get_fav_link"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            favourite_links.push("something");
+            populateFavouriteLinks();
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(get_fav_link_req));
+}
+
+function get_to_do_from_server(uid) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var getToDoReq = {
+      uid : uid,
+      type : "get_to_do"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            var event_list_server = JSON.parse(senderToServer.responseText);
+            var list_size = event_list_server.length;
+            for(var i = 0; i < list_size; ++i) {
+                var data = event_list_server[i].task.split(",");
+                var task = data[0];
+                var date = data[1];
+                var time = data[2];
+                events_today.push(task);
+                events_ToDo_List.push(task + " " + time);
+            }
+            Scroll_Events();
+            populateToDoList();
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(getToDoReq));
 }
 
 function loadPage() {
@@ -97,8 +218,6 @@ function Scroll_Events() {
 
 function add_new_task()
 {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
 	var form = document.getElementById("Task_Input");
 	var task = document.getElementById('to_do').value;
 	var time = document.getElementById('time').value;
@@ -129,79 +248,25 @@ function add_new_task()
     // read uid here, uid will be stored from the moment a user logs in or registers
     //
 
-	var dataToSend = {
-	    uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
-		task : task,
-        date : document.getElementById('date').value,
-        time : timeValue,
-        type : "add_task"
-	};
-	if(dataToSend.date === "")
-    {
-        dataToSend.date = date_today;
-    }
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            alert(senderToServer.responseText);
-            if(senderToServer.responseText === "success") {
-                //if(dataToSend.date === date_today) events_ToDo_List.push(dataToSend.task + " " + dataToSend.time);
-                events_today.push(task);
-                Scroll_Events();
-                events_ToDo_List.push(task + " " + dataToSend.time);
-                populateToDoList();
-            }
-            else {
-                //to be implemented
-            }
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(dataToSend));
+    var date = document.getElementById('date').value;
+    if(date === "") date = date_today;
+    add_task_to_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3", task, date, timeValue);
 	form.reset();
 	return false;
 }
 
 function load()
 {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
     loadPage();
     showTime();
 
     //
     // read uid here, uid will be stored from the moment a user logs in or registers
     //
+    get_to_do_from_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3"); //parameter will be changed to uid
+    get_fav_link_from_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3");
 
-    var dataToSend = {
-        uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
-        type : "get_to_do"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            var event_list_server = JSON.parse(senderToServer.responseText);
-            var list_size = event_list_server.length;
-            for(var i = 0; i < list_size; ++i) {
-                var data = event_list_server[i].task.split(",");
-                var task = data[0];
-                var date = data[1];
-                var time = data[2];
-                events_today.push(task);
-                events_ToDo_List.push(task + " " + time);
-            }
-            Scroll_Events();
-            populateToDoList();
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(dataToSend));
-    var tmp1= {
-        type : "get_fev_links"
-    };
-    //chrome.runtime.sendMessage(tmp);
-    chrome.runtime.sendMessage(tmp1, function(response) {
-        favourite_links = response;
-        populateFavouriteLinks();
-    });
+
 
     var date = new Date();
     date_of_current_list=(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
@@ -222,7 +287,7 @@ function load()
     document.getElementById("go_to_login").onclick = logInPage;
     document.getElementById("go_to_register").onclick = RegisterPage;
     document.getElementById("logIn_Form").onsubmit = logIn;
-    document.getElementById("register_Form").onsubmit = registered;
+    document.getElementById("register_Form").onsubmit = register;
 }
 
 //adding elements in to do list
@@ -245,7 +310,7 @@ function newElement()
   li.appendChild(span);
 }
 
-function newFevLink()
+function newFavLink()
 {
     var li = document.createElement("li");
     var inputValue = curLink;
@@ -259,7 +324,7 @@ function newFevLink()
 
     var span = document.createElement("SPAN");
     var txt = document.createTextNode("\u00D7");
-    span.className = "close_fev";
+    span.className = "close_fav";
     span.appendChild(txt);
     li.appendChild(span);
 }
@@ -274,23 +339,20 @@ function populateFavouriteLinks() {
     for (i = 0; i < favourite_links.length; i++)
     {
         curLink = favourite_links[i];
-        newFevLink();
+        newFavLink();
     }
 
-    var close = document.getElementsByClassName("close_fev");
+    var close = document.getElementsByClassName("close_fav");
     for (i = 0; i < close.length; i++)
     {
         close[i].onclick = function() {
             var div = this.parentElement;
             //div.style.display = "none";
-            var tmp = {
-                link : div.textContent.substring(0,div.textContent.length-1),
-                type : "delete_fev_link"
-            };
-            chrome.runtime.sendMessage(tmp, function(response) {
-                favourite_links = response;
-                populateFavouriteLinks();
-            });
+
+            //read uid here
+
+            delete_fav_link_from_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+                div.textContent.substring(0, div.textContent.length - 1));
         }
     }
     //var list = document.querySelector('ul');
@@ -298,7 +360,7 @@ function populateFavouriteLinks() {
         if (ev.target.tagName === 'LI') {
             var div = ev.target;
             var tmp = {
-                link : div.textContent.substring(0,div.textContent.length-1),
+                link : div.textContent.substring(0, div.textContent.length - 1),
                 type : "open_new_tab"
             };
             chrome.runtime.sendMessage(tmp);
@@ -326,16 +388,15 @@ function populateToDoList()
   		close[i].onclick = function() {
     	    var div = this.parentElement;
     	    //div.style.display = "none";
-            var tmp = {
-                task : div.textContent.substring(0,div.textContent.lastIndexOf(" ")),
-                date : date_of_current_list,
-                time : div.textContent.substring(div.textContent.lastIndexOf(" ")+1,div.textContent.length-1),
-                type : "delete to do"
-            };
-            chrome.runtime.sendMessage(tmp, function(response) {
-                events_ToDo_List = response;
-                populateToDoList();
-            });
+
+            //read uid here
+
+            delete_task_from_server(
+                "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+                div.textContent.substring(0, div.textContent.lastIndexOf(" ")),
+                date_of_current_list,
+                div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1)
+            );
     	}
 	}
 	//var list = document.querySelector('ul');
@@ -343,13 +404,15 @@ function populateToDoList()
   		if (ev.target.tagName === 'LI') {
     		ev.target.classList.toggle('checked');
     		var div = ev.target;
-            var tmp = {
+
+    		//read uid here
+    		//mark_task_in_server(uid, task, date, time);
+            /*var tmp = {
                 task : div.textContent.substring(0,div.textContent.lastIndexOf(" ")),
                 date : date_of_current_list,
                 time : div.textContent.substring(div.textContent.lastIndexOf(" ")+1,div.textContent.length-1),
                 type : "to do completed"
-            };
-            chrome.runtime.sendMessage(tmp);
+            };*/
   		}
 	}, false);
 }
@@ -381,8 +444,8 @@ function log_out() {
     body.style.backgroundColor ="#76b852";
     body.style.color = "black";
     logInPage();
-    document.getElementById("signup_page").style.display="block";
-    document.getElementById("home_page").style.display="none";
+    document.getElementById("signup_page").style.display = "block";
+    document.getElementById("home_page").style.display = "none";
     return false;
 }
 
@@ -418,7 +481,7 @@ function RegisterPage()
 
 function logIn()
 {
-    var dataToSend = {
+    var log_in_req = {
         email : document.getElementById("login_email").value,
         password : document.getElementById("login_password").value,
         type : "sign_in"
@@ -435,10 +498,10 @@ function logIn()
                 alert(name);
                 alert(uid);
                 var body = document.getElementById("homepage_body");
-                body.style.backgroundColor ="#6d7c62";
+                body.style.backgroundColor = "#6d7c62";
                 body.style.color = "white";
-                document.getElementById("signup_page").style.display="none";
-                document.getElementById("home_page").style.display="block";
+                document.getElementById("signup_page").style.display = "none";
+                document.getElementById("home_page").style.display = "block";
             }
             else {
                 //to be implemented
@@ -446,44 +509,44 @@ function logIn()
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(dataToSend));
-    /*chrome.runtime.sendMessage(tmp, function(response) {
-        //if ok load home page
-        isLoggedIn = response;
-        if(isLoggedIn==="true")
-        {
-            var body = document.getElementById("homepage_body");
-            body.style.backgroundColor ="#6d7c62";
-            body.style.color = "white";
-            document.getElementById("signup_page").style.display="none";
-            document.getElementById("home_page").style.display="block";
-        }
-    });*/
+    senderToServer.send(JSON.stringify(log_in_req));
     document.getElementById("logIn_Form").reset();
     return false;
 }
 
-function registered()
+function register()
 {
-    var tmp = {
+    var register_req = {
         name : document.getElementById("reg_name").value,
         email : document.getElementById("reg_password").value,
         password : document.getElementById("reg_email").value,
-        type : "register"
+        type : "sign_up"
     };
-    chrome.runtime.sendMessage(tmp, function(response) {
-        //if ok load home page
-        isLoggedIn = response;
-        if(isLoggedIn==="true")
-        {
-            var body = document.getElementById("homepage_body");
-            body.style.backgroundColor ="#6d7c62";
-            body.style.color = "white";
-            document.getElementById("signup_page").style.display="none";
-            document.getElementById("home_page").style.display="block";
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            var receivedData = JSON.parse(senderToServer.responseText);
+            if(receivedData.message === "success") {
+                var name = receivedData.name;
+                var uid = receivedData.uid;
+                //store name and uid
+                alert(name);
+                alert(uid);
+                var body = document.getElementById("homepage_body");
+                body.style.backgroundColor = "#6d7c62";
+                body.style.color = "white";
+                document.getElementById("signup_page").style.display = "none";
+                document.getElementById("home_page").style.display = "block";
+            }
+            else {
+
+            }
         }
-    });
-    document.getElementById("rgister_Form").reset();
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(register_req));
+    document.getElementById("register_Form").reset();
     return false;
 }
 

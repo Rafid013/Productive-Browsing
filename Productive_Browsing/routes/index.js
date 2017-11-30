@@ -65,7 +65,7 @@ router.post('/', function (req, res) {
             res.end();
         });
     }
-    else if(req.body.type === "task_done") {
+    else if(req.body.type === "mark_task") {
         db.mark_task(req.body.uid, req.body.task, req.body.date, req.body.time, function (msg) {
             res.json({
                 message : msg
