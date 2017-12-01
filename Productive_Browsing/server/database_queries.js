@@ -49,7 +49,7 @@ function mark_site(uid, site, callback) {
         var tmp = {
             Site : site
         };
-        ref.child(dataSnapshot.key).child('Sites').push(tmp, function (error) {
+        ref.child(dataSnapshot.key).child('Time Killer Sites').push(tmp, function (error) {
             if(error) {
                 console.log(error.code);
                 console.log(error.message);
@@ -63,13 +63,13 @@ function mark_site(uid, site, callback) {
     });
 }
 
-function de_mark_site(uid, site, callback) {
+function unmark_site(uid, site, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added", function (dataSnapshot) {
         var tmp = {
             Site : site
         };
-        var siteRef = ref.child(dataSnapshot.key).child('Sites').orderByChild('Site').equalTo(tmp.Site);
+        var siteRef = ref.child(dataSnapshot.key).child('Time Killer Sites').orderByChild('Site').equalTo(tmp.Site);
         siteRef.once("child_added", function (dataSnapshot1) {
             ref.child(dataSnapshot.key).child('Sites').child(dataSnapshot1.key).set(null, function (error) {
                 if(error) {
@@ -78,7 +78,7 @@ function de_mark_site(uid, site, callback) {
                     callback(error.code);
                 }
                 else {
-                    console.log("Site: " + site + " deMarked for uid: " + uid);
+                    console.log("Site: " + site + " unmarked for uid: " + uid);
                     callback("success");
                 }
             });
@@ -86,11 +86,11 @@ function de_mark_site(uid, site, callback) {
     });
 }
 
-function add_task(uid, task, callback) {
+function add_task(uid, task, date, time, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added", function (dataSnapshot) {
         var tmp = {
-            task : task.activity + ':' + task.date + ':' + task.time,
+            task : task + ',' + date + ',' + time,
             done : false
         };
         ref.child(dataSnapshot.key).child('To_Do_List').push(tmp, function (error) {
@@ -100,18 +100,18 @@ function add_task(uid, task, callback) {
                 callback(error.code);
             }
             else {
-                console.log("Task: " + task.activity + " added for uid: " + uid);
+                console.log("Task: " + task+ " added for uid: " + uid);
                 callback("success");
             }
         });
     });
 }
 
-function mark_task(uid, task, callback) {
+function mark_task(uid, task, date, time, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added", function (dataSnapshot) {
         var tmp = {
-            task : task.activity + ':' + task.date + ':' + task.time,
+            task : task + ',' + date + ',' + time,
             done : false
         };
         var taskRef = ref.child(dataSnapshot.key).child('To_Do_List').orderByChild("task").equalTo(tmp.task);
@@ -123,7 +123,7 @@ function mark_task(uid, task, callback) {
                     callback(error.code);
                 }
                 else {
-                    console.log("Task: " + task.activity + " marked \'done\' for uid: " + uid);
+                    console.log("Task: " + task + " marked \'done\' for uid: " + uid);
                     callback("success");
                 }
             });
@@ -132,11 +132,12 @@ function mark_task(uid, task, callback) {
 }
 
 
-function delete_task(uid, task, callback) {
+function delete_task(uid, task, date, time, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added", function (dataSnapshot) {
         var tmp = {
-            task : task.activity + ":" + task.date + ":" + task.time
+            task : task + ',' + date + ',' + time,
+            done : false
         };
         var taskRef = ref.child(dataSnapshot.key).child('To_Do_List').orderByChild("task").equalTo(tmp.task);
         taskRef.once("child_added", function (dataSnapshot1) {
@@ -147,7 +148,7 @@ function delete_task(uid, task, callback) {
                     callback(error.code);
                 }
                 else {
-                    console.log("Task: " + task.activity + " deleted for uid: " + uid);
+                    console.log("Task: " + task + " deleted for uid: " + uid);
                     callback("success");
                 }
             });
@@ -170,14 +171,74 @@ function get_to_do(uid, callback) {
 }
 
 
+function add_fav_link(uid, link, callback) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added", function (dataSnapshot) {
+        var tmp = {
+            Site : link
+        };
+        ref.child(dataSnapshot.key).child('Favourite Sites').push(tmp, function (error) {
+            if(error) {
+                console.log(error.code);
+                console.log(error.message);
+                callback(error.code);
+            }
+            else {
+                console.log("Site: " + link + " favoured  for uid: " + uid);
+                callback("success");
+            }
+        });
+    });
+}
+
+function delete_fav_link(uid, link, callback) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added", function (dataSnapshot) {
+        var tmp = {
+            Site : link
+        };
+        var siteRef = ref.child(dataSnapshot.key).child('Favourite Sites').orderByChild('Site').equalTo(tmp.Site);
+        siteRef.once("child_added", function (dataSnapshot1) {
+            ref.child(dataSnapshot.key).child('Favourite Sites').child(dataSnapshot1.key).set(null, function (error) {
+                if(error) {
+                    console.log(error.code);
+                    console.log(error.message);
+                    callback(error.code);
+                }
+                else {
+                    console.log("Favourite Site: " + link + " deleted for uid: " + uid);
+                    callback("success");
+                }
+            });
+        })
+    });
+}
+
+function get_fav_link(uid, callback) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added", function (dataSnapshot) {
+        var taskRef = ref.child(dataSnapshot.key).child('Favourite Sites').orderByChild("Site");
+        taskRef.once("value", function (dataSnapshot1) {
+            var sites = [];
+            dataSnapshot1.forEach(function(indexSnapshot) {
+                sites.push(indexSnapshot.val());
+            });
+            callback(sites);
+        })
+    });
+}
+
 module.exports = {
     admin : admin,
     add_UID : add_UID,
     mark_site : mark_site,
     delete_UID : delete_UID,
-    de_mark_site : de_mark_site,
+    unmark_site : unmark_site,
     add_task : add_task,
     mark_task : mark_task,
     delete_task : delete_task,
-    get_to_do : get_to_do
+    get_to_do : get_to_do,
+    add_fav_link : add_fav_link,
+    delete_fav_link : delete_fav_link,
+    get_fav_link : get_fav_link
 };

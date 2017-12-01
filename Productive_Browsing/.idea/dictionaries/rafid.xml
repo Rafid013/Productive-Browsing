@@ -2,13 +2,25 @@
   <dictionary name="rafid">
     <words>
       <w>addr</w>
+      <w>appspot</w>
       <w>cdnjs</w>
       <w>cloudflare</w>
+      <w>finput</w>
+      <w>firebase</w>
       <w>firebaseapp</w>
+      <w>fullscreen</w>
+      <w>gyih</w>
+      <w>igzba</w>
+      <w>islogged</w>
       <w>javascripts</w>
+      <w>ktpi</w>
+      <w>lasturl</w>
       <w>lockfile</w>
       <w>newtab</w>
+      <w>nxyr</w>
       <w>onreadystatechange</w>
+      <w>signup</w>
+      <w>unmark</w>
     </words>
   </dictionary>
 </component>

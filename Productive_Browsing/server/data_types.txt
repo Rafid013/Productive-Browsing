@@ -15,10 +15,10 @@ When:
     delete account,     type = "account_delete",
     change name,        type = "change_name",
     get to_do_list,     type = "get_to_do"
-    get favourite link  type = "get_fev_links"
-    update fev llinks   type = "update_fev_links"
-    delete fev link     type = "delete_fev_link"
-    add fev link        type = "add_fev_links" //occurs on background.js
+    get favourite link  type = "get_fav_links"
+    update favourite links   type = "update_fav_links"
+    delete favourite link     type = "delete_fav_link"
+    add favourite link        type = "add_fav_links" //occurs on background.js
     open new tab        type = "open_new_tab"
                                                    //in this case the response will be the list, if the sending the full
                                                   list at once is not possible there will be a header and a trailer

@@ -1,6 +1,6 @@
 var favourite_links=[];
-var events_today = ["Get a Haircut 12PM","Finish Offline 11AM","Date with Rupanzel 8:30PM","Read a Book 6AM","Joints to smoke 3AM"];
-var isloggenIn="false";
+var events_today = [];
+var isloggedIn="true";
 
 
 var activeTabIds=[];
@@ -25,29 +25,27 @@ chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
 chrome.windows.onRemoved.addListener(window_close_handler);
 chrome.tabs.onUpdated.addListener(start_tab);
 chrome.tabs.onRemoved.addListener(close_tab);
-chrome.tabs.onActivated.addListener(activateHandler)
+chrome.tabs.onActivated.addListener(activateHandler);
 
 function start_tab(tabId, changeInfo, tab) {
     var b= document.createElement('a');
     b.href = tab.url;// or do whatever you need
     var currUrl=b.hostname;
-    if(tabId!=lastTab)
+    var total_time = (end_time-start_time)/1000;
+    total_time = round(total_time, 2);
+    if(tabId !== lastTab)
     {
         lastTab=tabId;
         end_time = performance.now();
-        var total_time = (end_time-start_time)/1000;
-        total_time = round(total_time,2);
         console.log(lastTab);
         console.log(lasturl);
         console.log(total_time);
-        lasturl=currUrl;
+        lasturl = currUrl;
         start_time = end_time;
     }
-    else if(lasturl!=currUrl)
+    else if(lasturl !== currUrl)
     {
         end_time = performance.now();
-        var total_time = (end_time-start_time)/1000;
-        total_time = round(total_time,2);
         console.log(lastTab);
         console.log(lasturl);
         console.log(total_time);
@@ -75,7 +73,7 @@ function close_tab(tabId , removeInfo) {
 }
 
 function activateHandler(activeInfo) {
-    if(activeInfo.tabId!=lastTab)
+    if(activeInfo.tabId !== lastTab)
     {
         end_time = performance.now();
         var total_time = (end_time-start_time)/1000;
@@ -113,7 +111,7 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
         console.log("out of focus");
     } else {
         chrome.windows.get(windowId, function(chromeWindow) {
-            if (chromeWindow.state == "minimized") {
+            if (chromeWindow.state === "minimized") {
                 //window_close_handler();
                 console.log("minimized");
             } else {
@@ -157,45 +155,46 @@ function fav_link(data) {
     }
     console.log(favourite_links);
 }
-function fav_page(data,tab) {
+function fav_page(data, tab) {
     const index = favourite_links.indexOf(tab.url);
-    if (index == -1) {
+    if (index === -1) {
         favourite_links.push(tab.url);
     }
     console.log(favourite_links);
 }
 
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
-    /*var tmp = {
-      task : req.task,
-      date : req.date,
-      time : req.time,
-      type : req.type
-    };*/
-    tmp = req;
-
-    if(req.type == "get_to_do")
+    var dataToSend;
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    if(req.type === "get_to_do")
     {
-        //get to do list of today from server and send as response
-        //In the server append time with each task. When a task is marked as done or deleted task and time will
-        //I will send task time and date separately
+        dataToSend = {
+          uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+          type : "get_to_do"
+        };
+        senderToServer.onreadystatechange = function () {
+            if (senderToServer.readyState === 4 && senderToServer.status === 200) {
+                //res(senderToServer.responseText);
+            }
+        };
         res(events_today);
     }
 
-    else if(req.type =="delete to do")
+    else if(req.type === "delete to do")
     {
-        //delete task from databse
+        //delete task from database
         //this is test and works fine
         var str = req.task+" "+req.time;
         const index = events_today.indexOf(str);
-        if (index != -1) {
+        if (index !== -1) {
             events_today.splice(index, 1);
             alert(str);
         }
         res(events_today);
     }
 
-    else if(req.type =="to do completed")
+    else if(req.type === "to do completed")
     {
         //task completed operation on database
         //this is test and works fine
@@ -203,22 +202,22 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         alert(str);
     }
 
-    else if(req.type=="upload image")
+    else if(req.type === "upload image")
     {
         //upload req.file in server and send the url as response
     }
 
-    else if(req.type == "del_image")
+    else if(req.type === "del_image")
     {
         //delete image and send default image url as response
     }
 
-    else if(req.type == "isSignedIn")
+    else if(req.type === "isSignedIn")
     {
-        res(isloggenIn);
+        res(isloggedIn);
     }
 
-    else if(req.type == "sign_in")
+    else if(req.type === "sign_in")
     {
         //check if sign in is successful or not
         alert(req.email);
@@ -226,13 +225,13 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         res(tmp);
     }
 
-    else if(req.type == "register")
+    else if(req.type === "register")
     {
         //create new ID
-        isloggenIn="true";
-        res(isloggenIn);
+        isloggedIn="true";
+        res(isloggedIn);
     }
-    else if(req.type == "isMarked")
+    else if(req.type === "isMarked")
     {
         //check if the domain is marked as time killer and send back status
         var a= document.createElement('a');
@@ -240,57 +239,64 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         var tmp = "false";
         res(tmp);
     }
-    else if(req.type == "signed_out")
+    else if(req.type === "signed_out")
     {
-        isloggenIn="false";
+        isloggedIn="false";
     }
-    else if(req.type == "mark_site")
-    {
-
-    }
-    else if(req.type == "un_mark_site")
+    else if(req.type === "mark_site")
     {
 
     }
+    else if(req.type === "un_mark_site")
+    {
 
-    else if(req.type =="delete_fev_link")
+    }
+
+    else if(req.type === "delete_fev_link")
     {
         //delete link in req.link
         const index = favourite_links.indexOf(req.link);
-        if (index != -1) {
+        if (index !== -1) {
             favourite_links.splice(index, 1);
         }
         res(favourite_links);
     }
 
-    else if(req.type == "open_new_tab")
+    else if(req.type === "open_new_tab")
     {
         //open new tab of the link in req.link
         chrome.tabs.create({url:req.link},function (response) {
         });
     }
 
-    else if(req.type =="get_fev_links")
+    else if(req.type === "get_fev_links")
     {
         res(favourite_links);
     }
 
-    else if(req.type=="add_task")
+    else if(req.type === "add_task")
     {
-        var str = req.task+" "+req.time;
-        events_today.push(str);
-        res(events_today);
+        events_today.push(req.task + " " + req.time);
+        dataToSend = {
+            task : {
+                activity : req.task,
+                date : req.date,
+                time : req.time
+            },
+            uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+            type : "add_task"
+        };
+        senderToServer.onreadystatechange = function () {
+           if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+                if(senderToServer.responseText === "success") {
+
+                }
+                else {
+                    //to be implemented
+                }
+           }
+        };
     }
-
-
-   /* var senderToServer = new XMLHttpRequest();
-    senderToServer.onreadystatechange = function () {
-        if (senderToServer.readyState === 4) {
-            alert(JSON.parse(senderToServer.responseText));
-        }
-    };
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(tmp));*/
-
+    //senderToServer.setRequestHeader("Content-Type", "application/json");
+    //senderToServer.send(JSON.stringify(dataToSend));
 });
