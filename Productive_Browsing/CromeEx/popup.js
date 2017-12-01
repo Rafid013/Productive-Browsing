@@ -8,10 +8,10 @@ function load() {
     log_in_div = document.getElementById("log_in");
     mark_div = document.getElementById("Mark_Site");
     unmark_div = document.getElementById("Unmark_Site");
-    toolbar.style.display="none";
+    toolbar.style.display = "none";
     log_in_div.style.display = "none";
-    mark_div.style.display= "none";
-    unmark_div.style.display ="none";
+    mark_div.style.display = "none";
+    unmark_div.style.display = "none";
     var tmp= {
         type : "isSignedIn"
     };

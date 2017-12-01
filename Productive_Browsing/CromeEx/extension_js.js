@@ -14,10 +14,36 @@ function checkLoggedIn() {
     return false;
 }
 
+
+function mark_task_in_server(uid, task, date, time) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var mark_task_req = {
+        uid : uid,
+        task : task,
+        date : date,
+        time : time,
+        type : "mark_task"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            if(senderToServer.responseText === "success") {
+
+            }
+            else {
+
+            }
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(mark_task_req));
+}
+
 function delete_fav_link_from_server(uid, link) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var delete_fav_link_req = {
+      uid : uid,
       link : link,
       type : "delete_fav_link"
     };
@@ -39,7 +65,7 @@ function add_task_to_server(uid, task, date, time) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var add_task_req = {
-        uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+        uid : uid,
         task : task,
         date : date,
         time : time,
@@ -68,7 +94,7 @@ function delete_task_from_server(uid, task, date, time) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var delete_task_req = {
-        uid : "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+        uid : uid,
         task : task,
         date : date,
         time : time,
@@ -100,7 +126,11 @@ function get_fav_link_from_server(uid) {
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            favourite_links.push("something");
+            var link_list = JSON.parse(senderToServer.responseText);
+            var list_size = link_list.length;
+            for(var i = 0; i < list_size; ++i) {
+                favourite_links.push(link_list[i].Site);
+            }
             populateFavouriteLinks();
         }
     };
@@ -404,15 +434,11 @@ function populateToDoList()
   		if (ev.target.tagName === 'LI') {
     		ev.target.classList.toggle('checked');
     		var div = ev.target;
+            var task = div.textContent.substring(0, div.textContent.lastIndexOf(" "));
+            var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
 
     		//read uid here
-    		//mark_task_in_server(uid, task, date, time);
-            /*var tmp = {
-                task : div.textContent.substring(0,div.textContent.lastIndexOf(" ")),
-                date : date_of_current_list,
-                time : div.textContent.substring(div.textContent.lastIndexOf(" ")+1,div.textContent.length-1),
-                type : "to do completed"
-            };*/
+    		mark_task_in_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3", task, date_of_current_list, time);
   		}
 	}, false);
 }

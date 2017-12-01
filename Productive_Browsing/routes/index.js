@@ -37,15 +37,15 @@ router.post('/', function (req, res) {
         });
     }
     else if(req.body.type === "mark_site") {
-        db.mark_site(req.body.uid, req.body.site, function (msg) {
+        db.mark_site(req.body.uid, req.body.link, function (msg) {
             res.json({
                 message : msg
             });
             res.end();
         });
     }
-    else if(req.body.type === "de_mark site") {
-        db.de_mark_site(req.body.uid, req.body.site, function (msg) {
+    else if(req.body.type === "unmark site") {
+        db.unmark_site(req.body.uid, req.body.link, function (msg) {
             res.json({
                 message : msg
             });
@@ -118,6 +118,27 @@ router.post('/', function (req, res) {
     }
     else if(req.body.type === "get_to_do") {
         db.get_to_do(req.body.uid, function (list) {
+            res.writeHead(200);
+            res.write(JSON.stringify(list));
+            res.end();
+        })
+    }
+    else if(req.body.type === "add_fav_link") {
+        db.add_fav_link(req.body.uid, req.body.link, function (data) {
+            res.writeHead(200);
+            res.write(data);
+            res.end();
+        })
+    }
+    else if(req.body.type === "delete_fav_link") {
+        db.delete_fav_link(req.body.uid, req.body.link, function (data) {
+            res.writeHead(200);
+            res.write(data);
+            res.end();
+        })
+    }
+    else if(req.body.type === "get_fav_link") {
+        db.get_fav_link(req.body.uid, function (list) {
             res.writeHead(200);
             res.write(JSON.stringify(list));
             res.end();
