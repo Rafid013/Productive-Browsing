@@ -31,6 +31,7 @@ function sign_in(email, password, callback) {
 }
 
 function sign_up(name, email, password, callback) {
+    console.log(email);
     firebase_admin.auth().createUser({
         email: email,
         password: password,

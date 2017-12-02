@@ -2,7 +2,6 @@ var favourite_links=[];
 var events_today = [];
 var isloggedIn="true";
 
-
 var activeTabIds=[];
 var lastTab;
 var lasturl;
@@ -235,7 +234,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     {
         //check if the domain is marked as time killer and send back status
         var a= document.createElement('a');
-        a.href = req.url; // getting domain name from url
+        a.href = req.url; // getting domain name from url //a.hostname
         var tmp = "false";
         res(tmp);
     }

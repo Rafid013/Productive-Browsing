@@ -6,12 +6,15 @@ var favourite_links = [];
 var date_today;
 var curTask = "";
 var curLink = "";
+var uid;
+var name;
 
 function checkLoggedIn() {
     //check if UID is stored
     //if stored return true
     //else false
-    return false;
+    var status = false;
+    return status;
 }
 
 
@@ -27,6 +30,7 @@ function mark_task_in_server(uid, task, date, time) {
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            //alert(senderToServer.responseText);
             if(senderToServer.responseText === "success") {
 
             }
@@ -73,7 +77,6 @@ function add_task_to_server(uid, task, date, time) {
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            alert(senderToServer.responseText);
             if(senderToServer.responseText === "success") {
                 //if(dataToSend.date === date_today) events_ToDo_List.push(dataToSend.task + " " + dataToSend.time);
                 events_today.push(task);
@@ -104,11 +107,14 @@ function delete_task_from_server(uid, task, date, time) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             alert(senderToServer.responseText);
             if(senderToServer.responseText === "success") {
+                alert(senderToServer.responseText);
                 //if(dataToSend.date === date_today) events_ToDo_List.push(dataToSend.task + " " + dataToSend.time);
                 var del_index = events_ToDo_List.indexOf(task + " " + time);
                 if(del_index > -1) events_ToDo_List.splice(del_index, 1);
+                populateToDoList();
             }
             else {
+                alert("false");
                 //to be implemented
             }
         }
@@ -149,6 +155,8 @@ function get_to_do_from_server(uid) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var event_list_server = JSON.parse(senderToServer.responseText);
             var list_size = event_list_server.length;
+            events_today = [];
+            events_ToDo_List = [];
             for(var i = 0; i < list_size; ++i) {
                 var data = event_list_server[i].task.split(",");
                 var task = data[0];
@@ -168,17 +176,25 @@ function get_to_do_from_server(uid) {
 function loadPage() {
     var body = document.getElementById("homepage_body");
     body.style.display="block";
-    if(checkLoggedIn()) {
-        body.style.backgroundColor ="#6d7c62";
-        body.style.color = "white";
-        document.getElementById("signup_page").style.display="none";
-        document.getElementById("home_page").style.display="block";
-    }
-    else {
-        body.style.backgroundColor ="#76b852";
-        document.getElementById("signup_page").style.display="block";
-        document.getElementById("home_page").style.display="none";
-    }
+    chrome.storage.sync.get(["uid","name"], function (obj) {
+        if(obj.uid == undefined)
+        {
+            body.style.backgroundColor ="#76b852";
+            document.getElementById("signup_page").style.display="block";
+            document.getElementById("home_page").style.display="none";
+        }
+        else
+        {
+            uid = obj.uid;
+            name = obj.name;
+            body.style.backgroundColor ="#6d7c62";
+            body.style.color = "white";
+            document.getElementById("signup_page").style.display="none";
+            document.getElementById("home_page").style.display="block";
+            get_to_do_from_server(uid); //parameter will be changed to uid
+            get_fav_link_from_server(uid);
+        }
+    });
 }
 
 
@@ -280,27 +296,19 @@ function add_new_task()
 
     var date = document.getElementById('date').value;
     if(date === "") date = date_today;
-    add_task_to_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3", task, date, timeValue);
+    add_task_to_server(uid, task, date, timeValue);
 	form.reset();
 	return false;
 }
 
 function load()
 {
-    loadPage();
-    showTime();
-
-    //
-    // read uid here, uid will be stored from the moment a user logs in or registers
-    //
-    get_to_do_from_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3"); //parameter will be changed to uid
-    get_fav_link_from_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3");
-
-
-
     var date = new Date();
     date_of_current_list=(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
     date_today =(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+    loadPage();
+    showTime();
+
     var e = document.getElementById("task_list_ul");
     e.style.display = 'none';
     e = document.getElementById("favourite_list_ul");
@@ -381,7 +389,7 @@ function populateFavouriteLinks() {
 
             //read uid here
 
-            delete_fav_link_from_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+            delete_fav_link_from_server(uid,
                 div.textContent.substring(0, div.textContent.length - 1));
         }
     }
@@ -422,7 +430,7 @@ function populateToDoList()
             //read uid here
 
             delete_task_from_server(
-                "C8eNsKA1oNRRnGyihDMtNxyrGRI3",
+                uid,
                 div.textContent.substring(0, div.textContent.lastIndexOf(" ")),
                 date_of_current_list,
                 div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1)
@@ -438,7 +446,7 @@ function populateToDoList()
             var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
 
     		//read uid here
-    		mark_task_in_server("C8eNsKA1oNRRnGyihDMtNxyrGRI3", task, date_of_current_list, time);
+    		mark_task_in_server(uid, task, date_of_current_list, time);
   		}
 	}, false);
 }
@@ -464,7 +472,7 @@ function toggle_visibility_fav() {
 function log_out() {
 
     //delete UID from chrome storage
-
+    chrome.storage.sync.remove(["uid","name"]);
     var body = document.getElementById("homepage_body");
     body.style.background = "none";
     body.style.backgroundColor ="#76b852";
@@ -521,8 +529,14 @@ function logIn()
                 var name = receivedData.name;
                 var uid = receivedData.uid;
                 //store name and uid
-                alert(name);
-                alert(uid);
+                this.uid = uid;
+                this.name = name;
+                chrome.storage.sync.set({"uid": uid});
+                chrome.storage.sync.set({"name": name});
+                get_to_do_from_server(uid); //parameter will be changed to uid
+                get_fav_link_from_server(uid);
+                //alert(name);
+                //alert(uid);
                 var body = document.getElementById("homepage_body");
                 body.style.backgroundColor = "#6d7c62";
                 body.style.color = "white";
@@ -544,8 +558,8 @@ function register()
 {
     var register_req = {
         name : document.getElementById("reg_name").value,
-        email : document.getElementById("reg_password").value,
-        password : document.getElementById("reg_email").value,
+        email : document.getElementById("reg_email").value,
+        password : document.getElementById("reg_password").value,
         type : "sign_up"
     };
     var senderToServer = new XMLHttpRequest();
@@ -557,8 +571,14 @@ function register()
                 var name = receivedData.name;
                 var uid = receivedData.uid;
                 //store name and uid
-                alert(name);
-                alert(uid);
+                //alert(name);
+                //alert(uid);
+                this.uid = uid;
+                this.name = name;
+                get_to_do_from_server(uid); //parameter will be changed to uid
+                get_fav_link_from_server(uid);
+                chrome.storage.sync.set({"uid": uid});
+                chrome.storage.sync.set({"name": name});
                 var body = document.getElementById("homepage_body");
                 body.style.backgroundColor = "#6d7c62";
                 body.style.color = "white";

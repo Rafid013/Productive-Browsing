@@ -3,6 +3,8 @@ var toolbar;
 var log_in_div;
 var mark_div;
 var unmark_div;
+var uid;
+var name;
 function load() {
     toolbar = document.getElementById("Tool_Bar");
     log_in_div = document.getElementById("log_in");
@@ -12,13 +14,19 @@ function load() {
     log_in_div.style.display = "none";
     mark_div.style.display = "none";
     unmark_div.style.display = "none";
-    var tmp= {
-        type : "isSignedIn"
-    };
-    chrome.runtime.sendMessage(tmp, function(response) {
-        var isLoggedIn = response;
-        if(isLoggedIn==="true")
+
+    chrome.storage.sync.get(["uid","name"], function (obj) {
+        if(obj.uid === undefined)
         {
+            toolbar.style.display="none";
+            log_in_div.style.display = "block";
+            mark_div.style.display= "none";
+            unmark_div.style.display ="none";
+        }
+        else
+        {
+            uid = obj.uid;
+            name = obj.name;
             toolbar.style.display = "block";
             log_in_div.style.display ="none";
             chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
@@ -46,15 +54,7 @@ function load() {
                 });
             });
         }
-        else
-        {
-            toolbar.style.display="none";
-            log_in_div.style.display = "block";
-            mark_div.style.display= "none";
-            unmark_div.style.display ="none";
-        }
     });
-
 
     document.getElementById("Log_in_button").onclick = log_in;
     document.getElementById("mark_site_button").onclick = mark_site;
@@ -110,10 +110,7 @@ function unmark_site() {
     return false;
 }
 function log_out() {
-    var tmp = {
-        type : "signed_out"
-    };
-    chrome.runtime.sendMessage(tmp);
+    chrome.storage.sync.remove(["uid","name"]);
     toolbar.style.display="none";
     log_in_div.style.display = "block";
     mark_div.style.display= "none";
