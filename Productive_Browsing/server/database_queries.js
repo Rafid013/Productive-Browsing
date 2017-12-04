@@ -116,8 +116,9 @@ function mark_task(uid, task, date, time, callback) {
         };
         var taskRef = ref.child(dataSnapshot.key).child('To_Do_List').orderByChild("task").equalTo(tmp.task);
         taskRef.once("child_added", function (dataSnapshot1) {
-            ref.child(dataSnapshot.key).child('To_Do_List').child(dataSnapshot1.key).update({done : true}, function (error) {
-                if(error) {
+            ref.child(dataSnapshot.key).child('To_Do_List').child(dataSnapshot1.key)
+                .update({done: !dataSnapshot1.child("done").val()}, function (error) {
+                if (error) {
                     console.log(error.code);
                     console.log(error.message);
                     callback(error.code);

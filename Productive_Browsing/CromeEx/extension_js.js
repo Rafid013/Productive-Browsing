@@ -9,13 +9,13 @@ var curLink = "";
 var uid;
 var name;
 
-function checkLoggedIn() {
+/*function checkLoggedIn() {
     //check if UID is stored
     //if stored return true
     //else false
     var status = false;
     return status;
-}
+}*/
 
 
 function mark_task_in_server(uid, task, date, time) {
@@ -32,10 +32,10 @@ function mark_task_in_server(uid, task, date, time) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             //alert(senderToServer.responseText);
             if(senderToServer.responseText === "success") {
-
+                alert("Marked");
             }
             else {
-
+                alert("Not Marked");
             }
         }
     };
@@ -177,7 +177,7 @@ function loadPage() {
     var body = document.getElementById("homepage_body");
     body.style.display="block";
     chrome.storage.sync.get(["uid","name"], function (obj) {
-        if(obj.uid == undefined)
+        if(obj.uid === undefined)
         {
             body.style.backgroundColor ="#76b852";
             document.getElementById("signup_page").style.display="block";
@@ -408,7 +408,7 @@ function populateFavouriteLinks() {
 
 function populateToDoList()
 {
-    var ul=document.getElementById("task_list_ul");
+    var ul = document.getElementById("task_list_ul");
     while (ul.firstChild) {
         ul.removeChild(ul.firstChild);
     }
