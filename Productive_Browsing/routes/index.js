@@ -3,6 +3,7 @@ var router = express.Router();
 var auth = require('../server/authentication_queries');
 var db = require('../server/database_queries');
 
+// noinspection JSUnresolvedFunction
 router.post('/', function (req, res) {
     if (req.body.type === "sign_up") {
         auth.sign_up(req.body.name, req.body.email, req.body.password, function (data) {
@@ -31,24 +32,19 @@ router.post('/', function (req, res) {
     }
     else if(req.body.type === "sign_in") {
         auth.sign_in(req.body.email, req.body.password, function (data) {
-            res.writeHead(200);
-            res.write(JSON.stringify(data));
+            res.json(data);
             res.end();
         });
     }
     else if(req.body.type === "mark_site") {
         db.mark_site(req.body.uid, req.body.link, function (msg) {
-            res.json({
-                message : msg
-            });
+            res.write(msg);
             res.end();
         });
     }
-    else if(req.body.type === "unmark site") {
+    else if(req.body.type === "unmark_site") {
         db.unmark_site(req.body.uid, req.body.link, function (msg) {
-            res.json({
-                message : msg
-            });
+            res.write(msg);
             res.end();
         });
     }
@@ -60,26 +56,21 @@ router.post('/', function (req, res) {
     }
     else if(req.body.type === "add_task") {
         db.add_task(req.body.uid, req.body.task, req.body.date, req.body.time, function (msg) {
-            res.writeHead(200);
             res.write(msg);
             res.end();
         });
     }
     else if(req.body.type === "mark_task") {
-        db.mark_task(req.body.uid, req.body.task, req.body.date, req.body.time, function (msg) {
-            res.json({
-                message : msg
-            });
+        db.mark_task(req.body.uid, req.body.task, req.body.date, function (msg) {
+            res.write(msg);
             res.end();
         });
     }
     else if(req.body.type === "delete_task") {
-        db.mark_task(req.body.uid, req.body.task, req.body.date, req.body.time, function (msg) {
-            res.json({
-                message : msg
-            });
+        db.delete_task(req.body.uid, req.body.task, req.body.date, function (msg) {
+            res.write(msg);
             res.end();
-        })
+        });
     }
     else if(req.body.type === "update_task") {
 
@@ -117,30 +108,26 @@ router.post('/', function (req, res) {
         });
     }
     else if(req.body.type === "get_to_do") {
-        db.get_to_do(req.body.uid, function (list) {
-            res.writeHead(200);
-            res.write(JSON.stringify(list));
+        db.get_to_do(req.body.uid, req.body.date, function (list) {
+            res.json(list);
             res.end();
         })
     }
     else if(req.body.type === "add_fav_link") {
         db.add_fav_link(req.body.uid, req.body.link, function (data) {
-            res.writeHead(200);
             res.write(data);
             res.end();
         })
     }
     else if(req.body.type === "delete_fav_link") {
         db.delete_fav_link(req.body.uid, req.body.link, function (data) {
-            res.writeHead(200);
             res.write(data);
             res.end();
         })
     }
-    else if(req.body.type === "get_fav_link") {
+    else if(req.body.type === "get_fav_links") {
         db.get_fav_link(req.body.uid, function (list) {
-            res.writeHead(200);
-            res.write(JSON.stringify(list));
+            res.json(list);
             res.end();
         })
     }

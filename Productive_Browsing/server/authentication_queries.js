@@ -32,6 +32,7 @@ function sign_in(email, password, callback) {
 
 function sign_up(name, email, password, callback) {
     console.log(email);
+    // noinspection JSUnresolvedFunction
     firebase_admin.auth().createUser({
         email: email,
         password: password,
@@ -59,6 +60,7 @@ function sign_up(name, email, password, callback) {
 function change_name(email, password, name, callback) {
     sign_in(email, password, function (data) {
         if(data.message === "success") {
+            // noinspection JSUnresolvedFunction
             firebase_admin.auth().updateUser(data.uid, {
                 displayName : name
             }).then(function (userRecord) {
@@ -93,6 +95,7 @@ function change_name(email, password, name, callback) {
 function delete_user(email, password, callback) {
     sign_in(email, password, function (data) {
         if(data.message === "success") {
+            // noinspection JSUnresolvedFunction
             firebase_admin.auth().deleteUser(data.uid)
             .then(function () {
                 console.log("User deleted");

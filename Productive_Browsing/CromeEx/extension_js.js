@@ -1,13 +1,17 @@
 var type = 0;
 var events_today = [];
 var events_ToDo_List = [];
-var date_of_current_list;
 var favourite_links = [];
 var date_today;
 var curTask = "";
 var curLink = "";
 var uid;
 var name;
+
+function delete_from_array(array, elem) {
+    var index = array.indexOf(elem);
+    if(index > -1) array.splice(index, 1);
+}
 
 /*function checkLoggedIn() {
     //check if UID is stored
@@ -30,7 +34,6 @@ function mark_task_in_server(uid, task, date, time) {
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            //alert(senderToServer.responseText);
             if(senderToServer.responseText === "success") {
                 alert("Marked");
             }
@@ -78,15 +81,19 @@ function add_task_to_server(uid, task, date, time) {
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
-                //if(dataToSend.date === date_today) events_ToDo_List.push(dataToSend.task + " " + dataToSend.time);
-                events_today.push(task);
-                Scroll_Events();
-                events_ToDo_List.push(task + " " + time);
-                populateToDoList();
+                if(date === date_today) {
+                    events_today.push(task);
+                    Scroll_Events();
+                    events_ToDo_List.push(task + " " + time);
+                    populateToDoList();
+                }
             }
             else {
                 //to be implemented
             }
+        }
+        else {
+            //to be implemented
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -105,18 +112,20 @@ function delete_task_from_server(uid, task, date, time) {
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            alert(senderToServer.responseText);
             if(senderToServer.responseText === "success") {
-                alert(senderToServer.responseText);
-                //if(dataToSend.date === date_today) events_ToDo_List.push(dataToSend.task + " " + dataToSend.time);
-                var del_index = events_ToDo_List.indexOf(task + " " + time);
-                if(del_index > -1) events_ToDo_List.splice(del_index, 1);
-                populateToDoList();
+                if(date === date_today) {
+                    delete_from_array(events_today, task);
+                    delete_from_array(events_ToDo_List, task + " " + time);
+                    populateToDoList();
+                    Scroll_Events();
+                }
             }
             else {
-                alert("false");
                 //to be implemented
             }
+        }
+        else {
+            //to be implemented
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -128,7 +137,7 @@ function get_fav_link_from_server(uid) {
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var get_fav_link_req = {
         uid : uid,
-        type : "get_fav_link"
+        type : "get_fav_links"
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
@@ -144,29 +153,32 @@ function get_fav_link_from_server(uid) {
     senderToServer.send(JSON.stringify(get_fav_link_req));
 }
 
-function get_to_do_from_server(uid) {
+function get_to_do_from_server(uid, date) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var getToDoReq = {
       uid : uid,
+      date : date,
       type : "get_to_do"
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var event_list_server = JSON.parse(senderToServer.responseText);
             var list_size = event_list_server.length;
-            events_today = [];
-            events_ToDo_List = [];
             for(var i = 0; i < list_size; ++i) {
-                var data = event_list_server[i].task.split(",");
-                var task = data[0];
-                var date = data[1];
-                var time = data[2];
-                events_today.push(task);
-                events_ToDo_List.push(task + " " + time);
+                var task = event_list_server[i].task;
+                var time = event_list_server[i].time;
+                //var done = event_list_server[i].done;
+                if(date === date_today) {
+                    events_today.push(task);
+                    events_ToDo_List.push(task + " " + time);
+                    Scroll_Events();
+                    populateToDoList();
+                }
             }
-            Scroll_Events();
-            populateToDoList();
+        }
+        else {
+            //to be implemented
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -191,7 +203,7 @@ function loadPage() {
             body.style.color = "white";
             document.getElementById("signup_page").style.display="none";
             document.getElementById("home_page").style.display="block";
-            get_to_do_from_server(uid); //parameter will be changed to uid
+            get_to_do_from_server(uid, date_today); //parameter will be changed to uid
             get_fav_link_from_server(uid);
         }
     });
@@ -246,11 +258,12 @@ function selectBackground() {
 	input.click();
 }
 function fileInput() {
-	var image = document.getElementById('finput').files[0];
-    var tmp = {
-        type : "upload image",
+	//var image = document.getElementById('finput').files[0];
+    /*var tmp = {
+        type : "up_image",
         file: image
-    };
+    };*/
+
 	//these are dummy code. this file will be uploaded in the server. and then it will be set as background
 	var element = document.getElementById('homepage_body');
 	element.style.backgroundImage = "url('background.jpeg')";
@@ -290,9 +303,6 @@ function add_new_task()
     timeValue += (hours >= 12) ? "PM" : "AM";  // get AM/PM
 	//alert(timeValue);
 
-    //
-    // read uid here, uid will be stored from the moment a user logs in or registers
-    //
 
     var date = document.getElementById('date').value;
     if(date === "") date = date_today;
@@ -304,8 +314,7 @@ function add_new_task()
 function load()
 {
     var date = new Date();
-    date_of_current_list=(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
-    date_today =(date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+    date_today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
     loadPage();
     showTime();
 
@@ -387,8 +396,6 @@ function populateFavouriteLinks() {
             var div = this.parentElement;
             //div.style.display = "none";
 
-            //read uid here
-
             delete_fav_link_from_server(uid,
                 div.textContent.substring(0, div.textContent.length - 1));
         }
@@ -425,16 +432,12 @@ function populateToDoList()
 	{
   		close[i].onclick = function() {
     	    var div = this.parentElement;
-    	    //div.style.display = "none";
+    	    div.style.display = "none";
 
-            //read uid here
+            var task = div.textContent.substring(0, div.textContent.lastIndexOf(" "));
+            var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
 
-            delete_task_from_server(
-                uid,
-                div.textContent.substring(0, div.textContent.lastIndexOf(" ")),
-                date_of_current_list,
-                div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1)
-            );
+            delete_task_from_server(uid, task, date_today, time);
     	}
 	}
 	//var list = document.querySelector('ul');
@@ -446,18 +449,18 @@ function populateToDoList()
             var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
 
     		//read uid here
-    		mark_task_in_server(uid, task, date_of_current_list, time);
+    		mark_task_in_server(uid, task, date_today, time);
   		}
 	}, false);
 }
 
 function toggle_visibility() {	
-  var e = document.getElementById("task_list_ul");
-  if(e.style.display === 'none')
-    e.style.display = 'block';
-  else
-    e.style.display = 'none';
-  return false;
+    var e = document.getElementById("task_list_ul");
+    if(e.style.display === 'none')
+        e.style.display = 'block';
+    else
+        e.style.display = 'none';
+    return false;
 }
 
 function toggle_visibility_fav() {
@@ -526,17 +529,13 @@ function logIn()
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var receivedData = JSON.parse(senderToServer.responseText);
             if(receivedData.message === "success") {
-                var name = receivedData.name;
-                var uid = receivedData.uid;
+                name = receivedData.name;
+                uid = receivedData.uid;
                 //store name and uid
-                this.uid = uid;
-                this.name = name;
                 chrome.storage.sync.set({"uid": uid});
                 chrome.storage.sync.set({"name": name});
-                get_to_do_from_server(uid); //parameter will be changed to uid
+                get_to_do_from_server(uid, date_today);
                 get_fav_link_from_server(uid);
-                //alert(name);
-                //alert(uid);
                 var body = document.getElementById("homepage_body");
                 body.style.backgroundColor = "#6d7c62";
                 body.style.color = "white";
@@ -546,6 +545,9 @@ function logIn()
             else {
                 //to be implemented
             }
+        }
+        else {
+            //to be implemented
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -568,15 +570,9 @@ function register()
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var receivedData = JSON.parse(senderToServer.responseText);
             if(receivedData.message === "success") {
-                var name = receivedData.name;
-                var uid = receivedData.uid;
+                name = receivedData.name;
+                uid = receivedData.uid;
                 //store name and uid
-                //alert(name);
-                //alert(uid);
-                this.uid = uid;
-                this.name = name;
-                get_to_do_from_server(uid); //parameter will be changed to uid
-                get_fav_link_from_server(uid);
                 chrome.storage.sync.set({"uid": uid});
                 chrome.storage.sync.set({"name": name});
                 var body = document.getElementById("homepage_body");
@@ -586,8 +582,11 @@ function register()
                 document.getElementById("home_page").style.display = "block";
             }
             else {
-
+                //show the error
             }
+        }
+        else {
+            //show there was a problem while connecting to server, try again later
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
