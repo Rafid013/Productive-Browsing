@@ -1,7 +1,8 @@
 1. auth/invalid-email        //The email address is improperly formatted
 2. auth/wrong-password       //The password is invalid or the user does not have a password
 3. auth/user-not-found       //There is no user record corresponding to this identifier. The user may have been deleted
-4. auth/internal-error       //The Authentication server encountered an unexpected error while trying to process the request
+4. auth/internal-error       /*The Authentication server encountered an unexpected error
+                               while trying to process the request*/
 
 
 একটা JSON data পাঠানো হবে, সেটার at least ২ টা field, uid and message

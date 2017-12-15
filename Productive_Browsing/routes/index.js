@@ -3,6 +3,7 @@ var router = express.Router();
 var auth = require('../server/authentication_queries');
 var db = require('../server/database_queries');
 
+// noinspection JSUnresolvedFunction
 router.post('/', function (req, res) {
     if (req.body.type === "sign_up") {
         auth.sign_up(req.body.name, req.body.email, req.body.password, function (data) {

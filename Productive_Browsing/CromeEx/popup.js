@@ -35,10 +35,6 @@ function load() {
                 // the return variable should only have one entry
                 var activeTab = arrayOfTabs[0];
                 var activeTabId = activeTab.url; // or do whatever you need
-                /*var tmp = {
-                    url : activeTabId,
-                    type : "isMarked"
-                };*/
 
                 //check from storage if it's marked or not
                 var isMarked = true;

@@ -1,3 +1,4 @@
+/*noinspection CssUnknownTarget*/
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 .login-page {
@@ -139,7 +140,7 @@ body{
 }
 .change_background{
 	position: absolute;
-	top:0%;
+	top:0;
 	left:50%;
 	transform: translateX(-50%);
 }
@@ -148,7 +149,7 @@ body{
 {
     .color = white;
     position: absolute;
-    top:0%;
+    top:0;
     left:100%;
     font-size: 18px;
     transform: translateX(-100%);

@@ -32,7 +32,6 @@
         "https://*/*"
       ],
       "js": ["time_tracker.js"]
-      //"run_at": "document_end"         // pay attention to this line
     }
   ],
 

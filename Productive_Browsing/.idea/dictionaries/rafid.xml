@@ -25,6 +25,7 @@
       <w>onreadystatechange</w>
       <w>signup</w>
       <w>unmark</w>
+      <w>unselectable</w>
     </words>
   </dictionary>
 </component>

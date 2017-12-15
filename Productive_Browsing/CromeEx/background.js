@@ -178,7 +178,7 @@ function fav_page(data, tab) {
     console.log(favourite_links);
 }
 
-chrome.runtime.onMessage.addListener(function (req, sender, res) {
+chrome.runtime.onMessage.addListener(function (req/*, sender, res*/) {
     if(req.type === "open_new_tab") {
         //open new tab of the link in req.link
         chrome.tabs.create({url:req.link},function (response) {

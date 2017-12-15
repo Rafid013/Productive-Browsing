@@ -33,18 +33,18 @@
     <div id="MyClockDisplay" class="clock"></div>
     <marquee id="ShowEventScroll" behavior="scroll" direction="left" scrollamount="7"></marquee>
     <div class="change_background">
-        <div hidden="true"><input type="file" id="finput" accept=".gif,.jpg,.jpeg,.png"></div>
+        <div hidden><input type="file" id="finput" accept=".gif,.jpg,.jpeg,.png"></div>
         <i id="remove_icon" class="large remove icon"></i>
         <i id="edit_icon" class="large write square icon"></i>
         <i id="configure profile" class="large configure icon"></i>
     </div>
     <div id="Things_To_DO">Stuffs to do Today</div>
 
-    <form  id="Task_Input">
+    <form id="Task_Input">
         <input id="to_do" type="text" value="" placeholder="To Do..." required >
         <div>
-            <span><input id="date" type="date" name="Date"></span>
-            <span><input type="time" id="time" value="23:59:00"></span>
+            <span><input id="date" type="date" name="Date" title="Date"></span>
+            <span><input type="time" id="time" value="23:59:00" title="Time"></span>
         </div>
         <input id="input_submit" type="submit" name="Submit" value="ADD">
     </form>

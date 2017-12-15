@@ -258,11 +258,11 @@ function selectBackground() {
 	input.click();
 }
 function fileInput() {
-	var image = document.getElementById('finput').files[0];
-    var tmp = {
-        type : "upload image",
+	//var image = document.getElementById('finput').files[0];
+    /*var tmp = {
+        type : "up_image",
         file: image
-    };
+    };*/
 
 	//these are dummy code. this file will be uploaded in the server. and then it will be set as background
 	var element = document.getElementById('homepage_body');
