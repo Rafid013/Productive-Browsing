@@ -35,13 +35,24 @@ function load() {
                 // the return variable should only have one entry
                 var activeTab = arrayOfTabs[0];
                 var activeTabId = activeTab.url; // or do whatever you need
-                var tmp= {
+                /*var tmp = {
                     url : activeTabId,
                     type : "isMarked"
+                };*/
+
+                //check from storage if it's marked or not
+                var isMarked = true;
+                if(isMarked) {
+                    mark_div.style.display= "none";
+                    unmark_div.style.display ="block";
                 }
-                chrome.runtime.sendMessage(tmp, function(response) {
+                else {
+                    mark_div.style.display= "block";
+                    unmark_div.style.display ="none";
+                }
+                /*chrome.runtime.sendMessage(tmp, function(response) {
                     var isMarked = response;
-                    if(isMarked==="true")
+                    if(isMarked === "true")
                     {
                         mark_div.style.display= "none";
                         unmark_div.style.display ="block";
@@ -51,7 +62,7 @@ function load() {
                         mark_div.style.display= "block";
                         unmark_div.style.display ="none";
                     }
-                });
+                });*/
             });
         }
     });
@@ -75,11 +86,12 @@ function mark_site() {
         // the return variable should only have one entry
         var activeTab = arrayOfTabs[0];
         var activeTabId = activeTab.url; // or do whatever you need
-        var tmp = {
-            url : activeTabId,
+        /*var tmp = {
+            link : activeTabId,
             type : "mark_site"
-        };
-        chrome.runtime.sendMessage(tmp);
+        };*/
+        mark_site_in_server(uid, activeTabId);
+        //chrome.runtime.sendMessage(tmp);
 
     });
 
@@ -96,11 +108,12 @@ function unmark_site() {
         // the return variable should only have one entry
         var activeTab = arrayOfTabs[0];
         var activeTabId = activeTab.url; // or do whatever you need
-        var tmp = {
+        /*var tmp = {
             url : activeTabId,
             type : "un_mark_site"
         };
-        chrome.runtime.sendMessage(tmp);
+        chrome.runtime.sendMessage(tmp);*/
+        unmark_site_in_server(uid, activeTabId);
 
     });
     toolbar.style.display="block";
@@ -124,4 +137,55 @@ function home() {
 }
 function stat() {
     return false;
+}
+
+function mark_site_in_server(uid, link) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var mark_site_req = {
+        uid : uid,
+        link : link,
+        type : "mark_site"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            if(senderToServer.responseText === "success") {
+                //store
+            }
+            else {
+                //handle
+            }
+        }
+        else {
+            //handle
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(mark_site_req));
+}
+
+
+function unmark_site_in_server(uid, link) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var unmark_site_req = {
+        uid : uid,
+        link : link,
+        type : "unmark_site"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            if(senderToServer.responseText === "success") {
+                //delete from storage
+            }
+            else {
+                //handle
+            }
+        }
+        else {
+            //handle
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(unmark_site_req));
 }

@@ -66,21 +66,20 @@ function mark_site(uid, site, callback) {
 function unmark_site(uid, site, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added", function (dataSnapshot) {
-        var tmp = {
-            Site : site
-        };
-        var siteRef = ref.child(dataSnapshot.key).child('Time Killer Sites').orderByChild('Site').equalTo(tmp.Site);
+        console.log("HUH");
+        var siteRef = ref.child(dataSnapshot.key).child('Time Killer Sites').orderByChild('Site').equalTo(site);
         siteRef.once("child_added", function (dataSnapshot1) {
-            ref.child(dataSnapshot.key).child('Sites').child(dataSnapshot1.key).set(null, function (error) {
-                if(error) {
-                    console.log(error.code);
-                    console.log(error.message);
-                    callback(error.code);
-                }
-                else {
-                    console.log("Site: " + site + " unmarked for uid: " + uid);
-                    callback("success");
-                }
+            ref.child(dataSnapshot.key).child('Time Killer Sites').child(dataSnapshot1.key)
+                .set(null, function (error) {
+                    if(error) {
+                        console.log(error.code);
+                        console.log(error.message);
+                        callback(error.code);
+                    }
+                    else {
+                        console.log("Site: " + site + " unmarked for uid: " + uid);
+                        callback("success");
+                    }
             });
         })
     });

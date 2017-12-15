@@ -396,8 +396,6 @@ function populateFavouriteLinks() {
             var div = this.parentElement;
             //div.style.display = "none";
 
-            //read uid here
-
             delete_fav_link_from_server(uid,
                 div.textContent.substring(0, div.textContent.length - 1));
         }

@@ -37,17 +37,13 @@ router.post('/', function (req, res) {
     }
     else if(req.body.type === "mark_site") {
         db.mark_site(req.body.uid, req.body.link, function (msg) {
-            res.json({
-                message : msg
-            });
+            res.write(msg);
             res.end();
         });
     }
-    else if(req.body.type === "unmark site") {
+    else if(req.body.type === "unmark_site") {
         db.unmark_site(req.body.uid, req.body.link, function (msg) {
-            res.json({
-                message : msg
-            });
+            res.write(msg);
             res.end();
         });
     }
@@ -118,22 +114,19 @@ router.post('/', function (req, res) {
     }
     else if(req.body.type === "add_fav_link") {
         db.add_fav_link(req.body.uid, req.body.link, function (data) {
-            res.writeHead(200);
             res.write(data);
             res.end();
         })
     }
     else if(req.body.type === "delete_fav_link") {
         db.delete_fav_link(req.body.uid, req.body.link, function (data) {
-            res.writeHead(200);
             res.write(data);
             res.end();
         })
     }
     else if(req.body.type === "get_fav_links") {
         db.get_fav_link(req.body.uid, function (list) {
-            res.writeHead(200);
-            res.write(JSON.stringify(list));
+            res.json(list);
             res.end();
         })
     }

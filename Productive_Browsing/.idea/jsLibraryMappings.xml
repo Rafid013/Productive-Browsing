@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$/CromeEx/background.js" libraries="{Productive_Browsing/node_modules}" />
+    <file url="file://$PROJECT_DIR$/routes/index.js" libraries="{Productive_Browsing/node_modules}" />
+    <file url="file://$PROJECT_DIR$/server/database_queries.js" libraries="{Productive_Browsing/node_modules}" />
+    <file url="PROJECT" libraries="{@types/chrome}" />
     <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>
