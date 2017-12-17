@@ -36,10 +36,15 @@ function mark_task_in_server(uid, task, date, time) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
                 alert("Marked");
+                //also mark in storage
             }
             else {
                 alert("Not Marked");
+                //
             }
+        }
+        else {
+            //server connection fault
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -61,6 +66,9 @@ function delete_fav_link_from_server(uid, link) {
                 if(del_index > -1) favourite_links.splice(del_index, 1);
                 populateFavouriteLinks();
             }
+        }
+        else {
+
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -147,6 +155,10 @@ function get_fav_link_from_server(uid) {
                 favourite_links.push(link_list[i].Site);
             }
             populateFavouriteLinks();
+            //store in storage
+        }
+        else {
+            //server connection failed
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -179,6 +191,7 @@ function get_to_do_from_server(uid, date) {
         }
         else {
             //to be implemented
+            //storage
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -205,6 +218,8 @@ function loadPage() {
             document.getElementById("home_page").style.display="block";
             get_to_do_from_server(uid, date_today); //parameter will be changed to uid
             get_fav_link_from_server(uid);
+            //get_marked_sites
+            //get from storage instead of server
         }
     });
 }
@@ -476,6 +491,7 @@ function log_out() {
 
     //delete UID from chrome storage
     chrome.storage.sync.remove(["uid","name"]);
+    //storage empty
     var body = document.getElementById("homepage_body");
     body.style.background = "none";
     body.style.backgroundColor ="#76b852";

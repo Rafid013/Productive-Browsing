@@ -10,9 +10,9 @@ chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
     // the return variable should only have one entry
     var activeTab = arrayOfTabs[0];
     lastTab = activeTab.id;
-    var a= document.createElement('a');
+    var a = document.createElement('a');
     a.href = activeTab.url;// or do whatever you need
-    lasturl=a.hostname;
+    lasturl = a.hostname;
     start_time = performance.now();
 });
 
@@ -23,15 +23,15 @@ chrome.tabs.onRemoved.addListener(close_tab);
 chrome.tabs.onActivated.addListener(activateHandler);
 
 function start_tab(tabId, changeInfo, tab) {
-    var b= document.createElement('a');
+    end_time = performance.now();
+    var b = document.createElement('a');
     b.href = tab.url;// or do whatever you need
-    var currUrl=b.hostname;
+    var currUrl = b.hostname;
     var total_time = (end_time-start_time)/1000;
     total_time = round(total_time, 2);
     if(tabId !== lastTab)
     {
-        lastTab=tabId;
-        end_time = performance.now();
+        lastTab = tabId;
         console.log(lastTab);
         console.log(lasturl);
         console.log(total_time);
@@ -40,11 +40,10 @@ function start_tab(tabId, changeInfo, tab) {
     }
     else if(lasturl !== currUrl)
     {
-        end_time = performance.now();
         console.log(lastTab);
         console.log(lasturl);
         console.log(total_time);
-        lasturl=currUrl;
+        lasturl = currUrl;
         start_time = end_time;
     }
     //start_time = performance.now();
