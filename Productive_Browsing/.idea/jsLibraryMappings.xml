@@ -6,7 +6,7 @@
     <file url="file://$PROJECT_DIR$/bin/www" libraries="{Productive_Browsing/node_modules}" />
     <file url="file://$PROJECT_DIR$/routes/index.js" libraries="{Productive_Browsing/node_modules}" />
     <file url="file://$PROJECT_DIR$/server/database_queries.js" libraries="{Productive_Browsing/node_modules}" />
-    <file url="PROJECT" libraries="{@types/chrome}" />
+    <file url="PROJECT" libraries="{@types/chrome, Productive_Browsing/node_modules}" />
     <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>
