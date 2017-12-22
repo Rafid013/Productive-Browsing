@@ -208,3 +208,26 @@ function add_fav_link_in_server(uid, link) {
     senderToServer.setRequestHeader("Content-Type", "application/json");
     senderToServer.send(JSON.stringify(add_fav_link_req));
 }
+
+function update_site_time_in_server(uid, site, time) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var update_site_time_req = {
+        uid : uid,
+        site : site,
+        time : time,
+        type : "update_site_time"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            if(senderToServer.responseText === "success") {
+                console.log(senderToServer.responseText);
+            }
+            else {
+                //to be implemented
+            }
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(update_site_time_req));
+}

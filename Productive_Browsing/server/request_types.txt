@@ -4,6 +4,7 @@ When:
     upload image,             type = "up_image",
     signing in,               type = "sign_in",         //
     marking site,             type = "mark_site",       //
+    update site time,         type = "update_site_time",
     delete image,             type = "del_image",
     add to do,                type = "add_task",        //
     to do completed,          type = "mark_task",

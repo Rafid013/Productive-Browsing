@@ -48,6 +48,12 @@ router.post('/', function (req, res) {
             res.end();
         });
     }
+    else if(req.body.type === "update_site_time") {
+        db.update_site_time(req.body.uid, req.body.site, req.body.time, function (msg) {
+            res.write(msg);
+            res.end();
+        });
+    }
     else if(req.body.type === "up_image") {
 
     }
@@ -55,7 +61,8 @@ router.post('/', function (req, res) {
 
     }
     else if(req.body.type === "add_task") {
-        db.add_task(req.body.uid, req.body.task, req.body.date, req.body.time, function (msg) {
+        db.add_task(req.body.uid, req.body.task, req.body.date, req.body.normal_time, req.body.military_time,
+        function (msg) {
             res.write(msg);
             res.end();
         });

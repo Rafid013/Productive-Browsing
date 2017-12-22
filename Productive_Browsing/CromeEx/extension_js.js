@@ -76,14 +76,15 @@ function delete_fav_link_from_server(uid, link) {
 }
 
 
-function add_task_to_server(uid, task, date, time) {
+function add_task_to_server(uid, task, date, normal_time, military_time) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var add_task_req = {
         uid : uid,
         task : task,
         date : date,
-        time : time,
+        normal_time : normal_time,
+        military_time : military_time,
         type : "add_task"
     };
     senderToServer.onreadystatechange = function () {
@@ -92,7 +93,7 @@ function add_task_to_server(uid, task, date, time) {
                 if(date === date_today) {
                     events_today.push(task);
                     Scroll_Events();
-                    events_ToDo_List.push(task + " " + time);
+                    events_ToDo_List.push(task + " " + normal_time);
                     populateToDoList();
                 }
             }
@@ -179,11 +180,12 @@ function get_to_do_from_server(uid, date) {
             var list_size = event_list_server.length;
             for(var i = 0; i < list_size; ++i) {
                 var task = event_list_server[i].task;
-                var time = event_list_server[i].time;
+                var normal_time = event_list_server[i].normal_time;
+                //var military_time = event_list_server[i].military_time;
                 //var done = event_list_server[i].done;
                 if(date === date_today) {
                     events_today.push(task);
-                    events_ToDo_List.push(task + " " + time);
+                    events_ToDo_List.push(task + " " + normal_time);
                     Scroll_Events();
                     populateToDoList();
                 }
