@@ -5,8 +5,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
-var firebase_admin = require('./database_queries').admin;
+var firebase_admin = require('./firebase_app_initializer');
 
 
 function sign_in(email, password, callback) {

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var auth = require('../server/authentication_queries');
 var db = require('../server/database_queries');
+var storage = require("../server/storage_queries");
 
 // noinspection JSUnresolvedFunction
 router.post('/', function (req, res) {
@@ -55,7 +56,22 @@ router.post('/', function (req, res) {
         });
     }
     else if(req.body.type === "up_image") {
-
+        //console.log(req.body.encodedFile);
+        res.write("success");
+        res.end();
+        /*storage.upload_file(req.body.uid, req.body.file, function (msg) {
+            res.write(msg);
+            res.end();
+        });*/
+    }
+    else if(req.body.type === "down_image") {
+        storage.download_file(req.body.uid, function (url) {
+            res.json({
+                message : "success",
+                url : url
+            });
+            res.end();
+        });
     }
     else if(req.body.type === "del_image") {
 

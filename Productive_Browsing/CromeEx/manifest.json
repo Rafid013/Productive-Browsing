@@ -25,16 +25,6 @@
     "persistent": true
   },
 
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": ["time_tracker.js"]
-    }
-  ],
-
   "permissions": [
     "tabs",
     "activeTab",

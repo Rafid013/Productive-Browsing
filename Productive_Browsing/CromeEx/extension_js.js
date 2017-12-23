@@ -22,6 +22,33 @@ function delete_from_array(array, elem) {
 }*/
 
 
+function upload_image(uid, base64Image) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var up_image_req = {
+        uid : uid,
+        encodedFile : base64Image,
+        type : "up_image"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            if(senderToServer.responseText === "success") {
+                alert("Marked");
+                //also mark in storage
+            }
+            else {
+               // alert("Not Marked");
+                //
+            }
+        }
+        else {
+            //server connection fault
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(up_image_req));
+}
+
 function mark_task_in_server(uid, task, date, time) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
@@ -153,7 +180,7 @@ function get_fav_link_from_server(uid) {
             var link_list = JSON.parse(senderToServer.responseText);
             var list_size = link_list.length;
             for(var i = 0; i < list_size; ++i) {
-                favourite_links.push(link_list[i].Site);
+                favourite_links.push(link_list[i].site);
             }
             populateFavouriteLinks();
             //store in storage
@@ -274,17 +301,34 @@ function selectBackground() {
 	var input = document.getElementById('finput');
 	input.click();
 }
+function getBase64Image(imgElem, callback) {
+// imgElem must be on the same server otherwise a cross-origin error will be thrown "SECURITY_ERR: DOM Exception 18"
+    var canvas = document.createElement("canvas");
+    var ctx = canvas.getContext("2d");
+    var image = new Image();
+    image.onload = function () {
+        canvas.width = image.width;
+        canvas.height = image.height;
+        ctx.drawImage(image, 0, 0);
+        callback(canvas.toDataURL('image/jpeg'));
+    };
+    image.src = URL.createObjectURL(imgElem);
+}
 function fileInput() {
-	//var image = document.getElementById('finput').files[0];
+	var image = document.getElementById('finput').files[0];
     /*var tmp = {
         type : "up_image",
         file: image
     };*/
 
+    getBase64Image(image, function (retBase64String) {
+        upload_image(uid, retBase64String);
+    });
+
 	//these are dummy code. this file will be uploaded in the server. and then it will be set as background
-	var element = document.getElementById('homepage_body');
+	/*var element = document.getElementById('homepage_body');
 	element.style.backgroundImage = "url('background.jpeg')";
-	element.style.backgroundSize = "cover";
+	element.style.backgroundSize = "cover";*/
 }
 
 
