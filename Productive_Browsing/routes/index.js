@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var auth = require('../server/authentication_queries');
 var db = require('../server/database_queries');
-var storage = require("../server/storage_queries");
 
 // noinspection JSUnresolvedFunction
 router.post('/', function (req, res) {
@@ -15,13 +14,10 @@ router.post('/', function (req, res) {
                         res.end();
                     }
                     else {
-                        auth.delete_user(req.body.email, req.body.password, function (data1){
-                           console.log(data1);
-                            res.json({
-                                message : msg
-                            });
-                            res.end();
+                        res.json({
+                            message : msg
                         });
+                        res.end();
                     }
                 });
             }
@@ -29,12 +25,6 @@ router.post('/', function (req, res) {
                 res.json(data);
                 res.end();
             }
-        });
-    }
-    else if(req.body.type === "sign_in") {
-        auth.sign_in(req.body.email, req.body.password, function (data) {
-            res.json(data);
-            res.end();
         });
     }
     else if(req.body.type === "mark_site") {
@@ -55,27 +45,6 @@ router.post('/', function (req, res) {
             res.end();
         });
     }
-    else if(req.body.type === "up_image") {
-        //console.log(req.body.encodedFile);
-        res.write("success");
-        res.end();
-        /*storage.upload_file(req.body.uid, req.body.file, function (msg) {
-            res.write(msg);
-            res.end();
-        });*/
-    }
-    else if(req.body.type === "down_image") {
-        storage.download_file(req.body.uid, function (url) {
-            res.json({
-                message : "success",
-                url : url
-            });
-            res.end();
-        });
-    }
-    else if(req.body.type === "del_image") {
-
-    }
     else if(req.body.type === "add_task") {
         db.add_task(req.body.uid, req.body.task, req.body.date, req.body.normal_time, req.body.military_time,
         function (msg) {
@@ -92,41 +61,6 @@ router.post('/', function (req, res) {
     else if(req.body.type === "delete_task") {
         db.delete_task(req.body.uid, req.body.task, req.body.date, function (msg) {
             res.write(msg);
-            res.end();
-        });
-    }
-    else if(req.body.type === "update_task") {
-
-    }
-    else if(req.body.type === "account_delete") {
-        auth.delete_user(req.body.email, req.body.password, function (data) {
-            if(data.message === "success") {
-                db.delete_UID(data.uid, function (msg) {
-                    if(msg === "success") {
-                        res.json(data);
-                        res.end();
-                    }
-                    else {
-                        auth.sign_up(data.name, data.email, data.password, function (data1) {
-                            console.log(data1);
-                            res.json({
-                                uid : data1.uid,
-                                message : msg
-                            });
-                            res.end();
-                        });
-                    }
-                });
-            }
-            else {
-                res.json(data);
-                res.end();
-            }
-        });
-    }
-    else if(req.body.type === "change_name") {
-        auth.change_name(req.body.email, req.body.password, req.body.name, function (data) {
-            res.json(data);
             res.end();
         });
     }

@@ -5,8 +5,7 @@ var serviceAccount = require('../productive-browsing-firebase-adminsdk-v616k-45e
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://productive-browsing.firebaseio.com",
-    authDomain: "productive-browsing.firebaseapp.com",
-    storageBucket: "productive-browsing.appspot.com"
+    authDomain: "productive-browsing.firebaseapp.com"
 });
 
 module.exports = admin;
