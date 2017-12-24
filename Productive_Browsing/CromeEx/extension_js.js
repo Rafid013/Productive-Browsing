@@ -13,27 +13,19 @@ function delete_from_array(array, elem) {
     if(index > -1) array.splice(index, 1);
 }
 
-
-
 var config = {
     apiKey: "AIzaSyDWIgzbaNxKJ9HIxIrKTPI02jAXd2KDr-I",
     authDomain: "productive-browsing.firebaseapp.com",
     storageBucket: "productive-browsing.appspot.com"
 };
+
 firebase.initializeApp(config);
+
 
 var storageRef = firebase.storage().ref();
 
-/*function checkLoggedIn() {
-    //check if UID is stored
-    //if stored return true
-    //else false
-    var status = false;
-    return status;
-}*/
 
-
-function upload_image(uid, file) {
+function upload_image(uid, file, callback) {
     // Create the file metadata
     var metadata = {
         contentType: 'image/jpeg'
@@ -41,12 +33,12 @@ function upload_image(uid, file) {
 
 // Upload file and metadata to the object 'images/mountains.jpg'
     // noinspection JSCheckFunctionSignatures
-    var uploadTask = storageRef.child(uid + '/' + file.name).put(file, metadata);
+    var uploadTask = storageRef.child(uid + "/background.jpeg").put(file, metadata);
 
 // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
         function(snapshot) {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
             // noinspection JSUnresolvedVariable
             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log('Upload is ' + progress + '% done');
@@ -77,209 +69,41 @@ function upload_image(uid, file) {
             }
         }, function() {
             // Upload completed successfully, now we can get the download URL
-            //var downloadURL = uploadTask.snapshot.downloadURL;
+            var downloadURL = uploadTask.snapshot.downloadURL;
+            callback(downloadURL);
         });
 }
 
-function mark_task_in_server(uid, task, date, time) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var mark_task_req = {
-        uid : uid,
-        task : task,
-        date : date,
-        time : time,
-        type : "mark_task"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                alert("Marked");
-                //also mark in storage
-            }
-            else {
-                alert("Not Marked");
-                //
-            }
-        }
-        else {
-            //server connection fault
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(mark_task_req));
-}
-
-function delete_fav_link_from_server(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var delete_fav_link_req = {
-      uid : uid,
-      link : link,
-      type : "delete_fav_link"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                var del_index = favourite_links.indexOf(link);
-                if(del_index > -1) favourite_links.splice(del_index, 1);
-                populateFavouriteLinks();
-            }
-        }
-        else {
-
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(delete_fav_link_req));
-}
-
-
-function add_task_to_server(uid, task, date, normal_time, military_time) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var add_task_req = {
-        uid : uid,
-        task : task,
-        date : date,
-        normal_time : normal_time,
-        military_time : military_time,
-        type : "add_task"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                if(date === date_today) {
-                    events_today.push(task);
-                    Scroll_Events();
-                    events_ToDo_List.push(task + " " + normal_time);
-                    populateToDoList();
-                }
-            }
-            else {
-                //to be implemented
-            }
-        }
-        else {
-            //to be implemented
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(add_task_req));
-}
-
-function delete_task_from_server(uid, task, date, time) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var delete_task_req = {
-        uid : uid,
-        task : task,
-        date : date,
-        time : time,
-        type : "delete_task"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                if(date === date_today) {
-                    delete_from_array(events_today, task);
-                    delete_from_array(events_ToDo_List, task + " " + time);
-                    populateToDoList();
-                    Scroll_Events();
-                }
-            }
-            else {
-                //to be implemented
-            }
-        }
-        else {
-            //to be implemented
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(delete_task_req));
-}
-
-function get_fav_link_from_server(uid) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var get_fav_link_req = {
-        uid : uid,
-        type : "get_fav_links"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            var link_list = JSON.parse(senderToServer.responseText);
-            var list_size = link_list.length;
-            for(var i = 0; i < list_size; ++i) {
-                favourite_links.push(link_list[i].site);
-            }
-            populateFavouriteLinks();
-            //store in storage
-        }
-        else {
-            //server connection failed
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(get_fav_link_req));
-}
-
-function get_to_do_from_server(uid, date) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var getToDoReq = {
-      uid : uid,
-      date : date,
-      type : "get_to_do"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            var event_list_server = JSON.parse(senderToServer.responseText);
-            var list_size = event_list_server.length;
-            for(var i = 0; i < list_size; ++i) {
-                var task = event_list_server[i].task;
-                var normal_time = event_list_server[i].normal_time;
-                //var military_time = event_list_server[i].military_time;
-                //var done = event_list_server[i].done;
-                if(date === date_today) {
-                    events_today.push(task);
-                    events_ToDo_List.push(task + " " + normal_time);
-                    Scroll_Events();
-                    populateToDoList();
-                }
-            }
-        }
-        else {
-            //to be implemented
-            //storage
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(getToDoReq));
+function delete_image(uid) {
+    var delRef = storageRef.child(uid + "/background.jpeg");
+    delRef.delete().then(function() {
+        // File deleted successfully
+    }).catch(function(error) {
+        // Uh-oh, an error occurred!
+    });
 }
 
 function loadPage() {
-    var body = document.getElementById("homepage_body");
-    body.style.display="block";
     firebase.auth().onAuthStateChanged(function(user) {
+        var body = document.getElementById("homepage_body");
+        body.style.display = "block";
         if (user) {
             // User is signed in.
-            chrome.storage.sync.get(["uid","name"], function (obj) {
+            body.style.backgroundColor = "#6d7c62";
+            body.style.color = "white";
+            document.getElementById("signup_page").style.display = "none";
+            document.getElementById("home_page").style.display = "block";
+            chrome.storage.sync.get(["uid", "name"], function (obj) {
                 uid = obj.uid;
                 name = obj.name;
+                get_to_do_from_server(uid, date_today); //parameter will be changed to uid
+                get_fav_link_from_server(uid);
             });
-            body.style.backgroundColor ="#6d7c62";
-            body.style.color = "white";
-            document.getElementById("signup_page").style.display="none";
-            document.getElementById("home_page").style.display="block";
-            get_to_do_from_server(uid, date_today); //parameter will be changed to uid
-            get_fav_link_from_server(uid);
         } else {
             // No user is signed in.
-            body.style.backgroundColor ="#76b852";
-            document.getElementById("signup_page").style.display="block";
-            document.getElementById("home_page").style.display="none";
+            body.style.backgroundColor = "#76b852";
+            document.getElementById("signup_page").style.display = "block";
+            document.getElementById("home_page").style.display = "none";
         }
     });
 }
@@ -292,7 +116,7 @@ function showTime(){
 	var s = date.getSeconds(); // 0 - 59
 	var session = "AM";
 
-   
+
 	if(h === 0 && type === 0){
 		h = 12;
 	}
@@ -309,7 +133,7 @@ function showTime(){
 	var time = h + ":" + m + ":" + s;
 	if(type === 0)
 	{
-		time = time + " "+session;	
+		time = time + " " + session;
 	}
 	document.getElementById("MyClockDisplay").innerText = time;
 	document.getElementById("MyClockDisplay").textContent = time;
@@ -335,12 +159,14 @@ function selectBackground() {
 
 function fileInput() {
 	var image = document.getElementById('finput').files[0];
-    /*var tmp = {
-        type : "up_image",
-        file: image
-    };*/
 
-    upload_image(uid, image);
+    upload_image(uid, image, function (downloadURL) {
+        var element = document.getElementById('homepage_body');
+        element.style.backgroundImage = "url(downloadURL)";
+        console.log(downloadURL);
+        element.style.backgroundSize = "cover"
+    });
+
 
 	//these are dummy code. this file will be uploaded in the server. and then it will be set as background
 	/*var element = document.getElementById('homepage_body');
@@ -379,12 +205,13 @@ function add_new_task()
 
     timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
     timeValue += (hours >= 12) ? "PM" : "AM";  // get AM/PM
-	//alert(timeValue);
+
+    var militaryTimeValue = hours + ((minutes < 10) ? ":0" + minutes : ":" + minutes);
 
 
     var date = document.getElementById('date').value;
     if(date === "") date = date_today;
-    add_task_to_server(uid, task, date, timeValue);
+    add_task_to_server(uid, task, date, timeValue, militaryTimeValue);
 	form.reset();
 	return false;
 }
@@ -403,7 +230,6 @@ function load()
     document.getElementById("MyClockDisplay").onclick = toggle;
     document.getElementById("finput").onchange = fileInput;
     document.getElementById("edit_icon").onclick = selectBackground;
-    document.getElementById("remove_icon").onclick = delete_background;
     document.getElementById("Task_Input").onsubmit = add_new_task;
     document.getElementById("show_hide").onclick = toggle_visibility;
     document.getElementById("show_hide_fav").onclick = toggle_visibility_fav;
@@ -553,14 +379,13 @@ function toggle_visibility_fav() {
 function log_out() {
 
     //delete UID from chrome storage
-    chrome.storage.sync.remove(["uid","name"]);
     //storage empty
     firebase.auth().signOut()
         .then(function () {
-
+            chrome.storage.sync.remove(["uid","name"]);
         })
         .catch(function (error) {
-
+            alert(error.message);
         });
     var body = document.getElementById("homepage_body");
     body.style.background = "none";
@@ -572,19 +397,6 @@ function log_out() {
     return false;
 }
 
-function delete_background() {
-    var tmp= {
-        type : "del_image"
-    };
-    //chrome.runtime.sendMessage(tmp);
-    chrome.runtime.sendMessage(tmp, function(response) {
-        //get image form server as url link
-    });
-    //these are dummy code. this file will be uploaded in the server. and then it will be set as background
-    var element = document.getElementById('homepage_body');
-    element.style.backgroundImage = "url('background.jpeg')";
-    element.style.backgroundSize = "cover";
-}
 
 function logInPage()
 {
@@ -625,10 +437,10 @@ function logIn()
             document.getElementById("signup_page").style.display = "none";
             document.getElementById("home_page").style.display = "block";
         }).catch(function (error) {
-        console.log("Error when signing in for email: " + email);
-        console.log(error.code);
-        console.log(error.message);
-    });
+            console.log("Error when signing in for email: " + email);
+            console.log(error.code);
+            console.log(error.message);
+        });
     document.getElementById("logIn_Form").reset();
     return false;
 }

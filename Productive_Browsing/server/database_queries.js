@@ -16,7 +16,7 @@ function add_UID(uid, callback) {
     });
 }
 
-function delete_UID(uid, callback) {
+/*function delete_UID(uid, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added").then(function (dataSnapshot) {
         ref.child(dataSnapshot.key).set(null).then(function () {
@@ -28,7 +28,7 @@ function delete_UID(uid, callback) {
             callback(error.code);
         });
     });
-}
+}*/
 
 function mark_site(uid, site, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
@@ -211,7 +211,7 @@ function add_fav_link(uid, link, callback) {
         };
         ref.child(dataSnapshot.key + '/Favourite Sites').push(tmp)
         .then(function () {
-            console.log("Site: " + link + " favoured  for uid: " + uid);
+            console.log("Site: " + link + " favoured for uid: " + uid);
             callback("success");
         }).catch(function (error) {
             console.log(error.code);
@@ -257,7 +257,6 @@ module.exports = {
     admin : admin,
     add_UID : add_UID,
     mark_site : mark_site,
-    delete_UID : delete_UID,
     unmark_site : unmark_site,
     update_site_time : update_site_time,
     add_task : add_task,

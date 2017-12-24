@@ -82,9 +82,9 @@ function activateHandler(activeInfo) {
             // since only one tab should be active and in the current window at once
             // the return variable should only have one entry
             var activeTab = arrayOfTabs[0];
-            var a= document.createElement('a');
+            var a = document.createElement('a');
             a.href = activeTab.url;// or do whatever you need
-            lasturl=a.hostname;
+            lasturl = a.hostname;
         });
     }
 }
@@ -115,9 +115,9 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
                     // the return variable should only have one entry
                     var activeTab = arrayOfTabs[0];
                     lastTab = activeTab.id;
-                    var a= document.createElement('a');
+                    var a = document.createElement('a');
                     a.href = activeTab.url;// or do whatever you need
-                    lasturl=a.hostname;
+                    lasturl = a.hostname;
                     start_time = performance.now();
                 });
                 // Window is not minimized (maximized, fullscreen or normal)
@@ -142,6 +142,8 @@ chrome.contextMenus.create({
     "contexts": ["page"],
     "onclick" : fav_page
 });
+
+
 function fav_link(data) {
     const index = favourite_links.indexOf(data.linkUrl);
     if (index === -1) {
@@ -149,7 +151,7 @@ function fav_link(data) {
         var uid;
         chrome.storage.sync.get("uid", function (obj) {
             if(obj.uid === undefined) {
-                //store link only in storage
+                //do nothing
             }
             else {
                 uid = obj.uid;
@@ -159,6 +161,8 @@ function fav_link(data) {
     }
     console.log(favourite_links);
 }
+
+
 function fav_page(data, tab) {
     const index = favourite_links.indexOf(tab.url);
     if (index === -1) {
@@ -166,7 +170,7 @@ function fav_page(data, tab) {
         var uid;
         chrome.storage.sync.get("uid", function (obj) {
             if(obj.uid === undefined) {
-                //store link only in storage
+                //do nothing
             }
             else {
                 uid = obj.uid;
@@ -185,49 +189,3 @@ chrome.runtime.onMessage.addListener(function (req/*, sender, res*/) {
         });
     }
 });
-
-
-function add_fav_link_in_server(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var add_fav_link_req = {
-        uid : uid,
-        link : link,
-        type : "add_fav_link"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //store in storage now
-            }
-            else {
-                //to be implemented
-            }
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(add_fav_link_req));
-}
-
-function update_site_time_in_server(uid, site, time) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var update_site_time_req = {
-        uid : uid,
-        site : site,
-        time : time,
-        type : "update_site_time"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                console.log(senderToServer.responseText);
-            }
-            else {
-                //to be implemented
-            }
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(update_site_time_req));
-}

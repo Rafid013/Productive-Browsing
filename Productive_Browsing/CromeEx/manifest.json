@@ -21,7 +21,7 @@
   },
 
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["modules/server_communication.js", "background.js"],
     "persistent": true
   },
 
