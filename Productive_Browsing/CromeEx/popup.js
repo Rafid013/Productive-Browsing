@@ -123,7 +123,8 @@ function unmark_site() {
 function log_out() {
     firebase.auth().signOut()
         .then(function () {
-            chrome.storage.sync.remove(["uid","name"]);
+            chrome.storage.sync.remove(["uid", "name"]);
+            chrome.storage.sync.remove(["image_url"]);
         })
         .catch(function (error) {
             alert(error.message);

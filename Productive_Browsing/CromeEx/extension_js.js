@@ -42,6 +42,7 @@ function upload_image(uid, file, callback) {
             // noinspection JSUnresolvedVariable
             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log('Upload is ' + progress + '% done');
+            document.getElementById("progress").value = progress;
             // noinspection JSUnresolvedVariable
             switch (snapshot.state) {
                 case firebase.storage.TaskState.PAUSED: // or 'paused'
@@ -93,11 +94,13 @@ function loadPage() {
             body.style.color = "white";
             document.getElementById("signup_page").style.display = "none";
             document.getElementById("home_page").style.display = "block";
-            chrome.storage.sync.get(["uid", "name"], function (obj) {
-                uid = obj.uid;
-                name = obj.name;
-                get_to_do_from_server(uid, date_today); //parameter will be changed to uid
-                get_fav_link_from_server(uid);
+            uid = user.uid;
+            name = user.displayName;
+            get_to_do_from_server(uid, date_today);
+            get_fav_link_from_server(uid);
+            chrome.storage.sync.get("image_url", function (item) {
+                console.log(item.image_url);
+                showBackground(item.image_url);
             });
         } else {
             // No user is signed in.
@@ -157,21 +160,39 @@ function selectBackground() {
 	input.click();
 }
 
+function deleteBackground() {
+    delete_image(uid);
+    showBackground("none");
+}
+
+function showBackground(url) {
+    var element = document.getElementById('homepage_body');
+    if(url === "none") element.style.backgroundImage = "none";
+    else element.style.backgroundImage = "url(" + url + ")";
+    element.style.backgroundSize = "cover";
+}
+
+function getBackgroundDownloadURL(uid, callback) {
+    storageRef.child(uid + "/background.jpeg").getDownloadURL()
+        .then(function (url) {
+            callback(url);
+            chrome.storage.sync.set({"image_url": url});
+        })
+        .catch(function (error) {
+            console.log(error.message);
+            callback("none");
+        });
+}
+
 function fileInput() {
 	var image = document.getElementById('finput').files[0];
-
+    document.getElementById("upload_progress_bar").style.display = "block";
     upload_image(uid, image, function (downloadURL) {
-        var element = document.getElementById('homepage_body');
-        element.style.backgroundImage = "url(downloadURL)";
         console.log(downloadURL);
-        element.style.backgroundSize = "cover"
+        chrome.storage.sync.set({"image_url": downloadURL});
+        document.getElementById("upload_progress_bar").style.display = "none";
+        showBackground(downloadURL);
     });
-
-
-	//these are dummy code. this file will be uploaded in the server. and then it will be set as background
-	/*var element = document.getElementById('homepage_body');
-	element.style.backgroundImage = "url('background.jpeg')";
-	element.style.backgroundSize = "cover";*/
 }
 
 
@@ -227,9 +248,11 @@ function load()
     e.style.display = 'none';
     e = document.getElementById("favourite_list_ul");
     e.style.display = 'none';
+    document.getElementById("upload_progress_bar").style.display = "none";
     document.getElementById("MyClockDisplay").onclick = toggle;
     document.getElementById("finput").onchange = fileInput;
     document.getElementById("edit_icon").onclick = selectBackground;
+    document.getElementById("remove_icon").onclick = deleteBackground;
     document.getElementById("Task_Input").onsubmit = add_new_task;
     document.getElementById("show_hide").onclick = toggle_visibility;
     document.getElementById("show_hide_fav").onclick = toggle_visibility_fav;
@@ -382,10 +405,14 @@ function log_out() {
     //storage empty
     firebase.auth().signOut()
         .then(function () {
-            chrome.storage.sync.remove(["uid","name"]);
+            chrome.storage.sync.remove(["uid", "name"]);
+            chrome.storage.sync.remove(["image_url"]);
+            events_today.length = 0;
+            events_ToDo_List.length = 0;
+            favourite_links.length = 0;
         })
         .catch(function (error) {
-            alert(error.message);
+            console.log(error.message);
         });
     var body = document.getElementById("homepage_body");
     body.style.background = "none";
@@ -436,6 +463,7 @@ function logIn()
             body.style.color = "white";
             document.getElementById("signup_page").style.display = "none";
             document.getElementById("home_page").style.display = "block";
+            getBackgroundDownloadURL(uid, showBackground);
         }).catch(function (error) {
             console.log("Error when signing in for email: " + email);
             console.log(error.code);
