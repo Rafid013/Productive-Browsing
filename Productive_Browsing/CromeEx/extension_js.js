@@ -407,9 +407,9 @@ function log_out() {
         .then(function () {
             chrome.storage.sync.remove(["uid", "name"]);
             chrome.storage.sync.remove(["image_url"]);
-            events_today.length = 0;
-            events_ToDo_List.length = 0;
-            favourite_links.length = 0;
+            events_today = [];
+            events_ToDo_List = [];
+            favourite_links = [];
         })
         .catch(function (error) {
             console.log(error.message);
