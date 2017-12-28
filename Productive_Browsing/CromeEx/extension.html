@@ -4,7 +4,10 @@
 <head>
   <title>New Tab</title>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
-  <link rel="stylesheet" type="text/css" href="extension_css.css"><script type="text/javascript" src="extension_js.js"></script>
+  <link rel="stylesheet" type="text/css" href="extension_css.css">
+    <script type="text/javascript" src="modules/firebase.js"></script>
+    <script type="text/javascript" src="modules/server_communication.js"></script>
+    <script type="text/javascript" src="extension_js.js"></script>
 </head>
 
 <body id="homepage_body">
@@ -37,6 +40,10 @@
         <i id="remove_icon" class="large remove icon"></i>
         <i id="edit_icon" class="large write square icon"></i>
         <i id="configure profile" class="large configure icon"></i>
+    </div>
+    <div id="upload_progress_bar">
+        <progress id="progress" value="0" max="100">
+        </progress>
     </div>
     <div id="Things_To_DO">Stuffs to do Today</div>
 

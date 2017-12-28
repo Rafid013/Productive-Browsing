@@ -3,6 +3,7 @@
     <words>
       <w>addr</w>
       <w>appspot</w>
+      <w>arraybuffer</w>
       <w>cdnjs</w>
       <w>cloudflare</w>
       <w>dirname</w>
@@ -12,6 +13,7 @@
       <w>finput</w>
       <w>firebase</w>
       <w>firebaseapp</w>
+      <w>firebaseio</w>
       <w>fullscreen</w>
       <w>gyih</w>
       <w>igzba</w>
@@ -22,6 +24,7 @@
       <w>lockfile</w>
       <w>newtab</w>
       <w>nxyr</w>
+      <w>onload</w>
       <w>onreadystatechange</w>
       <w>signup</w>
       <w>unmark</w>

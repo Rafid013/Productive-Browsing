@@ -5,6 +5,7 @@ var mark_div;
 var unmark_div;
 var uid;
 var name;
+
 function load() {
     toolbar = document.getElementById("Tool_Bar");
     log_in_div = document.getElementById("log_in");
@@ -15,13 +16,13 @@ function load() {
     mark_div.style.display = "none";
     unmark_div.style.display = "none";
 
-    chrome.storage.sync.get(["uid","name"], function (obj) {
+    chrome.storage.sync.get(["uid", "name"], function (obj) {
         if(obj.uid === undefined)
         {
-            toolbar.style.display="none";
+            toolbar.style.display = "none";
             log_in_div.style.display = "block";
-            mark_div.style.display= "none";
-            unmark_div.style.display ="none";
+            mark_div.style.display = "none";
+            unmark_div.style.display = "none";
         }
         else
         {
@@ -71,7 +72,8 @@ function load() {
     document.getElementById("LogOut").onclick = log_out;
 }
 function log_in() {
-    chrome.tabs.create({},function (response) {
+    chrome.tabs.create({}, function (response) {
+
     });
     return false;
 }
@@ -119,7 +121,14 @@ function unmark_site() {
     return false;
 }
 function log_out() {
-    chrome.storage.sync.remove(["uid","name"]);
+    firebase.auth().signOut()
+        .then(function () {
+            chrome.storage.sync.remove(["uid", "name"]);
+            chrome.storage.sync.remove(["image_url"]);
+        })
+        .catch(function (error) {
+            alert(error.message);
+        });
     toolbar.style.display="none";
     log_in_div.style.display = "block";
     mark_div.style.display= "none";
@@ -127,61 +136,11 @@ function log_out() {
     return false;
 }
 function home() {
-    chrome.tabs.create({},function (response) {
+    chrome.tabs.create({}, function (response) {
+
     });
     return false;
 }
 function stat() {
     return false;
-}
-
-function mark_site_in_server(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var mark_site_req = {
-        uid : uid,
-        link : link,
-        type : "mark_site"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //store
-            }
-            else {
-                //handle
-            }
-        }
-        else {
-            //handle
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(mark_site_req));
-}
-
-
-function unmark_site_in_server(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var unmark_site_req = {
-        uid : uid,
-        link : link,
-        type : "unmark_site"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //delete from storage
-            }
-            else {
-                //handle
-            }
-        }
-        else {
-            //handle
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(unmark_site_req));
 }

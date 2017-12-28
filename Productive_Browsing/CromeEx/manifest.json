@@ -21,12 +21,15 @@
   },
 
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["modules/server_communication.js", "background.js"],
     "persistent": true
   },
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 07ff220ac8d9de2ddd72d5474a52e806d800e52b
   "permissions": [
     "tabs",
     "activeTab",
