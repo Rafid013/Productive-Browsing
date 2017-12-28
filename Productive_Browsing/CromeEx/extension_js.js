@@ -13,6 +13,7 @@ function delete_from_array(array, elem) {
     if(index > -1) array.splice(index, 1);
 }
 
+
 /*function checkLoggedIn() {
     //check if UID is stored
     //if stored return true

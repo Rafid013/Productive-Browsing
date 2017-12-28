@@ -25,15 +25,7 @@
     "persistent": true
   },
 
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": ["time_tracker.js"]
-    }
-  ],
+
 
   "permissions": [
     "tabs",
@@ -41,6 +33,7 @@
     "<all_urls>",
     "storage",
     "contextMenus",
-    "http://localhost:3000/"
+    "http://localhost:3000/",
+    "notifications"
   ]
 }
