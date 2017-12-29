@@ -205,7 +205,8 @@ function add_new_task()
 	var form = document.getElementById("Task_Input");
 	var task = document.getElementById('to_do').value;
 	var time = document.getElementById('time').value;
-    time = time.split(':'); // convert to array
+    var militaryTimeValue = time;
+    time = time.split(':');// convert to array
     // fetch
     var hours = Number(time[0]);
     var minutes = Number(time[1]);
@@ -226,8 +227,6 @@ function add_new_task()
 
     timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
     timeValue += (hours >= 12) ? "PM" : "AM";  // get AM/PM
-
-    var militaryTimeValue = hours + ((minutes < 10) ? ":0" + minutes : ":" + minutes);
 
 
     var date = document.getElementById('date').value;
