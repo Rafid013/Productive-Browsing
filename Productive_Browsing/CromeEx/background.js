@@ -4,6 +4,20 @@ var lasturl;
 var start_time;
 var end_time;
 
+/*setTimeout(sayHi, 5000);
+function sayHi() {
+    alert('Hello');
+}*/
+var options = {
+    type : "basic",
+    title : "You have a task to complete",
+    message : "eat me",
+    iconUrl : "icon.png"
+}
+
+chrome.notifications.create(options,notificationCallback);
+
+
 chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
 
     // since only one tab should be active and in the current window at once

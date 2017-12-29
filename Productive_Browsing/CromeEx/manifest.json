@@ -25,12 +25,18 @@
     "persistent": true
   },
 
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 07ff220ac8d9de2ddd72d5474a52e806d800e52b
   "permissions": [
     "tabs",
     "activeTab",
     "<all_urls>",
     "storage",
     "contextMenus",
-    "http://localhost:3000/"
+    "http://localhost:3000/",
+    "notifications"
   ]
 }
