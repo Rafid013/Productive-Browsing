@@ -13,8 +13,6 @@ function delete_from_array(array, elem) {
     if(index > -1) array.splice(index, 1);
 }
 
-<<<<<<< HEAD
-
 /*function checkLoggedIn() {
     //check if UID is stored
     //if stored return true
@@ -22,13 +20,11 @@ function delete_from_array(array, elem) {
     var status = false;
     return status;
 }*/
-=======
 var config = {
     apiKey: "AIzaSyDWIgzbaNxKJ9HIxIrKTPI02jAXd2KDr-I",
     authDomain: "productive-browsing.firebaseapp.com",
     storageBucket: "productive-browsing.appspot.com"
 };
->>>>>>> 07ff220ac8d9de2ddd72d5474a52e806d800e52b
 
 firebase.initializeApp(config);
 
