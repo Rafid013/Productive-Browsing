@@ -13,8 +13,6 @@ function delete_from_array(array, elem) {
     if(index > -1) array.splice(index, 1);
 }
 
-<<<<<<< HEAD
-
 /*function checkLoggedIn() {
     //check if UID is stored
     //if stored return true
@@ -22,13 +20,11 @@ function delete_from_array(array, elem) {
     var status = false;
     return status;
 }*/
-=======
 var config = {
     apiKey: "AIzaSyDWIgzbaNxKJ9HIxIrKTPI02jAXd2KDr-I",
     authDomain: "productive-browsing.firebaseapp.com",
     storageBucket: "productive-browsing.appspot.com"
 };
->>>>>>> 07ff220ac8d9de2ddd72d5474a52e806d800e52b
 
 firebase.initializeApp(config);
 
@@ -216,7 +212,8 @@ function add_new_task()
 	var form = document.getElementById("Task_Input");
 	var task = document.getElementById('to_do').value;
 	var time = document.getElementById('time').value;
-    time = time.split(':'); // convert to array
+    var militaryTimeValue = time;
+    time = time.split(':');// convert to array
     // fetch
     var hours = Number(time[0]);
     var minutes = Number(time[1]);
@@ -237,8 +234,6 @@ function add_new_task()
 
     timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
     timeValue += (hours >= 12) ? "PM" : "AM";  // get AM/PM
-
-    var militaryTimeValue = hours + ((minutes < 10) ? ":0" + minutes : ":" + minutes);
 
 
     var date = document.getElementById('date').value;

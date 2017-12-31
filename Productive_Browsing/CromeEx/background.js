@@ -13,9 +13,9 @@ var options = {
     title : "You have a task to complete",
     message : "eat me",
     iconUrl : "icon.png"
-}
+};
 
-chrome.notifications.create(options,notificationCallback);
+chrome.notifications.create(options, notificationCallback);
 
 
 chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
