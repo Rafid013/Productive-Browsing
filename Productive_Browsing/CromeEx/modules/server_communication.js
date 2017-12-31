@@ -11,11 +11,28 @@ function mark_task_in_server(uid, task, date, time) {
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
-                alert("Marked");
+                //alert("Marked");
                 //also mark in storage
+                if(date===date_today)
+                {
+                    var hour = parseInt(time.substring(0,2));
+                    var min = parseInt(time.substring(3,5));
+                    var modifier = time.substring(5,7);
+                    if(hour ===  12) hour =0;
+                    if(modifier === "PM") hour = hour +12;
+                    var milTime = hour+":"+min;
+
+                    var tmp = {
+                        type : "change_Timer",
+                        task : task,
+                        time: milTime
+                    };
+                    chrome.runtime.sendMessage(tmp);
+
+                }
             }
             else {
-                alert("Not Marked");
+                //alert("Not Marked");
                 //
             }
         }
@@ -69,9 +86,17 @@ function add_task_to_server(uid, task, date, normal_time, military_time) {
             if(senderToServer.responseText === "success") {
                 if(date === date_today) {
                     events_today.push(task);
+                    events_today_marked.push(false);
                     Scroll_Events();
                     events_ToDo_List.push(task + " " + normal_time);
+                    events_ToDo_marked.push(false);
                     populateToDoList();
+                    var tmp = {
+                        type : "add_Timer",
+                        task : task,
+                        time: military_time
+                    };
+                    chrome.runtime.sendMessage(tmp);
                 }
             }
             else {
@@ -100,10 +125,24 @@ function delete_task_from_server(uid, task, date, time) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
                 if(date === date_today) {
-                    delete_from_array(events_today, task);
-                    delete_from_array(events_ToDo_List, task + " " + time);
+                    var index;
+                    index=delete_from_array(events_today, task);
+                    if(index>-1)
+                    {
+                        events_today_marked.splice(index,1);
+                    }
+                    index=delete_from_array(events_ToDo_List, task + " " + time);
+                    if(index>-1)
+                    {
+                        events_ToDo_marked.splice(index,1);
+                    }
                     populateToDoList();
                     Scroll_Events();
+                    var tmp = {
+                        type : "delete_Timer",
+                        task : task
+                    };
+                    chrome.runtime.sendMessage(tmp);
                 }
             }
             else {
@@ -155,14 +194,19 @@ function get_to_do_from_server(uid, date) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var event_list_server = JSON.parse(senderToServer.responseText);
             var list_size = event_list_server.length;
+            events_today=[];
+            events_today_marked =[];
+            events_ToDo_List=[];
+            events_ToDo_marked=[];
             for(var i = 0; i < list_size; ++i) {
                 var task = event_list_server[i].task;
                 var normal_time = event_list_server[i].normal_time;
                 //var military_time = event_list_server[i].military_time;
-                //var done = event_list_server[i].done;
                 if(date === date_today) {
                     events_today.push(task);
                     events_ToDo_List.push(task + " " + normal_time);
+                    events_today_marked[i] = event_list_server[i].done;
+                    events_ToDo_marked[i]  = event_list_server[i].done;
                     Scroll_Events();
                     populateToDoList();
                 }
@@ -213,6 +257,14 @@ function mark_site_in_server(uid, link) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
                 //store
+                //alert("heyyy");
+                var tmp ={
+                    type :"mark_site",
+                    site :link
+                }
+                chrome.runtime.sendMessage(tmp, function(response) {
+
+                });
             }
             else {
                 //handle
@@ -239,6 +291,14 @@ function unmark_site_in_server(uid, link) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
                 //delete from storage
+               // alert("success");
+                var tmp ={
+                    type :"unmark_site",
+                    site :link
+                }
+                chrome.runtime.sendMessage(tmp, function(response) {
+
+                });
             }
             else {
                 //handle

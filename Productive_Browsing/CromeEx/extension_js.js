@@ -1,6 +1,8 @@
 var type = 0;
 var events_today = [];
+var events_today_marked = [];
 var events_ToDo_List = [];
+var events_ToDo_marked = [];
 var favourite_links = [];
 var date_today;
 var curTask = "";
@@ -10,7 +12,11 @@ var name;
 
 function delete_from_array(array, elem) {
     var index = array.indexOf(elem);
-    if(index > -1) array.splice(index, 1);
+    if(index > -1)
+    {
+        array.splice(index, 1);
+    }
+    return index;
 }
 
 /*function checkLoggedIn() {
@@ -106,7 +112,7 @@ function loadPage() {
             get_to_do_from_server(uid, date_today);
             get_fav_link_from_server(uid);
             chrome.storage.sync.get("image_url", function (item) {
-                console.log(item.image_url);
+                //console.log(item.image_url);
                 showBackground(item.image_url);
             });
         } else {
@@ -271,7 +277,7 @@ function load()
 }
 
 //adding elements in to do list
-function newElement() 
+function newElement(isDone)
 {
   var li = document.createElement("li");
   var inputValue = curTask;
@@ -288,6 +294,10 @@ function newElement()
   span.className = "close";
   span.appendChild(txt);
   li.appendChild(span);
+  if(isDone == true)
+  {
+      li.classList.toggle('checked');
+  }
 }
 
 function newFavLink()
@@ -357,7 +367,7 @@ function populateToDoList()
 	for (i = 0; i < events_ToDo_List.length; i++)
 	{
 		curTask = events_ToDo_List[i];
-		newElement();
+		newElement(events_ToDo_marked[i]);
 	}
 
 	var close = document.getElementsByClassName("close");
@@ -380,6 +390,20 @@ function populateToDoList()
     		var div = ev.target;
             var task = div.textContent.substring(0, div.textContent.lastIndexOf(" "));
             var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
+            var index;
+            index = events_today_marked.indexOf(task);
+            if(index>-1)
+            {
+                if(events_today_marked[index]==true) events_today_marked[index] = false;
+                else events_today_marked = true;
+            }
+            index = events_ToDo_marked.indexOf(task + " " + time);
+            if(index>-1)
+            {
+                if(events_ToDo_marked[index]==true) events_ToDo_marked[index] = false;
+                else events_ToDo_marked = true;
+            }
+
 
     		//read uid here
     		mark_task_in_server(uid, task, date_today, time);
@@ -416,6 +440,11 @@ function log_out() {
             events_today = [];
             events_ToDo_List = [];
             favourite_links = [];
+            var tmp = {
+                type : "delete_all_timers"
+            };
+            chrome.runtime.sendMessage(tmp);
+
         })
         .catch(function (error) {
             console.log(error.message);
@@ -459,6 +488,11 @@ function logIn()
             console.log("Name: " + userRecord.displayName);
             name = userRecord.displayName;
             uid = userRecord.uid;
+            var tmp = {
+                type : "start_timer",
+                uid:uid
+            };
+            chrome.runtime.sendMessage(tmp);
             //store name and uid
             chrome.storage.sync.set({"uid": uid});
             chrome.storage.sync.set({"name": name});
@@ -496,6 +530,11 @@ function register()
                 name = receivedData.name;
                 uid = receivedData.uid;
                 //store name and uid
+                var tmp = {
+                    type : "start_timer",
+                    uid:uid
+                };
+                chrome.runtime.sendMessage(tmp);
                 chrome.storage.sync.set({"uid": uid});
                 chrome.storage.sync.set({"name": name});
                 var body = document.getElementById("homepage_body");

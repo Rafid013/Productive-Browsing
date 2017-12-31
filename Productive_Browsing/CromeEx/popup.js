@@ -38,7 +38,7 @@ function load() {
                 var activeTabId = activeTab.url; // or do whatever you need
 
                 //check from storage if it's marked or not
-                var isMarked = true;
+                /*var isMarked = false;
                 if(isMarked) {
                     mark_div.style.display= "none";
                     unmark_div.style.display ="block";
@@ -46,9 +46,16 @@ function load() {
                 else {
                     mark_div.style.display= "block";
                     unmark_div.style.display ="none";
+                }*/
+                var a = document.createElement('a');
+                a.href = activeTab.url;// or do whatever you need
+                var tmp ={
+                    type :"is_marked",
+                    site :a.hostname
                 }
-                /*chrome.runtime.sendMessage(tmp, function(response) {
+                chrome.runtime.sendMessage(tmp, function(response) {
                     var isMarked = response;
+                    //alert(response);
                     if(isMarked === "true")
                     {
                         mark_div.style.display= "none";
@@ -59,7 +66,7 @@ function load() {
                         mark_div.style.display= "block";
                         unmark_div.style.display ="none";
                     }
-                });*/
+                });
             });
         }
     });
@@ -88,7 +95,9 @@ function mark_site() {
             link : activeTabId,
             type : "mark_site"
         };*/
-        mark_site_in_server(uid, activeTabId);
+        var a = document.createElement('a');
+        a.href = activeTab.url;
+        mark_site_in_server(uid, a.hostname);
         //chrome.runtime.sendMessage(tmp);
 
     });
@@ -111,7 +120,9 @@ function unmark_site() {
             type : "un_mark_site"
         };
         chrome.runtime.sendMessage(tmp);*/
-        unmark_site_in_server(uid, activeTabId);
+        var a = document.createElement('a');
+        a.href = activeTab.url;
+        unmark_site_in_server(uid, a.hostname);
 
     });
     toolbar.style.display="block";
