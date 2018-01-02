@@ -76,7 +76,7 @@ function delete_image(uid) {
     delRef.delete()
         .then(function() {
             // File deleted successfully
-            chrome.storage.sync.set({"image_url":"none"});
+            chrome.storage.sync.remove("image_url");
         })
         .catch(function(error) {
             // Uh-oh, an error occurred!
@@ -99,7 +99,7 @@ function loadPage() {
             get_fav_link_from_server(uid);
             get_marked_sites(uid);
             chrome.storage.sync.get("image_url", function (item) {
-                if(item.image_url) showBackground(item.image_url);
+                if(item.image_url !== undefined) showBackground(item.image_url);
                 else getBackgroundDownloadURL(uid, showBackground);
             });
         } else {
@@ -165,7 +165,9 @@ function selectBackground() {
 
 function deleteBackground() {
     delete_image(uid);
-    showBackground("none");
+
+    //gets one of the default backgrounds available
+    getBackgroundDownloadURL(uid, showBackground);
 }
 
 function showBackground(url) {
@@ -184,9 +186,17 @@ function getBackgroundDownloadURL(uid, callback) {
         .catch(function (error) {
             console.log(error.message);
             console.log(error.code);
-            if(error.code === "storage/object-not-found")
-                chrome.storage.sync.set({"image_url":"none"});
-            callback("none");
+            var backgroundNo = Math.floor(Math.random()*4) + 1;
+            var path = "backgrounds/background" + backgroundNo + ".jpeg";
+            storageRef.child(path).getDownloadURL()
+                .then(function (url1) {
+                    callback(url1);
+                })
+                .catch(function (error) {
+                    console.log(error.message);
+                    console.log(error.code);
+                    callback("none");
+                });
         });
 }
 
