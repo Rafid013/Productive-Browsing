@@ -39,6 +39,12 @@ router.post('/', function (req, res) {
             res.end();
         });
     }
+    else if(req.body.type === "get_marked_sites") {
+        db.get_marked_sites(req.body.uid, function (data) {
+            res.json(data);
+            res.end();
+        });
+    }
     else if(req.body.type === "update_site_time") {
         db.update_site_time(req.body.uid, req.body.site, req.body.time, function (msg) {
             res.write(msg);

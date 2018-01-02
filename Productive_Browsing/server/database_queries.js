@@ -253,6 +253,20 @@ function get_fav_link(uid, callback) {
     });
 }
 
+function get_marked_sites(uid, callback) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var siteRef = ref.child(dataSnapshot.key + '/Time Killer Sites');
+        siteRef.once("value").then(function (data) {
+            var sites = [];
+            data.forEach(function (index) {
+                sites.push(index.val());
+            });
+            callback(sites);
+        });
+    });
+}
+
 module.exports = {
     admin : admin,
     add_UID : add_UID,
@@ -265,5 +279,6 @@ module.exports = {
     get_to_do : get_to_do,
     add_fav_link : add_fav_link,
     delete_fav_link : delete_fav_link,
-    get_fav_link : get_fav_link
+    get_fav_link : get_fav_link,
+    get_marked_sites : get_marked_sites
 };

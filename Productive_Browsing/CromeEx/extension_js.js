@@ -10,22 +10,6 @@ var curLink = "";
 var uid;
 var name;
 
-function delete_from_array(array, elem) {
-    var index = array.indexOf(elem);
-    if(index > -1)
-    {
-        array.splice(index, 1);
-    }
-    return index;
-}
-
-/*function checkLoggedIn() {
-    //check if UID is stored
-    //if stored return true
-    //else false
-    var status = false;
-    return status;
-}*/
 var config = {
     apiKey: "AIzaSyDWIgzbaNxKJ9HIxIrKTPI02jAXd2KDr-I",
     authDomain: "productive-browsing.firebaseapp.com",
@@ -44,7 +28,6 @@ function upload_image(uid, file, callback) {
         contentType: 'image/jpeg'
     };
 
-// Upload file and metadata to the object 'images/mountains.jpg'
     // noinspection JSCheckFunctionSignatures
     var uploadTask = storageRef.child(uid + "/background.jpeg").put(file, metadata);
 
@@ -90,11 +73,14 @@ function upload_image(uid, file, callback) {
 
 function delete_image(uid) {
     var delRef = storageRef.child(uid + "/background.jpeg");
-    delRef.delete().then(function() {
-        // File deleted successfully
-    }).catch(function(error) {
-        // Uh-oh, an error occurred!
-    });
+    delRef.delete()
+        .then(function() {
+            // File deleted successfully
+            chrome.storage.sync.set({"image_url":"none"});
+        })
+        .catch(function(error) {
+            // Uh-oh, an error occurred!
+        });
 }
 
 function loadPage() {
@@ -111,13 +97,17 @@ function loadPage() {
             name = user.displayName;
             get_to_do_from_server(uid, date_today);
             get_fav_link_from_server(uid);
+            get_marked_sites(uid);
             chrome.storage.sync.get("image_url", function (item) {
-                //console.log(item.image_url);
-                showBackground(item.image_url);
+                if(item.image_url) showBackground(item.image_url);
+                else getBackgroundDownloadURL(uid, showBackground);
             });
         } else {
             // No user is signed in.
             body.style.backgroundColor = "#76b852";
+            body.style.color = "black";
+            showBackground("none");
+            logInPage();
             document.getElementById("signup_page").style.display = "block";
             document.getElementById("home_page").style.display = "none";
         }
@@ -193,6 +183,9 @@ function getBackgroundDownloadURL(uid, callback) {
         })
         .catch(function (error) {
             console.log(error.message);
+            console.log(error.code);
+            if(error.code === "storage/object-not-found")
+                chrome.storage.sync.set({"image_url":"none"});
             callback("none");
         });
 }
@@ -252,7 +245,13 @@ function add_new_task()
 function load()
 {
     var date = new Date();
-    date_today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    if(month < 10) month = "0" + month;
+    if(day < 10) day = "0" + day;
+    date_today = year + "-" + month + "-" + day;
+
     loadPage();
     showTime();
 
@@ -294,7 +293,7 @@ function newElement(isDone)
   span.className = "close";
   span.appendChild(txt);
   li.appendChild(span);
-  if(isDone == true)
+  if(isDone)
   {
       li.classList.toggle('checked');
   }
@@ -345,6 +344,7 @@ function populateFavouriteLinks() {
     }
     //var list = document.querySelector('ul');
     ul.addEventListener('click', function(ev) {
+        // noinspection JSUnresolvedVariable
         if (ev.target.tagName === 'LI') {
             var div = ev.target;
             var tmp = {
@@ -385,8 +385,10 @@ function populateToDoList()
 	}
 	//var list = document.querySelector('ul');
 	ul.addEventListener('click', function(ev) {
-  		if (ev.target.tagName === 'LI') {
-    		ev.target.classList.toggle('checked');
+  		// noinspection JSUnresolvedVariable
+        if (ev.target.tagName === 'LI') {
+    		// noinspection JSUnresolvedVariable
+            ev.target.classList.toggle('checked');
     		var div = ev.target;
             var task = div.textContent.substring(0, div.textContent.lastIndexOf(" "));
             var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
@@ -394,13 +396,13 @@ function populateToDoList()
             index = events_today_marked.indexOf(task);
             if(index>-1)
             {
-                if(events_today_marked[index]==true) events_today_marked[index] = false;
+                if(events_today_marked[index]) events_today_marked[index] = false;
                 else events_today_marked = true;
             }
             index = events_ToDo_marked.indexOf(task + " " + time);
             if(index>-1)
             {
-                if(events_ToDo_marked[index]==true) events_ToDo_marked[index] = false;
+                if(events_ToDo_marked[index]) events_ToDo_marked[index] = false;
                 else events_ToDo_marked = true;
             }
 
@@ -435,8 +437,7 @@ function log_out() {
     //storage empty
     firebase.auth().signOut()
         .then(function () {
-            chrome.storage.sync.remove(["uid", "name"]);
-            chrome.storage.sync.remove(["image_url"]);
+            chrome.storage.sync.remove(["uid", "name", "image_url", "marked_sites"]);
             events_today = [];
             events_ToDo_List = [];
             favourite_links = [];
@@ -449,14 +450,6 @@ function log_out() {
         .catch(function (error) {
             console.log(error.message);
         });
-    var body = document.getElementById("homepage_body");
-    body.style.background = "none";
-    body.style.backgroundColor ="#76b852";
-    body.style.color = "black";
-    logInPage();
-    document.getElementById("signup_page").style.display = "block";
-    document.getElementById("home_page").style.display = "none";
-    return false;
 }
 
 
@@ -490,20 +483,12 @@ function logIn()
             uid = userRecord.uid;
             var tmp = {
                 type : "start_timer",
-                uid:uid
+                uid : uid
             };
             chrome.runtime.sendMessage(tmp);
             //store name and uid
             chrome.storage.sync.set({"uid": uid});
             chrome.storage.sync.set({"name": name});
-            get_to_do_from_server(uid, date_today);
-            get_fav_link_from_server(uid);
-            var body = document.getElementById("homepage_body");
-            body.style.backgroundColor = "#6d7c62";
-            body.style.color = "white";
-            document.getElementById("signup_page").style.display = "none";
-            document.getElementById("home_page").style.display = "block";
-            getBackgroundDownloadURL(uid, showBackground);
         }).catch(function (error) {
             console.log("Error when signing in for email: " + email);
             console.log(error.code);
@@ -537,11 +522,7 @@ function register()
                 chrome.runtime.sendMessage(tmp);
                 chrome.storage.sync.set({"uid": uid});
                 chrome.storage.sync.set({"name": name});
-                var body = document.getElementById("homepage_body");
-                body.style.backgroundColor = "#6d7c62";
-                body.style.color = "white";
-                document.getElementById("signup_page").style.display = "none";
-                document.getElementById("home_page").style.display = "block";
+                firebase.auth().signInWithEmailAndPassword(register_req.email, register_req.password);
             }
             else {
                 //show the error

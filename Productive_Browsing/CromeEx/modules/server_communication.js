@@ -1,3 +1,16 @@
+function delete_from_array(array, elem) {
+    var index = array.indexOf(elem);
+    if(index > -1)
+    {
+        array.splice(index, 1);
+    }
+    return index;
+}
+
+
+
+
+
 function mark_task_in_server(uid, task, date, time) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
@@ -13,14 +26,14 @@ function mark_task_in_server(uid, task, date, time) {
             if(senderToServer.responseText === "success") {
                 //alert("Marked");
                 //also mark in storage
-                if(date===date_today)
+                if(date === date_today)
                 {
                     var hour = parseInt(time.substring(0,2));
                     var min = parseInt(time.substring(3,5));
                     var modifier = time.substring(5,7);
                     if(hour ===  12) hour =0;
-                    if(modifier === "PM") hour = hour +12;
-                    var milTime = hour+":"+min;
+                    if(modifier === "PM") hour = hour + 12;
+                    var milTime = hour + ":" + min;
 
                     var tmp = {
                         type : "change_Timer",
@@ -126,12 +139,12 @@ function delete_task_from_server(uid, task, date, time) {
             if(senderToServer.responseText === "success") {
                 if(date === date_today) {
                     var index;
-                    index=delete_from_array(events_today, task);
+                    index = delete_from_array(events_today, task);
                     if(index>-1)
                     {
                         events_today_marked.splice(index,1);
                     }
-                    index=delete_from_array(events_ToDo_List, task + " " + time);
+                    index = delete_from_array(events_ToDo_List, task + " " + time);
                     if(index>-1)
                     {
                         events_ToDo_marked.splice(index,1);
@@ -194,10 +207,10 @@ function get_to_do_from_server(uid, date) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var event_list_server = JSON.parse(senderToServer.responseText);
             var list_size = event_list_server.length;
-            events_today=[];
-            events_today_marked =[];
-            events_ToDo_List=[];
-            events_ToDo_marked=[];
+            events_today = [];
+            events_today_marked = [];
+            events_ToDo_List = [];
+            events_ToDo_marked = [];
             for(var i = 0; i < list_size; ++i) {
                 var task = event_list_server[i].task;
                 var normal_time = event_list_server[i].normal_time;
@@ -257,11 +270,10 @@ function mark_site_in_server(uid, link) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
                 //store
-                //alert("heyyy");
                 var tmp ={
-                    type :"mark_site",
-                    site :link
-                }
+                    type : "mark_site",
+                    site : link
+                };
                 chrome.runtime.sendMessage(tmp, function(response) {
 
                 });
@@ -295,7 +307,7 @@ function unmark_site_in_server(uid, link) {
                 var tmp ={
                     type :"unmark_site",
                     site :link
-                }
+                };
                 chrome.runtime.sendMessage(tmp, function(response) {
 
                 });
@@ -334,4 +346,25 @@ function update_site_time_in_server(uid, site, time) {
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
     senderToServer.send(JSON.stringify(update_site_time_req));
+}
+
+function get_marked_sites(uid) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var get_marked_sites_req = {
+        uid : uid,
+        type : "get_marked_sites"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            if(senderToServer.responseText === "success") {
+                //console.log(senderToServer.responseText);
+            }
+            else {
+                //to be implemented
+            }
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(get_marked_sites_req));
 }

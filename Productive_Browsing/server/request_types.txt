@@ -3,6 +3,7 @@ remove marked site,       type = "unmark_site",     //
 upload image,             type = "up_image",
 signing in,               type = "sign_in",         //
 marking site,             type = "mark_site",       //
+get marked sites          type = "get_marked_sites"
 update site time,         type = "update_site_time",
 delete image,             type = "del_image",
 download image,           type = "down_image",

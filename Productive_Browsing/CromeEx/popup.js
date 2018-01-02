@@ -35,7 +35,7 @@ function load() {
                 // since only one tab should be active and in the current window at once
                 // the return variable should only have one entry
                 var activeTab = arrayOfTabs[0];
-                var activeTabId = activeTab.url; // or do whatever you need
+                //var activeTabId = activeTab.url; // or do whatever you need
 
                 //check from storage if it's marked or not
                 /*var isMarked = false;
@@ -52,11 +52,10 @@ function load() {
                 var tmp ={
                     type :"is_marked",
                     site :a.hostname
-                }
+                };
                 chrome.runtime.sendMessage(tmp, function(response) {
-                    var isMarked = response;
                     //alert(response);
-                    if(isMarked === "true")
+                    if(response === "true")
                     {
                         mark_div.style.display= "none";
                         unmark_div.style.display ="block";
@@ -90,7 +89,7 @@ function mark_site() {
         // since only one tab should be active and in the current window at once
         // the return variable should only have one entry
         var activeTab = arrayOfTabs[0];
-        var activeTabId = activeTab.url; // or do whatever you need
+        //var activeTabId = activeTab.url; // or do whatever you need
         /*var tmp = {
             link : activeTabId,
             type : "mark_site"
@@ -102,10 +101,10 @@ function mark_site() {
 
     });
 
-    toolbar.style.display="block";
+    toolbar.style.display = "block";
     log_in_div.style.display = "none";
-    mark_div.style.display= "none";
-    unmark_div.style.display ="block";
+    mark_div.style.display = "none";
+    unmark_div.style.display = "block";
     return false;
 }
 function unmark_site() {
@@ -114,7 +113,7 @@ function unmark_site() {
         // since only one tab should be active and in the current window at once
         // the return variable should only have one entry
         var activeTab = arrayOfTabs[0];
-        var activeTabId = activeTab.url; // or do whatever you need
+        //var activeTabId = activeTab.url; // or do whatever you need
         /*var tmp = {
             url : activeTabId,
             type : "un_mark_site"
@@ -125,17 +124,16 @@ function unmark_site() {
         unmark_site_in_server(uid, a.hostname);
 
     });
-    toolbar.style.display="block";
+    toolbar.style.display = "block";
     log_in_div.style.display = "none";
-    mark_div.style.display= "block";
-    unmark_div.style.display ="none";
+    mark_div.style.display = "block";
+    unmark_div.style.display = "none";
     return false;
 }
 function log_out() {
     firebase.auth().signOut()
         .then(function () {
-            chrome.storage.sync.remove(["uid", "name"]);
-            chrome.storage.sync.remove(["image_url"]);
+            chrome.storage.sync.remove(["uid", "name", "image_url", "marked_sites"]);
         })
         .catch(function (error) {
             alert(error.message);

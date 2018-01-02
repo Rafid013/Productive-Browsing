@@ -1,4 +1,4 @@
-var favourite_links=[];
+var favourite_links = [];
 var lastTab;
 var lasturl;
 var start_time;
@@ -7,20 +7,21 @@ var date = new Date();
 var timers = {};
 date_today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 var last_task = "";
-var marked_sites ={};
+var marked_sites = {};
+var myNotificationId;
 
 function showTaskNotification(task) {
     var options = {
         type : "basic",
         title : "You have a task to complete",
         message : task,
-        buttons: [{
+        buttons : [{
             title: "Snooze for 5 minutes"
         }],
         iconUrl : "icon.png"
     };
     chrome.notifications.create(options, notificationCallback);
-    last_task=task;
+    last_task = task;
 }
 
 //setTimeout(showTaskNotification,2000,"holaaaa");
@@ -32,7 +33,7 @@ function notificationCallback(id) {
 chrome.notifications.onButtonClicked.addListener(function(Id, btnIdx) {
     if (Id === myNotificationId) {
         if (btnIdx === 0) {
-            timers[last_task] = setTimeout(showTaskNotification,2000,last_task);
+            timers[last_task] = setTimeout(showTaskNotification, 2000, last_task);
         }
     }
 });
@@ -50,8 +51,8 @@ chrome.storage.sync.get(["uid", "name"], function (obj) {
     }
     else
     {
-        get_to_do(obj.uid,date_today);
-        chrome.storage.sync.get("marked_sites",function (obj) {
+        get_to_do(obj.uid, date_today);
+        chrome.storage.sync.get("marked_sites", function (obj) {
             if(obj.marked_sites === undefined)
             {
                 //alert("no_data");
@@ -60,7 +61,7 @@ chrome.storage.sync.get(["uid", "name"], function (obj) {
             {
                 marked_sites = obj.marked_sites;
                 console.log(marked_sites);
-                setTimeout(upload_marked_sites_in_storage,5000);
+                setTimeout(upload_marked_sites_in_storage, 5000);
                 //delete marked_sites["www.facebook.com"];
                 //chrome.storage.sync.set({"marked_sites":marked_sites});
                 //console.log(marked_sites);
@@ -79,17 +80,18 @@ function get_to_do(uid, date) {
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            timers ={};
+            timers = {};
             var date = new Date();
             var currentTime = date.getHours()*60 + date.getMinutes();
             var event_list_server = JSON.parse(senderToServer.responseText);
             var list_size = event_list_server.length;
 
             for(var i = 0; i < list_size; ++i) {
-                if(event_list_server[i].done === false && getMinutes(event_list_server[i].military_time)>currentTime)
+                if(!event_list_server[i].done && getMinutes(event_list_server[i].military_time) > currentTime)
                 {
-                    var diff = getMinutes(event_list_server[i].military_time)-currentTime;
-                    timers[event_list_server[i].task]=setTimeout(showTaskNotification,diff*1000*60,event_list_server[i].task);
+                    var diff = getMinutes(event_list_server[i].military_time) - currentTime;
+                    timers[event_list_server[i].task] =
+                        setTimeout(showTaskNotification, diff*1000*60, event_list_server[i].task);
                 }
                 //var task = event_list_server[i].task;
                 //var normal_time = event_list_server[i].normal_time;
@@ -148,26 +150,27 @@ function start_tab(tabId, changeInfo, tab) {
     var currUrl = b.hostname;
     var total_time = (end_time-start_time)/1000;
     total_time = round(total_time, 2);
+    var tasks, k, options;
     if(tabId !== lastTab)
     {
         lastTab = tabId;
         console.log(lastTab);
         console.log(lasturl);
         console.log(total_time);
-        if(marked_sites[lasturl]!== undefined)
+        if(marked_sites[lasturl] !== undefined)
         {
             marked_sites[lasturl] += total_time;
-            var tasks = [];
-            for (var k in timers){
-                tasks.push({title:"Task To Do:",message:k});
+            tasks = [];
+            for (k in timers){
+                tasks.push({title:"Task To Do:", message:k});
             }
 
-            if(marked_sites[lasturl]>=10)
+            if(marked_sites[lasturl] >= 10)
             {
-                var options = {
+                options = {
                     type : "list",
-                    title : "You are using " + lasturl+" too long",
-                    message : "You are using " + lasturl+" too long",
+                    title : "You are using " + lasturl + " too long",
+                    message : "You are using " + lasturl + " too long",
                     iconUrl : "icon.png",
                     items: tasks
                 };
@@ -182,20 +185,20 @@ function start_tab(tabId, changeInfo, tab) {
         console.log(lastTab);
         console.log(lasturl);
         console.log(total_time);
-        if(marked_sites[lasturl]!== undefined)
+        if(marked_sites[lasturl] !== undefined)
         {
             marked_sites[lasturl] += total_time;
-            var tasks = [];
-            for (var k in timers){
-                tasks.push({title:"Task To Do:",message:k});
+            tasks = [];
+            for (k in timers){
+                tasks.push({title:"Task To Do:", message:k});
             }
 
             if(marked_sites[lasturl]>=10)
             {
-                var options = {
+                options = {
                     type : "list",
-                    title : "You are using " + lasturl+" too long",
-                    message : "You are using " + lasturl+" too long",
+                    title : "You are using " + lasturl + " too long",
+                    message : "You are using " + lasturl + " too long",
                     iconUrl : "icon.png",
                     items: tasks
                 };
@@ -212,17 +215,17 @@ function start_tab(tabId, changeInfo, tab) {
             if(marked_sites[lasturl]!== undefined)
             {
                 marked_sites[lasturl] += total_time;
-                var tasks = [];
-                for (var k in timers){
-                    tasks.push({title:"Task To Do:",message:k});
+                tasks = [];
+                for (k in timers){
+                    tasks.push({title:"Task To Do:", message:k});
                 }
 
                 if(marked_sites[lasturl]>=120)
                 {
-                    var options = {
+                    options = {
                         type : "list",
-                        title : "You are using " + lasturl+" too long",
-                        message : "You are using " + lasturl+" too long",
+                        title : "You are using " + lasturl + " too long",
+                        message : "You are using " + lasturl + " too long",
                         iconUrl : "icon.png",
                         items: tasks
                     };
@@ -262,27 +265,27 @@ function activateHandler(activeInfo) {
         console.log(lastTab);
         console.log(lasturl);
         console.log(total_time);
-        if(marked_sites[lasturl]!== undefined)
+        if(marked_sites[lasturl] !== undefined)
         {
             marked_sites[lasturl] += total_time;
             var tasks = [];
             for (var k in timers){
-                tasks.push({title:"Task To Do:",message:k});
+                tasks.push({title:"Task To Do:", message:k});
             }
 
             if(marked_sites[lasturl]>=10)
             {
                 var options = {
                     type : "list",
-                    title : "You are using " + lasturl+" too long",
-                    message : "You are using " + lasturl+" too long",
+                    title : "You are using " + lasturl + " too long",
+                    message : "You are using " + lasturl + " too long",
                     iconUrl : "icon.png",
                     items: tasks
                 };
                 chrome.notifications.create(options);
             }
         }
-        lastTab=activeInfo.tabId;
+        lastTab = activeInfo.tabId;
         start_time = end_time;
         chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
 
@@ -315,8 +318,8 @@ function window_close_handler() {
         {
             var options = {
                 type : "list",
-                title : "You are using " + lasturl+" too long",
-                message : "You are using " + lasturl+" too long",
+                title : "You are using " + lasturl + " too long",
+                message : "You are using " + lasturl + " too long",
                 iconUrl : "icon.png",
                 items: tasks
             };
@@ -409,20 +412,21 @@ function fav_page(data, tab) {
 }
 
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
+    var date, currentTime, task_time;
     if(req.type === "open_new_tab") {
         //open new tab of the link in req.link
-        chrome.tabs.create({url:req.link},function (response) {
+        chrome.tabs.create({url:req.link}, function (response) {
 
         });
     }
     else if(req.type === "add_Timer")
     {
-        var date = new Date();
-        var currentTime = date.getHours()*60 + date.getMinutes();
-        var task_time = getMinutes(req.time);
-        if(task_time>currentTime)
+        date = new Date();
+        currentTime = date.getHours()*60 + date.getMinutes();
+        task_time = getMinutes(req.time);
+        if(task_time > currentTime)
         {
-            timers[req.task] = setTimeout(showTaskNotification,(task_time-currentTime)*60*1000,req.task);
+            timers[req.task] = setTimeout(showTaskNotification, (task_time - currentTime)*60*1000, req.task);
             alert("set");
         }
         else
@@ -432,7 +436,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     }
     else if(req.type === "delete_Timer")
     {
-        if(timers[req.task]!== undefined)
+        if(timers[req.task] !== undefined)
         {
             clearTimeout(timers[req.task]);
             delete timers[req.task];
@@ -450,9 +454,9 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         }
         else
         {
-            var date = new Date();
-            var currentTime = date.getHours()*60 + date.getMinutes();
-            var task_time = getMinutes(req.time);
+            date = new Date();
+            currentTime = date.getHours()*60 + date.getMinutes();
+            task_time = getMinutes(req.time);
             if(task_time>currentTime)
             {
                 timers[req.task] = setTimeout(showTaskNotification,(task_time-currentTime)*60*1000,req.task);
@@ -471,13 +475,13 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         chrome.storage.sync.get("marked_sites",function (obj) {
             if(obj.marked_sites === undefined)
             {
-                alert("no_data");
+                //alert("no_data");
             }
             else
             {
                 marked_sites = obj.marked_sites;
                 console.log(marked_sites);
-                setTimeout(upload_marked_sites_in_storage,5000);
+                setTimeout(upload_marked_sites_in_storage, 5000);
             }
         });
     }
@@ -490,7 +494,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     }
     else if(req.type ==="is_marked")
     {
-        if(marked_sites[req.site]!== undefined)
+        if(marked_sites[req.site] !== undefined)
         {
             //alert(marked_sites[req.site]);
             res("true");
@@ -511,7 +515,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     {
         //alert(req.site);
         //alert(marked_sites[req.site]);
-        if(marked_sites[req.site]!== undefined)
+        if(marked_sites[req.site] !== undefined)
         {
             delete marked_sites[req.site];
             chrome.storage.sync.set({"marked_sites": marked_sites});
@@ -529,7 +533,7 @@ function upload_marked_sites_in_storage() {
         else{
             chrome.storage.sync.set({"marked_sites":marked_sites});
             //alert("updated");
-            setTimeout(upload_marked_sites_in_storage,5000);
+            setTimeout(upload_marked_sites_in_storage, 5000);
         }
     });
 }
