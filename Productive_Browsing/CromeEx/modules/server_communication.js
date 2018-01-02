@@ -304,7 +304,7 @@ function unmark_site_in_server(uid, link) {
             if(senderToServer.responseText === "success") {
                 //delete from storage
                // alert("success");
-                var tmp ={
+                var tmp = {
                     type :"unmark_site",
                     site :link
                 };
@@ -357,12 +357,19 @@ function get_marked_sites(uid) {
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //console.log(senderToServer.responseText);
+            //console.log(senderToServer.responseText);
+            var site_list = JSON.parse(senderToServer.responseText);
+            var sites_to_be_stored = {};
+            for(var i = 0; i < site_list.length; ++i) {
+                sites_to_be_stored[site_list[i].site] = 0;
             }
-            else {
-                //to be implemented
-            }
+            chrome.storage.sync.set({"marked_sites" : sites_to_be_stored});
+            /*var tmp = {
+                type :"load_marked_sites"
+            };
+            chrome.runtime.sendMessage(tmp, function(response) {
+
+            });*/
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");

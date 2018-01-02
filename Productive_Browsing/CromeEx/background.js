@@ -472,7 +472,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     else if(req.type === "start_timer")
     {
         get_to_do(req.uid,date_today);
-        chrome.storage.sync.get("marked_sites",function (obj) {
+        chrome.storage.sync.get("marked_sites", function (obj) {
             if(obj.marked_sites === undefined)
             {
                 //alert("no_data");
@@ -508,7 +508,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     else if(req.type === "mark_site")
     {
         marked_sites[req.site] = 0;
-        chrome.storage.sync.set({"marked_sites": marked_sites});
+        chrome.storage.sync.set({"marked_sites" : marked_sites});
         console.log(marked_sites);
     }
     else if(req.type === "unmark_site")
@@ -518,7 +518,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         if(marked_sites[req.site] !== undefined)
         {
             delete marked_sites[req.site];
-            chrome.storage.sync.set({"marked_sites": marked_sites});
+            chrome.storage.sync.set({"marked_sites" : marked_sites});
             console.log(marked_sites);
         }
     }
