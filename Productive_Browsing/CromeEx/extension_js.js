@@ -5,6 +5,7 @@ var events_ToDo_List = [];
 var events_ToDo_marked = [];
 var favourite_links = [];
 var date_today;
+var date_To_Do_list;
 var curTask = "";
 var curLink = "";
 var uid;
@@ -252,6 +253,12 @@ function add_new_task()
 	return false;
 }
 
+function Search_To_Do() {
+    var date = document.getElementById("Search_date").value;
+    get_to_do_from_server(uid,date);
+    return false;
+}
+
 function load()
 {
     var date = new Date();
@@ -261,7 +268,7 @@ function load()
     if(month < 10) month = "0" + month;
     if(day < 10) day = "0" + day;
     date_today = year + "-" + month + "-" + day;
-
+    date_To_Do_list = year + "-" + month + "-" + day;
     loadPage();
     showTime();
 
@@ -269,6 +276,7 @@ function load()
     e.style.display = 'none';
     e = document.getElementById("favourite_list_ul");
     e.style.display = 'none';
+    document.getElementById("search_container").style.display = "none";
     document.getElementById("upload_progress_bar").style.display = "none";
     document.getElementById("MyClockDisplay").onclick = toggle;
     document.getElementById("finput").onchange = fileInput;
@@ -276,6 +284,7 @@ function load()
     document.getElementById("remove_icon").onclick = deleteBackground;
     document.getElementById("Task_Input").onsubmit = add_new_task;
     document.getElementById("show_hide").onclick = toggle_visibility;
+    document.getElementById("stat_page").onclick = ShowStatPage;
     document.getElementById("show_hide_fav").onclick = toggle_visibility_fav;
     document.getElementById("log_out").onclick = log_out;
     document.getElementById("register_Form").style.display = 'none';
@@ -283,8 +292,12 @@ function load()
     document.getElementById("go_to_register").onclick = RegisterPage;
     document.getElementById("logIn_Form").onsubmit = logIn;
     document.getElementById("register_Form").onsubmit = register;
+    document.getElementById("search_form").onsubmit = Search_To_Do;
 }
-
+function ShowStatPage() {
+    window.location.href = "stat.html";
+    return false;
+}
 //adding elements in to do list
 function newElement(isDone)
 {
@@ -425,10 +438,15 @@ function populateToDoList()
 
 function toggle_visibility() {	
     var e = document.getElementById("task_list_ul");
-    if(e.style.display === 'none')
+    var searchDiv = document.getElementById("search_container");
+    if(e.style.display === 'none'){
         e.style.display = 'block';
-    else
+        searchDiv.style.display = 'block';
+    }
+    else{
         e.style.display = 'none';
+        searchDiv.style.display = 'none';
+    }
     return false;
 }
 

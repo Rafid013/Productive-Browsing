@@ -151,5 +151,9 @@ function home() {
     return false;
 }
 function stat() {
+    chrome.tabs.create({url:chrome.extension.getURL("stat.html")}, function (response) {
+
+    });
     return false;
 }
+

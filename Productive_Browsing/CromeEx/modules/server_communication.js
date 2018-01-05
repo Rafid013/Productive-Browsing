@@ -97,13 +97,17 @@ function add_task_to_server(uid, task, date, normal_time, military_time) {
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
+                if(date === date_To_Do_list)
+                {
+                    events_ToDo_List.push(task + " " + normal_time);
+                    events_ToDo_marked.push(false);
+                    populateToDoList();
+                }
                 if(date === date_today) {
                     events_today.push(task);
                     events_today_marked.push(false);
                     Scroll_Events();
-                    events_ToDo_List.push(task + " " + normal_time);
-                    events_ToDo_marked.push(false);
-                    populateToDoList();
+
                     var tmp = {
                         type : "add_Timer",
                         task : task,
@@ -137,6 +141,15 @@ function delete_task_from_server(uid, task, date, time) {
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
+                if(date === date_To_Do_list)
+                {
+                    var index = delete_from_array(events_ToDo_List, task + " " + time);
+                    if(index>-1)
+                    {
+                        events_ToDo_marked.splice(index,1);
+                    }
+                    populateToDoList();
+                }
                 if(date === date_today) {
                     var index;
                     index = delete_from_array(events_today, task);
@@ -144,12 +157,6 @@ function delete_task_from_server(uid, task, date, time) {
                     {
                         events_today_marked.splice(index,1);
                     }
-                    index = delete_from_array(events_ToDo_List, task + " " + time);
-                    if(index>-1)
-                    {
-                        events_ToDo_marked.splice(index,1);
-                    }
-                    populateToDoList();
                     Scroll_Events();
                     var tmp = {
                         type : "delete_Timer",
@@ -207,23 +214,29 @@ function get_to_do_from_server(uid, date) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var event_list_server = JSON.parse(senderToServer.responseText);
             var list_size = event_list_server.length;
-            events_today = [];
-            events_today_marked = [];
+            if(date === date_today) {
+                events_today = [];
+                events_today_marked = [];
+            }
             events_ToDo_List = [];
             events_ToDo_marked = [];
             for(var i = 0; i < list_size; ++i) {
                 var task = event_list_server[i].task;
                 var normal_time = event_list_server[i].normal_time;
+                events_ToDo_List.push(task + " " + normal_time);
+                events_ToDo_marked[i]  = event_list_server[i].done;
                 //var military_time = event_list_server[i].military_time;
                 if(date === date_today) {
                     events_today.push(task);
-                    events_ToDo_List.push(task + " " + normal_time);
                     events_today_marked[i] = event_list_server[i].done;
-                    events_ToDo_marked[i]  = event_list_server[i].done;
-                    Scroll_Events();
-                    populateToDoList();
                 }
             }
+            populateToDoList();
+            if(date === date_today)
+            {
+                Scroll_Events();
+            }
+            date_To_Do_list = date;
         }
         else {
             //to be implemented
@@ -363,7 +376,13 @@ function get_marked_sites(uid) {
             for(var i = 0; i < site_list.length; ++i) {
                 sites_to_be_stored[site_list[i].site] = 0;
             }
-            chrome.storage.sync.set({"marked_sites" : sites_to_be_stored});
+            chrome.storage.sync.set({"marked_sites" : sites_to_be_stored},function () {
+                var tmp = {
+                    type : "update_marked_sites_object"
+                };
+                chrome.runtime.sendMessage(tmp);
+
+            });
             /*var tmp = {
                 type :"load_marked_sites"
             };

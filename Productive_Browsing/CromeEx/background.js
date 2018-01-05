@@ -3,13 +3,22 @@ var lastTab;
 var lasturl;
 var start_time;
 var end_time;
-var date = new Date();
 var timers = {};
-date_today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+var date = new Date();
+var year = date.getFullYear();
+var month = date.getMonth() + 1;
+var day = date.getDate();
+if(month < 10) month = "0" + month;
+if(day < 10) day = "0" + day;
+var date_today = year + "-" + month + "-" + day;
 var last_task = "";
 var marked_sites = {};
 var myNotificationId;
+var threshold = 60*15;
 
+var timeTillMidnight = (1440-(date.getHours()*60+date.getMinutes()))*60*1000;
+
+setTimeout(update_date,timeTillMidnight);
 function showTaskNotification(task) {
     var options = {
         type : "basic",
@@ -52,6 +61,7 @@ chrome.storage.sync.get(["uid", "name"], function (obj) {
     else
     {
         get_to_do(obj.uid, date_today);
+        //console.log(timers);
         chrome.storage.sync.get("marked_sites", function (obj) {
             if(obj.marked_sites === undefined)
             {
@@ -66,6 +76,7 @@ chrome.storage.sync.get(["uid", "name"], function (obj) {
                 //chrome.storage.sync.set({"marked_sites":marked_sites});
                 //console.log(marked_sites);
             }
+            update_per_day_stat();
         });
     }
 });
@@ -85,10 +96,11 @@ function get_to_do(uid, date) {
             var currentTime = date.getHours()*60 + date.getMinutes();
             var event_list_server = JSON.parse(senderToServer.responseText);
             var list_size = event_list_server.length;
-
+            console.log(event_list_server);
             for(var i = 0; i < list_size; ++i) {
                 if(!event_list_server[i].done && getMinutes(event_list_server[i].military_time) > currentTime)
                 {
+                    //alert("a task");
                     var diff = getMinutes(event_list_server[i].military_time) - currentTime;
                     timers[event_list_server[i].task] =
                         setTimeout(showTaskNotification, diff*1000*60, event_list_server[i].task);
@@ -97,6 +109,7 @@ function get_to_do(uid, date) {
                 //var normal_time = event_list_server[i].normal_time;
                 //var military_time = event_list_server[i].military_time;
             }
+
         }
         else {
             //to be implemented
@@ -165,7 +178,12 @@ function start_tab(tabId, changeInfo, tab) {
                 tasks.push({title:"Task To Do:", message:k});
             }
 
-            if(marked_sites[lasturl] >= 10)
+            if(tasks[0]==undefined)
+            {
+                tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+            }
+
+            if(marked_sites[lasturl] >= threshold)
             {
                 options = {
                     type : "list",
@@ -175,6 +193,7 @@ function start_tab(tabId, changeInfo, tab) {
                     items: tasks
                 };
                 chrome.notifications.create(options);
+                update_per_day_stat();
             }
         }
         lasturl = currUrl;
@@ -193,7 +212,12 @@ function start_tab(tabId, changeInfo, tab) {
                 tasks.push({title:"Task To Do:", message:k});
             }
 
-            if(marked_sites[lasturl]>=10)
+            if(tasks[0]==undefined)
+            {
+                tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+            }
+
+            if(marked_sites[lasturl]>=threshold)
             {
                 options = {
                     type : "list",
@@ -203,6 +227,7 @@ function start_tab(tabId, changeInfo, tab) {
                     items: tasks
                 };
                 chrome.notifications.create(options);
+                update_per_day_stat();
             }
         }
         lasturl = currUrl;
@@ -210,7 +235,7 @@ function start_tab(tabId, changeInfo, tab) {
     }
     else if(lasturl === currUrl)
     {
-        if(total_time>=120)
+        if(total_time>=10)
         {
             if(marked_sites[lasturl]!== undefined)
             {
@@ -220,7 +245,12 @@ function start_tab(tabId, changeInfo, tab) {
                     tasks.push({title:"Task To Do:", message:k});
                 }
 
-                if(marked_sites[lasturl]>=120)
+                if(tasks[0]==undefined)
+                {
+                    tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+                }
+
+                if(marked_sites[lasturl]>=threshold)
                 {
                     options = {
                         type : "list",
@@ -230,6 +260,7 @@ function start_tab(tabId, changeInfo, tab) {
                         items: tasks
                     };
                     chrome.notifications.create(options);
+                    update_per_day_stat();
                 }
             }
             lasturl = currUrl;
@@ -272,8 +303,12 @@ function activateHandler(activeInfo) {
             for (var k in timers){
                 tasks.push({title:"Task To Do:", message:k});
             }
+            if(tasks[0]==undefined)
+            {
+                tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+            }
 
-            if(marked_sites[lasturl]>=10)
+            if(marked_sites[lasturl]>=threshold)
             {
                 var options = {
                     type : "list",
@@ -283,6 +318,7 @@ function activateHandler(activeInfo) {
                     items: tasks
                 };
                 chrome.notifications.create(options);
+                update_per_day_stat();
             }
         }
         lastTab = activeInfo.tabId;
@@ -302,6 +338,7 @@ function activateHandler(activeInfo) {
 function window_close_handler() {
     end_time = performance.now();
     var total_time = (end_time-start_time)/1000;
+    start_time = end_time;
     total_time = round(total_time,2);
     console.log(lastTab);
     console.log(lasturl);
@@ -313,8 +350,12 @@ function window_close_handler() {
         for (var k in timers){
             tasks.push({title:"Task To Do:",message:k});
         }
+        if(tasks[0]==undefined)
+        {
+            tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+        }
 
-        if(marked_sites[lasturl]>=10)
+        if(marked_sites[lasturl]>=threshold)
         {
             var options = {
                 type : "list",
@@ -324,6 +365,7 @@ function window_close_handler() {
                 items: tasks
             };
             chrome.notifications.create(options);
+            update_per_day_stat();
         }
     }
 }
@@ -427,7 +469,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         if(task_time > currentTime)
         {
             timers[req.task] = setTimeout(showTaskNotification, (task_time - currentTime)*60*1000, req.task);
-            alert("set");
+            //alert("set");
         }
         else
         {
@@ -491,6 +533,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
             clearTimeout(timers[k]);
             delete timers[k];
         }
+        update_per_day_stat();
     }
     else if(req.type ==="is_marked")
     {
@@ -522,6 +565,13 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
             console.log(marked_sites);
         }
     }
+
+    else if(req.type == "update_marked_sites_object")
+    {
+        chrome.storage.sync.get("marked_sites", function (obj) {
+            marked_sites = obj.marked_sites;
+        });
+    }
 });
 
 function upload_marked_sites_in_storage() {
@@ -536,4 +586,76 @@ function upload_marked_sites_in_storage() {
             setTimeout(upload_marked_sites_in_storage, 5000);
         }
     });
+}
+
+function update_per_day_stat() {
+    chrome.storage.sync.get(["per_day_stat","date"], function (obj) {
+        if(obj.date === undefined)
+        {
+            obj.date = date_today;
+        }
+        if(obj.per_day_stat === undefined)
+        {
+            var object = {};
+            for (var k in marked_sites){
+
+                object[k] = marked_sites[k];
+            }
+            obj.per_day_stat = object;
+        }
+        else
+        {
+            for (var k in marked_sites){
+                if(obj.per_day_stat[k]===undefined)
+                {
+                    obj.per_day_stat[k] = marked_sites[k];
+                }
+                else
+                {
+                    obj.per_day_stat[k] += marked_sites[k];
+                }
+            }
+            console.log(obj.per_day_stat);
+            console.log(marked_sites);
+        }
+        for (var k in marked_sites){
+            marked_sites[k] = 0;
+        }
+        if(date_today !== obj.date)
+        {
+            chrome.storage.sync.get(["uid", "name"], function (object) {
+                if(object.uid === undefined)
+                {
+
+                }
+                else
+                {
+                    for (var k in obj.per_day_stat){
+                        update_site_time_in_server(object.uid, k, obj.per_day_stat.k);
+                        obj.per_day_stat[k] = 0;
+                    }
+                    chrome.storage.sync.set({"per_day_stat":obj.per_day_stat});
+                    alert("one day gone");
+                }
+            });
+
+            //update in database obj.per_day_stat
+            obj.date = date_today;
+        }
+        chrome.storage.sync.set({"date":obj.date});
+        chrome.storage.sync.set({"per_day_stat":obj.per_day_stat});
+        chrome.storage.sync.set({"marked_sites":marked_sites});
+    });
+}
+
+function update_date() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    if(month < 10) month = "0" + month;
+    if(day < 10) day = "0" + day;
+    date_today = year + "-" + month + "-" + day;
+    update_per_day_stat();
+    setTimeout(1440*60);
 }

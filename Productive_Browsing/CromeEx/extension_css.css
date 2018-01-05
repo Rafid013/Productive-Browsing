@@ -169,6 +169,11 @@ body{
     text-decoration: underline;
     cursor: pointer;
 }
+#stat_page:hover
+{
+    text-decoration: underline;
+    cursor: pointer;
+}
 #Things_To_DO{
 	position: absolute;
 	top:12%;
@@ -226,6 +231,12 @@ body{
     font-size: 18px;
 }
 
+#stat_page
+{
+    position: absolute;
+    left: 7.5%;
+    font-size: 18px;
+}
 ul {
     margin: 0;
     padding: 0;
@@ -331,11 +342,24 @@ ul li.checked::before {
     border: none;
 }
 
+#Search_date
+{
+    text-decoration: underline;
+    background-color: rgba(0,0,0,0);
+    color: white;
+    border: none;
+}
 #time{
     text-decoration: underline;
     background-color: rgba(0,0,0,0);
     color: white;
     border: none;
+}
+
+#Search_submit
+{
+    background-color: rgba(0,0,0,0);
+    border : none;
 }
 
 input:focus,
