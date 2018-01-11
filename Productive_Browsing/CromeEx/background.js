@@ -14,7 +14,7 @@ var date_today = year + "-" + month + "-" + day;
 var last_task = "";
 var marked_sites = {};
 var myNotificationId;
-var threshold = 60*15;
+var threshold = 15*60;
 
 var timeTillMidnight = (1440-(date.getHours()*60+date.getMinutes()))*60*1000;
 
@@ -185,10 +185,11 @@ function start_tab(tabId, changeInfo, tab) {
 
             if(marked_sites[lasturl] >= threshold)
             {
+                var url = lasturl;
                 options = {
                     type : "list",
-                    title : "You are using " + lasturl + " too long",
-                    message : "You are using " + lasturl + " too long",
+                    title : "You are using " + url + " too long",
+                    message : "You are using " + url + " too long",
                     iconUrl : "icon.png",
                     items: tasks
                 };
@@ -219,10 +220,11 @@ function start_tab(tabId, changeInfo, tab) {
 
             if(marked_sites[lasturl]>=threshold)
             {
+                var url = lasturl;
                 options = {
                     type : "list",
-                    title : "You are using " + lasturl + " too long",
-                    message : "You are using " + lasturl + " too long",
+                    title : "You are using " + url + " too long",
+                    message : "You are using " + url + " too long",
                     iconUrl : "icon.png",
                     items: tasks
                 };
@@ -252,10 +254,11 @@ function start_tab(tabId, changeInfo, tab) {
 
                 if(marked_sites[lasturl]>=threshold)
                 {
+                    var url = lasturl;
                     options = {
                         type : "list",
-                        title : "You are using " + lasturl + " too long",
-                        message : "You are using " + lasturl + " too long",
+                        title : "You are using " + url + " too long",
+                        message : "You are using " + url + " too long",
                         iconUrl : "icon.png",
                         items: tasks
                     };
@@ -310,10 +313,11 @@ function activateHandler(activeInfo) {
 
             if(marked_sites[lasturl]>=threshold)
             {
+                var url = lasturl;
                 var options = {
                     type : "list",
-                    title : "You are using " + lasturl + " too long",
-                    message : "You are using " + lasturl + " too long",
+                    title : "You are using " + url + " too long",
+                    message : "You are using " + url + " too long",
                     iconUrl : "icon.png",
                     items: tasks
                 };
@@ -357,10 +361,11 @@ function window_close_handler() {
 
         if(marked_sites[lasturl]>=threshold)
         {
+            var url = lasturl;
             var options = {
                 type : "list",
-                title : "You are using " + lasturl + " too long",
-                message : "You are using " + lasturl + " too long",
+                title : "You are using " + url + " too long",
+                message : "You are using " + url + " too long",
                 iconUrl : "icon.png",
                 items: tasks
             };
