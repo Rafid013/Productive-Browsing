@@ -100,12 +100,15 @@ function add_task_to_server(uid, task, date, normal_time, military_time) {
                 if(date === date_To_Do_list)
                 {
                     events_ToDo_List.push(task + " " + normal_time);
-                    events_ToDo_marked.push(false);
-                    populateToDoList();
+                    var index = events_ToDo_List.indexOf(task + " " + normal_time);
+                    events_ToDo_marked[index] = false;
+                    //populateToDoList();
+                    get_to_do_from_server(uid,date_To_Do_list);
                 }
                 if(date === date_today) {
                     events_today.push(task);
-                    events_today_marked.push(false);
+                    var index = events_today.indexOf(task);
+                    events_today_marked[index] = false;
                     Scroll_Events();
 
                     var tmp = {
@@ -144,18 +147,20 @@ function delete_task_from_server(uid, task, date, time) {
                 if(date === date_To_Do_list)
                 {
                     var index = delete_from_array(events_ToDo_List, task + " " + time);
+                    //alert(index);
                     if(index>-1)
                     {
-                        events_ToDo_marked.splice(index,1);
+                        //events_ToDo_marked.splice(index,1);
                     }
-                    populateToDoList();
+                    //populateToDoList();
+                    get_to_do_from_server(uid,date_To_Do_list);
                 }
                 if(date === date_today) {
                     var index;
                     index = delete_from_array(events_today, task);
                     if(index>-1)
                     {
-                        events_today_marked.splice(index,1);
+                        //events_today_marked.splice(index,1);
                     }
                     Scroll_Events();
                     var tmp = {
@@ -393,4 +398,44 @@ function get_marked_sites(uid) {
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
     senderToServer.send(JSON.stringify(get_marked_sites_req));
+}
+
+
+function get_fav_link_from_server_background(uid) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var get_fav_link_req = {
+        uid : uid,
+        type : "get_fav_links"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            var link_list = JSON.parse(senderToServer.responseText);
+            var list_size = link_list.length;
+            var links = [];
+            for(var i = 0; i < list_size; ++i) {
+                links.push({title:"Check this link",message:link_list[i].site});
+            }
+            if(list_size === 0)
+            {
+                //alert("inside");
+                links.push({title:"No task in To-Do List",message:""});
+            }
+            //alert("inside");
+            var url = lasturl;
+            var options = {
+                type : "list",
+                title : "You are using " + url + " too long",
+                message : "You are using " + url + " too long",
+                iconUrl : "icon.png",
+                items: links
+            };
+            chrome.notifications.create(options);
+        }
+        else {
+            //server connection failed
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(get_fav_link_req));
 }

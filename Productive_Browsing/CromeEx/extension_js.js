@@ -382,6 +382,7 @@ function populateFavouriteLinks() {
 function populateToDoList()
 {
     var ul = document.getElementById("task_list_ul");
+    ul.removeEventListener('click',mark_event_listener,false);
     while (ul.firstChild) {
         ul.removeChild(ul.firstChild);
     }
@@ -403,38 +404,47 @@ function populateToDoList()
             var task = div.textContent.substring(0, div.textContent.lastIndexOf(" "));
             var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
 
-            delete_task_from_server(uid, task, date_today, time);
+            delete_task_from_server(uid, task, date_To_Do_list, time);
     	}
 	}
 	//var list = document.querySelector('ul');
-	ul.addEventListener('click', function(ev) {
-  		// noinspection JSUnresolvedVariable
-        if (ev.target.tagName === 'LI') {
-    		// noinspection JSUnresolvedVariable
-            ev.target.classList.toggle('checked');
-    		var div = ev.target;
-            var task = div.textContent.substring(0, div.textContent.lastIndexOf(" "));
-            var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
-            var index;
-            index = events_today_marked.indexOf(task);
-            if(index>-1)
-            {
-                if(events_today_marked[index]) events_today_marked[index] = false;
-                else events_today_marked = true;
-            }
-            index = events_ToDo_marked.indexOf(task + " " + time);
-            if(index>-1)
-            {
-                if(events_ToDo_marked[index]) events_ToDo_marked[index] = false;
-                else events_ToDo_marked = true;
-            }
-
-
-    		//read uid here
-    		mark_task_in_server(uid, task, date_today, time);
-  		}
-	}, false);
+	ul.addEventListener('click',mark_event_listener,false);
 }
+
+
+function mark_event_listener(ev) {
+    if (ev.target.tagName === 'LI') {
+        // noinspection JSUnresolvedVariable
+        ev.target.classList.toggle('checked');
+        //alert("inside");
+        var div = ev.target;
+        var task = div.textContent.substring(0, div.textContent.lastIndexOf(" "));
+        var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
+        var index;
+
+        index = events_ToDo_List.indexOf(task + " " + time);
+        if (index > -1) {
+            //alert("tes");
+            if (events_ToDo_marked[index]) events_ToDo_marked[index] = false;
+            else events_ToDo_marked[index] = true;
+        }
+
+        if (date_To_Do_list === date_today) {
+            index = events_today.indexOf(task);
+            if (index > -1) {
+                //alert(events_today_marked[index]);
+                if (events_today_marked[index]) events_today_marked[index] = false;
+                else events_today_marked[index] = true;
+            }
+        }
+
+
+        //read uid here
+        mark_task_in_server(uid, task, date_To_Do_list, time);
+
+    }
+}
+
 
 function toggle_visibility() {	
     var e = document.getElementById("task_list_ul");

@@ -14,8 +14,7 @@ var date_today = year + "-" + month + "-" + day;
 var last_task = "";
 var marked_sites = {};
 var myNotificationId;
-var threshold = 15*60;
-
+var threshold = 30*60;
 var timeTillMidnight = (1440-(date.getHours()*60+date.getMinutes()))*60*1000;
 
 setTimeout(update_date,timeTillMidnight);
@@ -178,12 +177,21 @@ function start_tab(tabId, changeInfo, tab) {
                 tasks.push({title:"Task To Do:", message:k});
             }
 
-            if(tasks[0]==undefined)
+            if(tasks[0]===undefined && marked_sites[lasturl] >= threshold)
             {
-                tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+                chrome.storage.sync.get(["uid", "name"], function (obj) {
+                    if(obj.uid === undefined)
+                    {
+
+                    }
+                    else{
+                        get_fav_link_from_server_background(obj.uid);
+                    }
+                });
+                update_per_day_stat();
             }
 
-            if(marked_sites[lasturl] >= threshold)
+            else if(marked_sites[lasturl] >= threshold)
             {
                 var url = lasturl;
                 options = {
@@ -213,12 +221,21 @@ function start_tab(tabId, changeInfo, tab) {
                 tasks.push({title:"Task To Do:", message:k});
             }
 
-            if(tasks[0]==undefined)
+            if(tasks[0] === undefined && marked_sites[lasturl] >= threshold)
             {
-                tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+                chrome.storage.sync.get(["uid", "name"], function (obj) {
+                    if(obj.uid === undefined)
+                    {
+
+                    }
+                    else{
+                        get_fav_link_from_server_background(obj.uid);
+                    }
+                });
+                update_per_day_stat();
             }
 
-            if(marked_sites[lasturl]>=threshold)
+            else if(marked_sites[lasturl] >= threshold)
             {
                 var url = lasturl;
                 options = {
@@ -247,12 +264,21 @@ function start_tab(tabId, changeInfo, tab) {
                     tasks.push({title:"Task To Do:", message:k});
                 }
 
-                if(tasks[0]==undefined)
+                if(tasks[0]===undefined && marked_sites[lasturl] >= threshold)
                 {
-                    tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+                    chrome.storage.sync.get(["uid", "name"], function (obj) {
+                        if(obj.uid === undefined)
+                        {
+
+                        }
+                        else{
+                            get_fav_link_from_server_background(obj.uid);
+                        }
+                    });
+                    update_per_day_stat();
                 }
 
-                if(marked_sites[lasturl]>=threshold)
+                else if(marked_sites[lasturl] >= threshold)
                 {
                     var url = lasturl;
                     options = {
@@ -306,15 +332,24 @@ function activateHandler(activeInfo) {
             for (var k in timers){
                 tasks.push({title:"Task To Do:", message:k});
             }
-            if(tasks[0]==undefined)
+            if(tasks[0] === undefined && marked_sites[lasturl] >= threshold)
             {
-                tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+                chrome.storage.sync.get(["uid", "name"], function (obj) {
+                    if(obj.uid === undefined)
+                    {
+
+                    }
+                    else{
+                        get_fav_link_from_server_background(obj.uid);
+                    }
+                });
+                update_per_day_stat();
             }
 
-            if(marked_sites[lasturl]>=threshold)
+            else if(marked_sites[lasturl] >= threshold)
             {
                 var url = lasturl;
-                var options = {
+                options = {
                     type : "list",
                     title : "You are using " + url + " too long",
                     message : "You are using " + url + " too long",
@@ -354,15 +389,24 @@ function window_close_handler() {
         for (var k in timers){
             tasks.push({title:"Task To Do:",message:k});
         }
-        if(tasks[0]==undefined)
+        if(tasks[0] === undefined && marked_sites[lasturl] >= threshold)
         {
-            tasks[0] = {title:"Task To Do:", message:"No Task Right Now"};
+            chrome.storage.sync.get(["uid", "name"], function (obj) {
+                if(obj.uid === undefined)
+                {
+
+                }
+                else{
+                    get_fav_link_from_server_background(obj.uid);
+                }
+            });
+            update_per_day_stat();
         }
 
-        if(marked_sites[lasturl]>=threshold)
+        else if(marked_sites[lasturl] >= threshold)
         {
             var url = lasturl;
-            var options = {
+            options = {
                 type : "list",
                 title : "You are using " + url + " too long",
                 message : "You are using " + url + " too long",
@@ -487,7 +531,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         {
             clearTimeout(timers[req.task]);
             delete timers[req.task];
-            alert("timer deleted");
+            //alert("timer deleted");
         }
     }
 
@@ -497,7 +541,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         {
             clearTimeout(timers[req.task]);
             delete timers[req.task];
-            alert("timer deleted");
+            //alert("timer deleted");
         }
         else
         {
@@ -507,11 +551,11 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
             if(task_time>currentTime)
             {
                 timers[req.task] = setTimeout(showTaskNotification,(task_time-currentTime)*60*1000,req.task);
-                alert("set");
+                //alert("set");
             }
             else
             {
-                alert("time passed");
+                //alert("time passed");
             }
         }
     }

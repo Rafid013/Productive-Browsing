@@ -24,9 +24,8 @@ body{
 #marked_sites
 {
     position: absolute;
-    top:20%;
-    left:50%;
-    transform: translateX(-50%);
+    top:10%;
+    left:45%;
     font-size: 18px;
 }
 
@@ -114,5 +113,8 @@ ul li.checked::before {
     color: white;
 }
 
-
+.site_stat
+{
+    text-decoration: underline;
+}
 
