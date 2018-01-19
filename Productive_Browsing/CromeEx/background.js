@@ -69,7 +69,7 @@ chrome.storage.sync.get(["uid", "name"], function (obj) {
             else
             {
                 marked_sites = obj.marked_sites;
-                console.log(marked_sites);
+                //console.log(marked_sites);
                 setTimeout(upload_marked_sites_in_storage, 5000);
                 //delete marked_sites["www.facebook.com"];
                 //chrome.storage.sync.set({"marked_sites":marked_sites});
@@ -179,13 +179,15 @@ function start_tab(tabId, changeInfo, tab) {
 
             if(tasks[0]===undefined && marked_sites[lasturl] >= threshold)
             {
+                var url = "";
+                url += lasturl;
                 chrome.storage.sync.get(["uid", "name"], function (obj) {
                     if(obj.uid === undefined)
                     {
 
                     }
                     else{
-                        get_fav_link_from_server_background(obj.uid);
+                        get_fav_link_from_server_background(obj.uid,url);
                     }
                 });
                 update_per_day_stat();
@@ -193,7 +195,8 @@ function start_tab(tabId, changeInfo, tab) {
 
             else if(marked_sites[lasturl] >= threshold)
             {
-                var url = lasturl;
+                var url = "";
+                url += lasturl;
                 options = {
                     type : "list",
                     title : "You are using " + url + " too long",
@@ -223,13 +226,15 @@ function start_tab(tabId, changeInfo, tab) {
 
             if(tasks[0] === undefined && marked_sites[lasturl] >= threshold)
             {
+                var url = "";
+                url += lasturl;
                 chrome.storage.sync.get(["uid", "name"], function (obj) {
                     if(obj.uid === undefined)
                     {
 
                     }
                     else{
-                        get_fav_link_from_server_background(obj.uid);
+                        get_fav_link_from_server_background(obj.uid,url);
                     }
                 });
                 update_per_day_stat();
@@ -237,7 +242,8 @@ function start_tab(tabId, changeInfo, tab) {
 
             else if(marked_sites[lasturl] >= threshold)
             {
-                var url = lasturl;
+                var url = "";
+                url += lasturl;
                 options = {
                     type : "list",
                     title : "You are using " + url + " too long",
@@ -266,13 +272,15 @@ function start_tab(tabId, changeInfo, tab) {
 
                 if(tasks[0]===undefined && marked_sites[lasturl] >= threshold)
                 {
+                    var url = "";
+                    url += lasturl;
                     chrome.storage.sync.get(["uid", "name"], function (obj) {
                         if(obj.uid === undefined)
                         {
 
                         }
                         else{
-                            get_fav_link_from_server_background(obj.uid);
+                            get_fav_link_from_server_background(obj.uid,url);
                         }
                     });
                     update_per_day_stat();
@@ -280,7 +288,8 @@ function start_tab(tabId, changeInfo, tab) {
 
                 else if(marked_sites[lasturl] >= threshold)
                 {
-                    var url = lasturl;
+                    var url = "";
+                    url += lasturl;
                     options = {
                         type : "list",
                         title : "You are using " + url + " too long",
@@ -325,6 +334,8 @@ function activateHandler(activeInfo) {
         console.log(lastTab);
         console.log(lasturl);
         console.log(total_time);
+        var url = "";
+        url += lasturl;
         if(marked_sites[lasturl] !== undefined)
         {
             marked_sites[lasturl] += total_time;
@@ -340,7 +351,7 @@ function activateHandler(activeInfo) {
 
                     }
                     else{
-                        get_fav_link_from_server_background(obj.uid);
+                        get_fav_link_from_server_background(obj.uid,url);
                     }
                 });
                 update_per_day_stat();
@@ -348,7 +359,6 @@ function activateHandler(activeInfo) {
 
             else if(marked_sites[lasturl] >= threshold)
             {
-                var url = lasturl;
                 options = {
                     type : "list",
                     title : "You are using " + url + " too long",
@@ -391,13 +401,15 @@ function window_close_handler() {
         }
         if(tasks[0] === undefined && marked_sites[lasturl] >= threshold)
         {
+            var url = "";
+            url += lasturl;
             chrome.storage.sync.get(["uid", "name"], function (obj) {
                 if(obj.uid === undefined)
                 {
 
                 }
                 else{
-                    get_fav_link_from_server_background(obj.uid);
+                    get_fav_link_from_server_background(obj.uid),url;
                 }
             });
             update_per_day_stat();
@@ -405,7 +417,8 @@ function window_close_handler() {
 
         else if(marked_sites[lasturl] >= threshold)
         {
-            var url = lasturl;
+            var url = "";
+            url += lasturl;
             options = {
                 type : "list",
                 title : "You are using " + url + " too long",
@@ -615,7 +628,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         }
     }
 
-    else if(req.type == "update_marked_sites_object")
+    else if(req.type === "update_marked_sites_object")
     {
         chrome.storage.sync.get("marked_sites", function (obj) {
             marked_sites = obj.marked_sites;
@@ -665,7 +678,7 @@ function update_per_day_stat() {
                 }
             }
             console.log(obj.per_day_stat);
-            console.log(marked_sites);
+            //console.log(marked_sites);
         }
         for (var k in marked_sites){
             marked_sites[k] = 0;
@@ -680,7 +693,8 @@ function update_per_day_stat() {
                 else
                 {
                     for (var k in obj.per_day_stat){
-                        update_site_time_in_server(object.uid, k, obj.per_day_stat.k);
+                        //console.log(k +"  "+  obj.per_day_stat[k])
+                        update_site_time_in_server(object.uid, k , obj.per_day_stat[k]);
                         obj.per_day_stat[k] = 0;
                     }
                     chrome.storage.sync.set({"per_day_stat":obj.per_day_stat});

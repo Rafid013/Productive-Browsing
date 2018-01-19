@@ -346,6 +346,9 @@ function unmark_site_in_server(uid, link) {
 function update_site_time_in_server(uid, site, time) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
+    console.log(uid);
+    console.log(site);
+    console.log(time);
     var update_site_time_req = {
         uid : uid,
         site : site,
@@ -401,7 +404,7 @@ function get_marked_sites(uid) {
 }
 
 
-function get_fav_link_from_server_background(uid) {
+function get_fav_link_from_server_background(uid,url) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var get_fav_link_req = {
@@ -422,7 +425,6 @@ function get_fav_link_from_server_background(uid) {
                 links.push({title:"No task in To-Do List",message:""});
             }
             //alert("inside");
-            var url = lasturl;
             var options = {
                 type : "list",
                 title : "You are using " + url + " too long",

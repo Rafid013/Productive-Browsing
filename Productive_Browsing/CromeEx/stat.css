@@ -10,15 +10,12 @@ body{
     -moz-osx-font-smoothing: grayscale;
 }
 
-#log_out
+#weather
 {
-    .color = white;
+    display: none;
     position: absolute;
-    top:0;
-    left:100%;
+    top:20%;
     font-size: 18px;
-    transform: translateX(-100%);
-    cursor: pointer;
 }
 
 #marked_sites
@@ -40,10 +37,6 @@ body{
 
 #show_hide:hover
 {
-    text-decoration: underline;
-    cursor: pointer;
-}
-#log_out:hover {
     text-decoration: underline;
     cursor: pointer;
 }

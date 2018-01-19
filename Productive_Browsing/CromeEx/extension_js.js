@@ -336,7 +336,7 @@ function newFavLink()
 
     var span = document.createElement("SPAN");
     var txt = document.createTextNode("\u00D7");
-    span.className = "close_fav";
+    span.className = "close_fev";
     span.appendChild(txt);
     li.appendChild(span);
 }
