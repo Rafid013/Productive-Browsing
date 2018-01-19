@@ -8,7 +8,11 @@ function delete_from_array(array, elem) {
 }
 
 
-
+function get_Minutes(str)
+{
+    str = str.split(":");
+    return (Number(str[0])*60 + Number(str[1]));
+}
 
 
 function mark_task_in_server(uid, task, date, time) {
@@ -236,6 +240,59 @@ function get_to_do_from_server(uid, date) {
                     events_today_marked[i] = event_list_server[i].done;
                 }
             }
+            populateToDoList();
+            if(date === date_today)
+            {
+                Scroll_Events();
+            }
+            date_To_Do_list = date;
+        }
+        else {
+            //to be implemented
+            //storage
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(getToDoReq));
+}
+
+function search_to_do_from_server(uid, date, minTime, maxTime) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var getToDoReq = {
+        uid : uid,
+        date : date,
+        type : "get_to_do"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            var event_list_server = JSON.parse(senderToServer.responseText);
+            var list_size = event_list_server.length;
+            if(date === date_today) {
+                events_today = [];
+                events_today_marked = [];
+            }
+            events_ToDo_List = [];
+            events_ToDo_marked = [];
+            var min = get_Minutes(minTime);
+            var max = get_Minutes(maxTime);
+            var j = 0;
+            for(var i = 0; i < list_size; ++i) {
+                var task_time = get_Minutes(event_list_server[i].military_time);
+                if(task_time>=min && task_time <=max) {
+                    var task = event_list_server[i].task;
+                    var normal_time = event_list_server[i].normal_time;
+                    events_ToDo_List.push(task + " " + normal_time);
+                    events_ToDo_marked[j] = event_list_server[i].done;
+                    j++;
+                }
+                //var military_time = event_list_server[i].military_time;
+                if(date === date_today) {
+                    events_today.push(task);
+                    events_today_marked[i] = event_list_server[i].done;
+                }
+            }
+            console.log(events_ToDo_List);
             populateToDoList();
             if(date === date_today)
             {

@@ -255,7 +255,10 @@ function add_new_task()
 
 function Search_To_Do() {
     var date = document.getElementById("Search_date").value;
-    get_to_do_from_server(uid,date);
+    var maxTime = document.getElementById("maxTime").value;
+    var minTime = document.getElementById("minTime").value;
+    search_to_do_from_server(uid,date,minTime,maxTime);
+    //get_to_do_from_server(uid,date);
     return false;
 }
 

@@ -353,7 +353,7 @@ ul li.checked::before {
     color: white;
     border: none;
 }
-#time{
+.times{
     text-decoration: underline;
     background-color: rgba(0,0,0,0);
     color: white;

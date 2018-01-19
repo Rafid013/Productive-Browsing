@@ -51,7 +51,7 @@
         <input id="to_do" type="text" value="" placeholder="To Do..." required >
         <div>
             <span><input id="date" type="date" name="Date" title="Date"></span>
-            <span><input type="time" id="time" value="23:59:00" title="Time"></span>
+            <span><input class="times" type="time" id="time" value="23:59:00" title="Time"></span>
         </div>
         <input id="input_submit" type="submit" name="Submit" value="ADD">
     </form>
@@ -63,6 +63,10 @@
             <form id ="search_form">
                 <input id="Search_date" type="date" name="Search_Date" title="Date" required>
                 <button id ="Search_submit" type="submit"><i class="large search icon"></i></i></button>
+                <div>
+                    <span><input class="times" id="minTime" type="time" value="00:00" title="Time"></span>
+                    <span><input class="times" type="time" id="maxTime" value="23:59" title="Time"></span>
+                </div>
             </form>
         </div>
         <ul id="task_list_ul">
