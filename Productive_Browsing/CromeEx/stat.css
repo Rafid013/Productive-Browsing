@@ -47,6 +47,13 @@ ul {
     list-style-type: none;
 }
 
+
+#mark_sites_ul
+{
+    height: 250px;
+    overflow: auto;
+}
+
 /* Style the list items */
 ul li {
     cursor: pointer;

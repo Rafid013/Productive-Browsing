@@ -130,11 +130,12 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
 .clock{
 	position: absolute;
-	top: 45%;
-	left: 50%;
-	transform: translateX(-50%) translateY(-50%);
+	top: 40%;
+	left: 15%;
+	/*transform: translateX(-50%) translateY(-50%);*/
 	font-size: 7.5vw;
 	cursor: pointer;
 }
@@ -150,9 +151,9 @@ body{
     .color = white;
     position: absolute;
     top:0;
-    left:100%;
+    left:90%;
     font-size: 18px;
-    transform: translateX(-100%);
+    /*transform: translateX(-100%);*/
     cursor: pointer;
 }
 #show_hide:hover
@@ -163,6 +164,13 @@ body{
 #log_out:hover {
     text-decoration: underline;
 	cursor: pointer;
+}
+#weather
+{
+    position: absolute;
+    top:27.5%;
+    left:60%;
+    font-size: 18px;
 }
 #show_hide_fav:hover
 {
@@ -209,6 +217,7 @@ body{
     background-color: rgba(0,0,0,0);
     color: white;
     border: none;
+    font-size: 18px;
 }
 #date_time_div
 {
@@ -241,8 +250,21 @@ ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    /*width: 300px;*/
+
 }
 
+#task_list_ul
+{
+    height: 500px;
+    overflow: auto;
+}
+
+#favourite_list_ul
+{
+    height: 350px;
+    overflow: auto;
+}
 /* Style the list items */
 ul li {
     cursor: pointer;
@@ -313,12 +335,7 @@ ul li.checked::before {
     color: white;
 }
 
-#weather
-{
-    position: absolute;
-    top:30%;
-    font-size: 18px;
-}
+
 
 #to_do{
     width:200%;
@@ -344,6 +361,7 @@ ul li.checked::before {
     background-color: rgba(0,0,0,0);
     color: white;
     border: none;
+    font-size: 18px;
 }
 
 #Search_date
@@ -358,6 +376,7 @@ ul li.checked::before {
     background-color: rgba(0,0,0,0);
     color: white;
     border: none;
+    font-size: 18px;
 }
 
 #Search_submit
@@ -481,4 +500,29 @@ progress::-webkit-progress-value {
 #configure_profile:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+#configure_profile
+{
+    cursor: pointer;
+}
+
+#remove_icon
+{
+    cursor: pointer;
+}
+
+#edit_icon
+{
+    cursor: pointer;
+}
+
+#search_container
+{
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    background: #4d4772;
+    font-size: 18px;
 }

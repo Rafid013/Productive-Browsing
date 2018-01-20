@@ -106,8 +106,8 @@ function add_task_to_server(uid, task, date, normal_time, military_time) {
                     events_ToDo_List.push(task + " " + normal_time);
                     var index = events_ToDo_List.indexOf(task + " " + normal_time);
                     events_ToDo_marked[index] = false;
-                    //populateToDoList();
-                    get_to_do_from_server(uid,date_To_Do_list);
+                    populateToDoList();
+                    //get_to_do_from_server(uid,date_To_Do_list);
                 }
                 if(date === date_today) {
                     events_today.push(task);
@@ -156,8 +156,8 @@ function delete_task_from_server(uid, task, date, time) {
                     {
                         //events_ToDo_marked.splice(index,1);
                     }
-                    //populateToDoList();
-                    get_to_do_from_server(uid,date_To_Do_list);
+                    populateToDoList();
+                    //search_to_do_from_server(uid,date_To_Do_list);
                 }
                 if(date === date_today) {
                     var index;
@@ -268,10 +268,7 @@ function search_to_do_from_server(uid, date, minTime, maxTime) {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var event_list_server = JSON.parse(senderToServer.responseText);
             var list_size = event_list_server.length;
-            if(date === date_today) {
-                events_today = [];
-                events_today_marked = [];
-            }
+
             events_ToDo_List = [];
             events_ToDo_marked = [];
             var min = get_Minutes(minTime);
@@ -287,17 +284,11 @@ function search_to_do_from_server(uid, date, minTime, maxTime) {
                     j++;
                 }
                 //var military_time = event_list_server[i].military_time;
-                if(date === date_today) {
-                    events_today.push(task);
-                    events_today_marked[i] = event_list_server[i].done;
-                }
+
             }
             console.log(events_ToDo_List);
             populateToDoList();
-            if(date === date_today)
-            {
-                Scroll_Events();
-            }
+
             date_To_Do_list = date;
         }
         else {

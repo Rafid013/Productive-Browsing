@@ -61,35 +61,6 @@
         </div>
         <input id="input_submit" type="submit" name="Submit" value="ADD">
     </form>
-    <div id="task_list" class="ui dropdown">
-        <div id="show_hide">
-            To-Do List
-        </div>
-        <div id="search_container">
-            <form id ="search_form">
-                <input id="Search_date" type="date" name="Search_Date" title="Date" required>
-                <button id ="Search_submit" type="submit"><i class="large search icon"></i></i></button>
-                <div>
-                    <span><input class="times" id="minTime" type="time" value="00:00" title="Time"></span>
-                    <span><input class="times" type="time" id="maxTime" value="23:59" title="Time"></span>
-                </div>
-            </form>
-        </div>
-        <ul id="task_list_ul">
-
-        </ul>
-    </div>
-        <div id="favourite_list">
-            <div id="show_hide_fav">
-                Favourite Links
-            </div>
-            <ul id="favourite_list_ul">
-            </ul>
-        </div>
-        <div id="stat_page">
-            Stat
-        </div>
-
         <div id="weather">
             <iframe src="https://www.meteoblue.com/en/weather/widget/three/dhaka_bangladesh_
         1185241?geoloc=detect&nocurrent=0&noforecast=0&noforecast=1&days=4&tempunit=
@@ -105,6 +76,35 @@
             medium=linkus&utm_content=three&utm_campaign=Weather%2BWidget" target="_blank"></a>
             </div>
         </div>
+    <div id="task_list" class="ui dropdown">
+        <div id="show_hide">
+            To-Do List
+        </div>
+        <div id="search_container">
+            <form id ="search_form">
+                <input id="Search_date" type="date" name="Search_Date" title="Date" required>
+                <button id ="Search_submit" type="submit"><i class="large search icon"></i></i></button>
+                <div>
+                    <span><input class="times" id="minTime" type="time" value="00:00" title="Start Time"></span>
+                    <span><input class="times" type="time" id="maxTime" value="23:59" title="End Time"></span>
+                </div>
+            </form>
+        </div>
+        <ul id="task_list_ul">
+
+        </ul>
+    </div>
+        <div id="favourite_list">
+            <div id="show_hide_fav">
+                Favourite Links
+            </div>
+            <ul id="favourite_list_ul">
+            </ul>
+        </div>
+        <div id="stat_page">
+            Stats
+        </div>
+
     </div>
 
 </body>
