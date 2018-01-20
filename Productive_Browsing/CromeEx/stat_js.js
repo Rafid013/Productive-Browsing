@@ -1,5 +1,8 @@
 window.onload = load;
 var marked_sites = [];
+var sites_for_bar_chart = ["www.facebook.com","www.twitter.com","www.google.com","www.abc.com","www.def.com"];
+var site_times_in_min =[100,86,89,233,29];
+var total_time = 537;
 var curSite;
 function load() {
     chrome.storage.sync.get(["uid", "name"], function (obj) {
@@ -12,6 +15,9 @@ function load() {
     });
     document.getElementById("mark_sites_ul").style.display = "none";
     document.getElementById("show_hide").onclick = toggle_visibility_sites;
+    document.getElementById("next_button").onclick = nextButtonClickListener;
+    document.getElementById("prev_button").onclick = prevButtonClickListener;
+    populate_bar_chart(sites_for_bar_chart,site_times_in_min,total_time);
 }
 
 function newSite()
@@ -95,4 +101,50 @@ function toggle_visibility_sites() {
     else
         e.style.display = 'none';
     return false;
+}
+
+function round(value, decimals) {
+    return Number(Math.round(Number(value+'e'+decimals)) + 'e-' + decimals);
+}
+
+function min_to_hour(mins) {
+    var h = Math.floor(mins / 60);
+    var m = mins % 60;
+    h = h === 0 ? "" : h.toString() + " Hour(s) ";
+    m = m < 10 ? "0" + m.toString() +" Minutes(s)" : m.toString() + " Minutes(s)";
+    return h+m ;
+}
+
+function populate_bar_chart(bar_title_array, bar_value_array, total_min) {
+    var bars = document.getElementsByClassName("progress-fill");
+    var labels =document.getElementsByClassName("bar_chart_inside_text");
+    var length = bar_title_array.length;
+    for(var i = 0; i<length && i<5; i++)
+    {
+        var percent = (bar_value_array[i]*100.0)/total_min;
+        var round_up_value = round(percent,2);
+        percent = percent.toString() + "%";
+        var text = bar_title_array[i] + " " + min_to_hour(bar_value_array[i])+" " + round_up_value.toString() +"%";
+        bars[i].style.width = percent;
+        labels[i].innerText = text;
+    }
+}
+
+function populate_bar_test() {
+    var bars = document.getElementsByClassName("progress-fill");
+    var labels =document.getElementsByClassName("bar_chart_inside_text");
+    for(var i = 0; i<5; i++)
+    {
+        var percent = 10*(i+1)+ "%";
+        bars[i].style.width = percent;
+        labels[i].innerText = "abcdef";
+    }
+}
+
+function prevButtonClickListener() {
+    alert("prev clicked");
+}
+
+function nextButtonClickListener() {
+    alert("next clicked");
 }
