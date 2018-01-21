@@ -471,8 +471,12 @@ function get_marked_sites(uid) {
             for(var i = 0; i < site_list.length; ++i) {
                 sites_to_be_stored[site_list[i].site] = 0;
                 marked_sites_complete[i] = site_list[i];
-                total_monthly_time += site_list[i].monthly_time;
+                total_monthly_time += (site_list[i].monthly_time * site_list[i].num_of_months)
+                                        + site_list[i].total_time_this_month
+                                        + site_list[i].daily_time;
+                //total_monthly_time += site_list[i].monthly_time;
             }
+            populate_fields(marked_sites_complete);
             chrome.storage.sync.set({"marked_sites" : sites_to_be_stored},function () {
                 var tmp = {
                     type : "update_marked_sites_object"

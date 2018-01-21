@@ -1,12 +1,12 @@
 window.onload = load;
 var marked_sites = [];
 var marked_sites_complete = [];
-var sites_for_bar_chart = ["www.facebook.com","www.youtube.com","www.stackoverflow.com","www.abc.com","a",
-                            "b","c","d","e","f","g","h","i","j"];
-var site_times_in_min =[10, 20, 30, 40, 50, 10, 20, 30, 40, 50, 11, 12, 13, 14];
-var daily_time = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-var weekly_time = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-var total_time = 365;
+var sites_for_bar_chart = [];
+var site_times_in_min =[];
+var daily_time = [];
+var weekly_time = [];
+var monthly_time = [];
+var total_time = 0;
 var lastSeenIndex = -1;
 var curSite;
 var currently_visible_bars = 0;
@@ -34,6 +34,7 @@ function load() {
         }
     });
     prev_next_button_controller();
+    nextButtonClickListener();
     document.getElementById("mark_sites_ul").style.display = "none";
     document.getElementById("show_hide").onclick = toggle_visibility_sites;
     document.getElementById("next_button").onclick = nextButtonClickListener;
@@ -54,7 +55,6 @@ function load() {
         }
     });
 
-    nextButtonClickListener();
 }
 
 function newSite()
@@ -110,7 +110,7 @@ function populateMarkedSites() {
                 document.getElementById("site_name").innerText = site;
                 document.getElementById("daily_usage").innerText = min_to_hour(daily_time[index]);
                 document.getElementById("weekly_usage").innerText = min_to_hour(weekly_time[index]);
-                document.getElementById("monthly_usage").innerText = min_to_hour(site_times_in_min[index]);
+                document.getElementById("monthly_usage").innerText = min_to_hour(monthly_time[index]);
             }
         }
     }, false);
@@ -154,7 +154,7 @@ function round(value, decimals) {
 
 function min_to_hour(mins) {
     var h = Math.floor(mins / 60);
-    var m = mins % 60;
+    var m = round((mins % 60),2);
     h = h === 0 ? "" : h.toString() + " Hour(s) ";
     m = m < 10 ? "0" + m.toString() +" Minute(s)" : m.toString() + " Minute(s)";
     return h+m ;
@@ -220,6 +220,7 @@ function nextButtonClickListener() {
         tempTime[count] = site_times_in_min[i];
         count++;
     }
+    console.log(site_times_in_min);
     lastSeenIndex += count;
     currently_visible_bars = count;
     populate_bar_chart(tempTitle,tempTime,total_time);
@@ -249,4 +250,24 @@ function go_to_site() {
         type : "open_new_tab"
     };
     chrome.runtime.sendMessage(tmp);
+}
+
+function populate_fields(complete_list) {
+    console.log(complete_list);
+    for(var i =0 ;i<complete_list.length; i++)
+    {
+        marked_sites[i] = complete_list[i].site;
+        sites_for_bar_chart[i] = complete_list[i].site;
+        monthly_time[i] = complete_list[i].monthly_time;
+        site_times_in_min[i] = complete_list[i].monthly_time*complete_list[i].num_of_months
+                            +complete_list[i].total_time_this_month
+                            +complete_list[i].daily_time;
+        daily_time[i] = complete_list[i].daily_time;
+        weekly_time[i] = complete_list[i].weekly_time;
+        if(total_monthly_time === 0) total_time = 1;
+        else total_time = total_monthly_time;
+    }
+    console.log(site_times_in_min);
+    nextButtonClickListener();
+    populateMarkedSites();
 }

@@ -31,15 +31,25 @@ body{
 {
     position: absolute;
     top:60%;
+    padding:15px;
+    border-radius: 5px;
     left:73.5%;
     transform: translateX(-50%);
     font-size: 18px;
+    background: rgba(43, 51, 63,.4);
 }
 
 #show_hide:hover
 {
     text-decoration: underline;
     cursor: pointer;
+}
+
+#show_hide
+{
+    padding: 10px;
+    border-radius: 5px;
+    background: rgba(43, 51, 63,.5);
 }
 
 ul {
@@ -146,6 +156,7 @@ h2 {
     border-bottom: 1px solid #999;
     font-family: sans-serif;
     font-weight: normal;
+    background: rgba(43, 51, 63,.2);
 }
 
 #next_button
@@ -191,12 +202,12 @@ h2 {
     position: relative;
     width: 100%;
     height: 40px;
-    background: #ebebeb;
+    background: rgba(239, 242, 247,.15);
 }
 
 .horizontal .progress-fill {
     position: relative;
-    background: #f48642;
+    background: rgba(244, 134, 66, 1);
     height: 40px;
     width: 50%;
     line-height: 20px;

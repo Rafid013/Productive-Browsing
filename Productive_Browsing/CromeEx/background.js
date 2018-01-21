@@ -700,13 +700,14 @@ function update_per_day_stat() {
                 }
                 else
                 {
+                    console.log(obj.per_day_stat);
                     for (var k in obj.per_day_stat){
                         //console.log(k +"  "+  obj.per_day_stat[k])
                         update_site_time_in_server(object.uid, k , obj.per_day_stat[k]);
                         obj.per_day_stat[k] = 0;
                     }
                     chrome.storage.sync.set({"per_day_stat":obj.per_day_stat});
-                    alert("one day gone");
+
                 }
             });
 
