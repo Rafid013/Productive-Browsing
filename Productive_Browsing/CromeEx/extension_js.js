@@ -243,8 +243,22 @@ function show_stat_page() {
 //adding elements in to do list
 function newElement(isDone,curr_priority)
 {
-    //alert(curr_priority);
       var li = document.createElement("li");
+      if(curr_priority === 1)
+      {
+          li.style.color = "#4ff441";
+          li.title = "Low Priority"
+      }
+      else if(curr_priority === 2)
+      {
+          li.style.color = "#caf441";
+          li.title = "Medium Priority"
+      }
+      else
+      {
+          li.style.color = "#f4a142";
+          li.title = "High Priority"
+      }
       var inputValue = curTask;
       var t = document.createTextNode(inputValue);
       li.appendChild(t);

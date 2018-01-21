@@ -104,7 +104,7 @@ function add_task_to_server(uid, task, date, normal_time, military_time, priorit
         priority : priority,
         type : "add_task"
     };
-    
+
     var task_object = {
         task : task,
         done : false,
