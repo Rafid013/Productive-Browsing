@@ -216,7 +216,7 @@ function load()
     e.style.display = 'none';
     document.getElementById("white").style.display = "block";
     document.getElementById("black").style.display = "none";
-
+    document.getElementById("loading").style.display = "none";
     document.getElementById("search_container").style.display = "none";
     document.getElementById("upload_progress_bar").style.display = "none";
     document.getElementById("MyClockDisplay").onclick = toggle;
@@ -465,10 +465,12 @@ function RegisterPage()
 
 function logIn()
 {
+    document.getElementById("loading").style.display = "block";
     var email = document.getElementById("login_email").value;
     var password = document.getElementById("login_password").value;
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then(function (userRecord) {
+            document.getElementById("loading").style.display = "none";
             console.log("Signed In");
             console.log("UID: " + userRecord.uid);
             console.log("Name: " + userRecord.displayName);
@@ -483,7 +485,10 @@ function logIn()
             chrome.storage.sync.set({"uid": uid});
             chrome.storage.sync.set({"name": name});
         }).catch(function (error) {
+            document.getElementById("loading").style.display = "none";
             console.log("Error when signing in for email: " + email);
+            var input = document.getElementById("login_email");
+            //input.setCustomValidity(error.message);
             console.log(error.code);
             console.log(error.message);
         });
