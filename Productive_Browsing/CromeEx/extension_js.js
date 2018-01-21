@@ -498,6 +498,7 @@ function logIn()
 
 function register()
 {
+    document.getElementById("loading").style.display = "block";
     var register_req = {
         name : document.getElementById("reg_name").value,
         email : document.getElementById("reg_email").value,
@@ -509,6 +510,7 @@ function register()
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             var receivedData = JSON.parse(senderToServer.responseText);
+            document.getElementById("loading").style.display = "none";
             if(receivedData.message === "success") {
                 name = receivedData.name;
                 uid = receivedData.uid;
