@@ -22,15 +22,16 @@ body{
 {
     position: absolute;
     top:15%;
-    left:60%;
+    left:70%;
     font-size: 18px;
 }
+
 
 #site_usage
 {
     position: absolute;
-    top:40%;
-    left:65%;
+    top:60%;
+    left:73.5%;
     transform: translateX(-50%);
     font-size: 18px;
 }
@@ -113,11 +114,22 @@ ul li.checked::before {
     color: white;
 }
 
+
+
 .site_stat
 {
     text-decoration: underline;
 }
 
+#site_name
+{
+    cursor: pointer;
+}
+
+#site_usage
+{
+    text-align: center;
+}
 
 #bar_chart_container
 {
@@ -135,7 +147,7 @@ h2 {
     border-bottom: 1px solid #999;
     font-family: sans-serif;
     font-weight: normal;
-    color: #333;
+    color: white;
 }
 
 #next_button

@@ -519,6 +519,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     var date, currentTime, task_time;
     if(req.type === "open_new_tab") {
         //open new tab of the link in req.link
+        //alert(req.link);
         chrome.tabs.create({url:req.link}, function (response) {
 
         });

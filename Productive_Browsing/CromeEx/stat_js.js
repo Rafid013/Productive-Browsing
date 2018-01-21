@@ -1,9 +1,15 @@
 window.onload = load;
 var marked_sites = [];
-var sites_for_bar_chart = ["www.facebook.com","www.twitter.com","www.google.com","www.abc.com","www.def.com"];
-var site_times_in_min =[100,86,89,233,29];
-var total_time = 537;
+var sites_for_bar_chart = ["www.facebook.com","www.youtube.com","stackoverflow.com","www.abc.com","a",
+                            "b","c","d","e","f","g","h","i","j"];
+var site_times_in_min =[10,20,30,40,50,10,20,30,40,50,11,12,13,14];
+var daily_time = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+var weekly_time = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+var total_time = 365;
+var lastSeenIndex = -1;
 var curSite;
+var currently_visible_bars = 0;
+
 function load() {
     chrome.storage.sync.get(["uid", "name"], function (obj) {
         if (obj.uid === undefined) {
@@ -13,11 +19,13 @@ function load() {
             get_marked_sites_stat(obj.uid);
         }
     });
+    prev_next_button_controller();
     document.getElementById("mark_sites_ul").style.display = "none";
     document.getElementById("show_hide").onclick = toggle_visibility_sites;
     document.getElementById("next_button").onclick = nextButtonClickListener;
     document.getElementById("prev_button").onclick = prevButtonClickListener;
-    populate_bar_chart(sites_for_bar_chart,site_times_in_min,total_time);
+    document.getElementById("site_name").onclick = go_to_site;
+    nextButtonClickListener();
 }
 
 function newSite()
@@ -66,7 +74,15 @@ function populateMarkedSites() {
         // noinspection JSUnresolvedVariable
         if (ev.target.tagName === 'LI') {
             var div = ev.target;
-            alert(div.textContent.substring(0, div.textContent.length - 1));
+            var site = div.textContent.substring(0, div.textContent.length - 1);
+            var index = sites_for_bar_chart.indexOf(site);
+            if(index !== -1)
+            {
+                document.getElementById("site_name").innerText = site;
+                document.getElementById("daily_usage").innerText = min_to_hour(daily_time[index]);
+                document.getElementById("weekly_usage").innerText = min_to_hour(weekly_time[index]);
+                document.getElementById("monthly_usage").innerText = min_to_hour(site_times_in_min[index]);
+            }
         }
     }, false);
 
@@ -111,12 +127,14 @@ function min_to_hour(mins) {
     var h = Math.floor(mins / 60);
     var m = mins % 60;
     h = h === 0 ? "" : h.toString() + " Hour(s) ";
-    m = m < 10 ? "0" + m.toString() +" Minutes(s)" : m.toString() + " Minutes(s)";
+    m = m < 10 ? "0" + m.toString() +" Minute(s)" : m.toString() + " Minute(s)";
     return h+m ;
 }
 
 function populate_bar_chart(bar_title_array, bar_value_array, total_min) {
+
     var bars = document.getElementsByClassName("progress-fill");
+    var bars_container = document.getElementsByClassName("progress-bar horizontal");
     var labels =document.getElementsByClassName("bar_chart_inside_text");
     var length = bar_title_array.length;
     for(var i = 0; i<length && i<5; i++)
@@ -124,27 +142,82 @@ function populate_bar_chart(bar_title_array, bar_value_array, total_min) {
         var percent = (bar_value_array[i]*100.0)/total_min;
         var round_up_value = round(percent,2);
         percent = percent.toString() + "%";
-        var text = bar_title_array[i] + " " + min_to_hour(bar_value_array[i])+" " + round_up_value.toString() +"%";
+        var text = bar_title_array[i] + " " + min_to_hour(bar_value_array[i])+ "   " + round_up_value.toString() +"%";
         bars[i].style.width = percent;
+        bars_container[i].style.display = "block";
         labels[i].innerText = text;
     }
-}
 
-function populate_bar_test() {
-    var bars = document.getElementsByClassName("progress-fill");
-    var labels =document.getElementsByClassName("bar_chart_inside_text");
-    for(var i = 0; i<5; i++)
+    prev_next_button_controller();
+
+    for(;i<5;i++)
     {
-        var percent = 10*(i+1)+ "%";
-        bars[i].style.width = percent;
-        labels[i].innerText = "abcdef";
+        bars_container[i].style.display = "none";
     }
 }
 
+
 function prevButtonClickListener() {
-    alert("prev clicked");
+    var tempTitle = [];
+    var tempTime = [];
+    var count = 0;
+
+    lastSeenIndex -= currently_visible_bars;
+    for(var i = lastSeenIndex ; i>=0 ; i--)
+    {
+        if(count === 5) break;
+        tempTitle[count] = sites_for_bar_chart[i];
+        tempTime[count] = site_times_in_min[i];
+        count++;
+    }
+    currently_visible_bars = count;
+
+    tempTitle.reverse();
+    tempTime.reverse();
+
+    populate_bar_chart(tempTitle,tempTime,total_time);
+
+    return false;
 }
 
 function nextButtonClickListener() {
-    alert("next clicked");
+    var tempTitle = [];
+    var tempTime = [];
+    var count = 0;
+    for(var i = lastSeenIndex + 1; i<sites_for_bar_chart.length ; i++)
+    {
+        if(count === 5) break;
+        tempTitle[count] = sites_for_bar_chart[i];
+        tempTime[count] = site_times_in_min[i];
+        count++;
+    }
+    lastSeenIndex += count;
+    currently_visible_bars = count;
+    populate_bar_chart(tempTitle,tempTime,total_time);
+
+    return false;
+}
+
+function prev_next_button_controller() {
+    var next = document.getElementById("next_button");
+    var prev = document.getElementById("prev_button");
+    next.style.display = "none";
+    prev.style.display = "none";
+    if(lastSeenIndex > 4)
+    {
+        prev.style.display = "block";
+    }
+    if(lastSeenIndex >=0 && lastSeenIndex < sites_for_bar_chart.length-1)
+    {
+        next.style.display = "block";
+    }
+}
+
+function go_to_site() {
+    var site ="http://" + document.getElementById("site_name").innerText;
+    var tmp = {
+        link : site,
+        type : "open_new_tab"
+    };
+    chrome.runtime.sendMessage(tmp);
 }
