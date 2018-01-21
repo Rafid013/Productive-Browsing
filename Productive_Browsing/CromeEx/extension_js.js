@@ -252,7 +252,7 @@ function add_new_task()
 	return false;
 }
 
-function Search_To_Do() {
+function search_to_do() {
     var date = document.getElementById("Search_date").value;
     var maxTime = document.getElementById("maxTime").value;
     var minTime = document.getElementById("minTime").value;
@@ -286,7 +286,7 @@ function load()
     document.getElementById("remove_icon").onclick = deleteBackground;
     document.getElementById("Task_Input").onsubmit = add_new_task;
     document.getElementById("show_hide").onclick = toggle_visibility;
-    document.getElementById("stat_page").onclick = ShowStatPage;
+    document.getElementById("stat_page").onclick = show_stat_page;
     document.getElementById("show_hide_fav").onclick = toggle_visibility_fav;
     document.getElementById("log_out").onclick = log_out;
     document.getElementById("register_Form").style.display = 'none';
@@ -294,9 +294,9 @@ function load()
     document.getElementById("go_to_register").onclick = RegisterPage;
     document.getElementById("logIn_Form").onsubmit = logIn;
     document.getElementById("register_Form").onsubmit = register;
-    document.getElementById("search_form").onsubmit = Search_To_Do;
+    document.getElementById("search_form").onsubmit = search_to_do;
 }
-function ShowStatPage() {
+function show_stat_page() {
     window.location.href = "stat.html";
     return false;
 }
@@ -426,17 +426,13 @@ function mark_event_listener(ev) {
 
         index = events_ToDo_List.indexOf(task + " " + time);
         if (index > -1) {
-            //alert("tes");
-            if (events_ToDo_marked[index]) events_ToDo_marked[index] = false;
-            else events_ToDo_marked[index] = true;
+            events_ToDo_marked[index] = !events_ToDo_marked[index];
         }
 
         if (date_To_Do_list === date_today) {
             index = events_today.indexOf(task);
             if (index > -1) {
-                //alert(events_today_marked[index]);
-                if (events_today_marked[index]) events_today_marked[index] = false;
-                else events_today_marked[index] = true;
+                events_today_marked[index] = !events_today_marked[index];
             }
         }
 
