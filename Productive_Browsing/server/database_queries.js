@@ -37,8 +37,8 @@ function mark_site(uid, site, callback) {
             site : site,
             num_of_days : 0,
             daily_time : 0, //in minutes
-            weekly_time : 0, //in hours
-            monthly_time : 0, //in hours
+            weekly_time : 0, //in minutes
+            monthly_time : 0, //in minutes
             total_time_this_month : 0,
             total_time_this_week : 0,
             num_of_months : 0,
