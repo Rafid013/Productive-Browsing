@@ -3,6 +3,9 @@ var events_today = [];
 var events_today_marked = [];
 var events_ToDo_List = [];
 var events_ToDo_marked = [];
+
+var to_do_complete = [];
+
 var favourite_links = [];
 var date_today;
 var date_To_Do_list;
@@ -345,6 +348,7 @@ function newFavLink()
 
 function populateFavouriteLinks() {
     var ul=document.getElementById("favourite_list_ul");
+
     while (ul.firstChild) {
         ul.removeChild(ul.firstChild);
     }
