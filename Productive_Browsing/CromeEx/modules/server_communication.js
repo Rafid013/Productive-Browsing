@@ -87,7 +87,7 @@ function delete_fav_link_from_server(uid, link) {
     senderToServer.send(JSON.stringify(delete_fav_link_req));
 }
 
-function add_task_to_server(uid, task, date, normal_time, military_time) {
+function add_task_to_server(uid, task, date, normal_time, military_time, priority) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var add_task_req = {
@@ -96,22 +96,24 @@ function add_task_to_server(uid, task, date, normal_time, military_time) {
         date : date,
         normal_time : normal_time,
         military_time : military_time,
+        priority : priority,
         type : "add_task"
     };
     senderToServer.onreadystatechange = function () {
         if(senderToServer.readyState === 4 && senderToServer.status === 200) {
             if(senderToServer.responseText === "success") {
+                var index;
                 if(date === date_To_Do_list)
                 {
                     events_ToDo_List.push(task + " " + normal_time);
-                    var index = events_ToDo_List.indexOf(task + " " + normal_time);
+                    index = events_ToDo_List.indexOf(task + " " + normal_time);
                     events_ToDo_marked[index] = false;
                     populateToDoList();
                     //get_to_do_from_server(uid,date_To_Do_list);
                 }
                 if(date === date_today) {
                     events_today.push(task);
-                    var index = events_today.indexOf(task);
+                    index = events_today.indexOf(task);
                     events_today_marked[index] = false;
                     Scroll_Events();
 
@@ -235,6 +237,7 @@ function get_to_do_from_server(uid, date) {
                 events_ToDo_List.push(task + " " + normal_time);
                 events_ToDo_marked[i]  = event_list_server[i].done;
                 //var military_time = event_list_server[i].military_time;
+                //var priority = event_list_server[i].priority;
                 if(date === date_today) {
                     events_today.push(task);
                     events_today_marked[i] = event_list_server[i].done;
@@ -284,6 +287,7 @@ function search_to_do_from_server(uid, date, minTime, maxTime) {
                     j++;
                 }
                 //var military_time = event_list_server[i].military_time;
+                //var priority = event_list_server[i].priority;
 
             }
             console.log(events_ToDo_List);

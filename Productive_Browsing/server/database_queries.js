@@ -129,13 +129,14 @@ function update_site_time(uid, site, time_spent_today, callback) {
     });
 }
 
-function add_task(uid, task, date, normal_time, military_time, callback) {
+function add_task(uid, task, date, normal_time, military_time, priority, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added").then(function (dataSnapshot) {
         var tmp = {
             task : task,
             normal_time : normal_time,
             military_time : military_time,
+            priority : priority,
             done : false
         };
         var dateRef = ref.child(dataSnapshot.key + '/To_Do_List').child(date);

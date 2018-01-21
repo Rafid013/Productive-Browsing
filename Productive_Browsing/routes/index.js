@@ -53,6 +53,7 @@ router.post('/', function (req, res) {
     }
     else if(req.body.type === "add_task") {
         db.add_task(req.body.uid, req.body.task, req.body.date, req.body.normal_time, req.body.military_time,
+        req.body.priority,
         function (msg) {
             res.write(msg);
             res.end();
