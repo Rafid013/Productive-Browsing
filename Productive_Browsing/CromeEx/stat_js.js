@@ -11,6 +11,8 @@ var lastSeenIndex = -1;
 var curSite;
 var currently_visible_bars = 0;
 
+var total_monthly_time = 0;
+
 var uid;
 
 function showBackground(url) {
