@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Getting started example",
+  "name": "Productive Browsing",
   "description": "This extension allows the user to change the background color of the current page.",
   "version": "1.0",
 

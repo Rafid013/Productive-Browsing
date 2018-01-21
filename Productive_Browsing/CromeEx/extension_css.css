@@ -527,3 +527,69 @@ progress::-webkit-progress-value {
     background: #4d4772;
     font-size: 18px;
 }
+
+
+#priority {
+    width:100%;
+    box-sizing:border-box;
+    color: white;
+    /* background-color:white;*/
+    box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.4);
+    text-align:center;
+    position:relative;
+    border-radius:2px;
+}
+
+#priority > div {
+    color:white;
+    display:block;
+    position:absolute;
+    top:-4px;
+    left:-4px;
+    bottom:-4px;
+    width:calc(33.33% + 8px);
+    background-color: rgba(50, 150, 255,1);
+    border-radius:2px;
+    box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.4);
+    z-index:1;
+    pointer-events:none;
+    transform: translateX(calc(100% - 8px));
+    transition:transform 0.3s;
+}
+
+#priority::after {
+    content:"";
+    display:block;
+    clear:both;
+}
+
+#priority label {
+    float:left;
+    width:calc(33.333% - 1px);
+    position:relative;
+    padding:0px 0px 20px;
+    overflow:hidden;
+    border-left:solid 1px rgba(0,0,0,0.2);
+    transition:color 0.3s;
+    cursor:pointer;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+#priority label:first-child {
+    border-left:none;
+}
+
+#priority label input {
+    position:absolute;
+    top:-200%;
+}
+
+#priority label div {
+    z-index: 5;
+    position: absolute;
+    width: 100%;
+}
+
+#priority label.selected {
+    color: #1a1a1a;
+}

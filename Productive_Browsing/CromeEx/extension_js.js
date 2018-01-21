@@ -13,6 +13,7 @@ var curTask = "";
 var curLink = "";
 var uid;
 var name;
+var priority = 2;
 
 const total_pics = 3;
 
@@ -276,6 +277,7 @@ function load()
     date_To_Do_list = year + "-" + month + "-" + day;
     loadPage();
     showTime();
+    priority_selection_handler();
 
     var e = document.getElementById("task_list_ul");
     e.style.display = 'none';
@@ -348,7 +350,7 @@ function newFavLink()
 
 function populateFavouriteLinks() {
     var ul=document.getElementById("favourite_list_ul");
-
+    ul.removeEventListener('click',favourite_link_onclick_listener,false);
     while (ul.firstChild) {
         ul.removeChild(ul.firstChild);
     }
@@ -360,29 +362,29 @@ function populateFavouriteLinks() {
         newFavLink();
     }
 
-    var close = document.getElementsByClassName("close_fav");
+    var close = document.getElementsByClassName("close_fev");
     for (i = 0; i < close.length; i++)
     {
         close[i].onclick = function() {
             var div = this.parentElement;
             //div.style.display = "none";
-
             delete_fav_link_from_server(uid,
                 div.textContent.substring(0, div.textContent.length - 1));
         }
     }
     //var list = document.querySelector('ul');
-    ul.addEventListener('click', function(ev) {
-        // noinspection JSUnresolvedVariable
-        if (ev.target.tagName === 'LI') {
-            var div = ev.target;
-            var tmp = {
-                link : div.textContent.substring(0, div.textContent.length - 1),
-                type : "open_new_tab"
-            };
-            chrome.runtime.sendMessage(tmp);
-        }
-    }, false);
+    ul.addEventListener('click', favourite_link_onclick_listener , false);
+}
+
+function favourite_link_onclick_listener(ev) {
+    if (ev.target.tagName === 'LI') {
+        var div = ev.target;
+        var tmp = {
+            link : div.textContent.substring(0, div.textContent.length - 1),
+            type : "open_new_tab"
+        };
+        chrome.runtime.sendMessage(tmp);
+    }
 }
 
 function populateToDoList()
@@ -576,6 +578,20 @@ function register()
     senderToServer.send(JSON.stringify(register_req));
     document.getElementById("register_Form").reset();
     return false;
+}
+
+
+function priority_selection_handler() {
+
+    var inputs = document.querySelectorAll("#priority input");
+    for(var i=0; i<inputs.length ;i++)
+    {
+        inputs[i].addEventListener('click',function (event) {
+            var div = document.querySelector("#priority > div");
+            div.style.transform = "translateX(" + event.target.name + ")";
+            priority = event.target.value;
+        },false);
+    }
 }
 
 window.onload = load;

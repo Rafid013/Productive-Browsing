@@ -505,20 +505,39 @@ function get_fav_link_from_server_background(uid,url) {
             for(var i = 0; i < list_size; ++i) {
                 links.push({title:"Check this link",message:link_list[i].site});
             }
+
+            var randomNumber = Math.floor(Math.random() * list_size);
+
             if(list_size === 0)
             {
                 //alert("inside");
-                links.push({title:"No task in To-Do List",message:""});
+                links.push({title:"No task in To-Do List",message:""},
+                            {title:"No Favourite List Found",message:""});
+                var options = {
+                    type : "list",
+                    title : "You are using " + url + " too long",
+                    message : "You are using " + url + " too long",
+                    iconUrl : "icon.png",
+                    items: links
+                };
+                chrome.notifications.create(options);
+            }
+            else
+            {
+                var randomNumber = Math.floor(Math.random() * list_size);
+                suggest_link = link_list[randomNumber].site;
+                var options = {
+                    type : "basic",
+                    title : "You are using " + url + " too long",
+                    message : "You may want to visit this site",
+                    buttons : [{
+                        title: suggest_link
+                    }],
+                    iconUrl : "icon.png"
+                };
+                chrome.notifications.create(options);
             }
             //alert("inside");
-            var options = {
-                type : "list",
-                title : "You are using " + url + " too long",
-                message : "You are using " + url + " too long",
-                iconUrl : "icon.png",
-                items: links
-            };
-            chrome.notifications.create(options);
         }
         else {
             //server connection failed
