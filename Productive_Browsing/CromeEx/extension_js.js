@@ -38,9 +38,29 @@ function loadPage() {
             get_fav_link_from_server(uid);
             get_marked_sites(uid);
 
-            chrome.storage.sync.get("image_url", function (item) {
+            chrome.storage.sync.get(["image_url","color"], function (item) {
                 if(item.image_url !== undefined) showBackground(item.image_url);
                 else getBackgroundDownloadURL(uid, showBackground);
+                if(item.color === undefined)
+                {
+                    chrome.storage.sync.set({"color" : "white"});
+                }
+                else
+                {
+                    body.style.color = item.color;
+                    if(item.color === "white" )
+                    {
+                        document.getElementById("white").style.display = "block";
+                        document.getElementById("black").style.display = "none";
+
+                    }
+                    else
+                    {
+                        document.getElementById("white").style.display = "none";
+                        document.getElementById("black").style.display = "block";
+
+                    }
+                }
             });
         } else {
             // No user is signed in.
@@ -221,27 +241,28 @@ function show_stat_page() {
     return false;
 }
 //adding elements in to do list
-function newElement(isDone)
+function newElement(isDone,curr_priority)
 {
-  var li = document.createElement("li");
-  var inputValue = curTask;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === '') {
-    alert("You must write something!");
-  } else {
-    document.getElementById("task_list_ul").appendChild(li);
-  }
+    //alert(curr_priority);
+      var li = document.createElement("li");
+      var inputValue = curTask;
+      var t = document.createTextNode(inputValue);
+      li.appendChild(t);
+      if (inputValue === '') {
+        alert("You must write something!");
+      } else {
+        document.getElementById("task_list_ul").appendChild(li);
+      }
 
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-  if(isDone)
-  {
-      li.classList.toggle('checked');
-  }
+      var span = document.createElement("SPAN");
+      var txt = document.createTextNode("\u00D7");
+      span.className = "close";
+      span.appendChild(txt);
+      li.appendChild(span);
+      if(isDone)
+      {
+          li.classList.toggle('checked');
+      }
 }
 
 function newFavLink()
@@ -314,7 +335,8 @@ function populateToDoList()
 	for (i = 0; i < events_ToDo_List.length; i++)
 	{
 		curTask = events_ToDo_List[i];
-		newElement(events_ToDo_marked[i]);
+		var curr_priority = to_do_complete[i].priority;
+		newElement(events_ToDo_marked[i],curr_priority);
 	}
 
 	var close = document.getElementsByClassName("close");
@@ -394,7 +416,7 @@ function log_out() {
     //storage empty
     firebase.auth().signOut()
         .then(function () {
-            chrome.storage.sync.remove(["uid", "name", "image_url", "marked_sites"]);
+            chrome.storage.sync.remove(["uid", "name", "image_url", "marked_sites","color"]);
             events_today = [];
             events_ToDo_List = [];
             favourite_links = [];
@@ -518,12 +540,14 @@ function invert_color() {
         body.style.color = "#000000";
         document.getElementById("white").style.display = "none";
         document.getElementById("black").style.display = "block";
+        chrome.storage.sync.set({"color" : "#000000"});
     }
     else
     {
         body.style.color = "white";
         document.getElementById("white").style.display = "block";
         document.getElementById("black").style.display = "none";
+        chrome.storage.sync.set({"color" : "white"});
     }
     return false;
 }

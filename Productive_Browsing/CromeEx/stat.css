@@ -111,7 +111,6 @@ ul li.checked::before {
 
 .close:hover {
     background-color: #f44336;
-    color: white;
 }
 
 
@@ -147,7 +146,6 @@ h2 {
     border-bottom: 1px solid #999;
     font-family: sans-serif;
     font-weight: normal;
-    color: white;
 }
 
 #next_button
@@ -184,7 +182,6 @@ h2 {
     height: 70px;
     width: 100%;
     padding: 12px 0;
-    color: white;
     text-align: left;
     font-family: "Lato","Verdana",sans-serif;
     font-size: 18px;
