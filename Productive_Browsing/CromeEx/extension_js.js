@@ -12,6 +12,8 @@ var uid;
 var name;
 var priority = 2;
 
+const total_pics = 3;
+
 var config = {
     apiKey: "AIzaSyDWIgzbaNxKJ9HIxIrKTPI02jAXd2KDr-I",
     authDomain: "productive-browsing.firebaseapp.com",
@@ -100,18 +102,19 @@ function loadPage() {
             get_to_do_from_server(uid, date_today);
             get_fav_link_from_server(uid);
             get_marked_sites(uid);
+
             chrome.storage.sync.get("image_url", function (item) {
                 if(item.image_url !== undefined) showBackground(item.image_url);
                 else getBackgroundDownloadURL(uid, showBackground);
             });
         } else {
             // No user is signed in.
-            body.style.backgroundColor = "#76b852";
-            body.style.color = "black";
-            showBackground("none");
+            //body.style.backgroundColor = "#76b852";
+            //body.style.color = "black";
             logInPage();
             document.getElementById("signup_page").style.display = "block";
             document.getElementById("home_page").style.display = "none";
+            showBackground("backgrounds/background1.jpeg");
         }
     });
 }
@@ -188,17 +191,9 @@ function getBackgroundDownloadURL(uid, callback) {
         .catch(function (error) {
             console.log(error.message);
             console.log(error.code);
-            var backgroundNo = Math.floor(Math.random()*4) + 1;
+            var backgroundNo = Math.floor(Math.random()*total_pics) + 1;
             var path = "backgrounds/background" + backgroundNo + ".jpeg";
-            storageRef.child(path).getDownloadURL()
-                .then(function (url1) {
-                    callback(url1);
-                })
-                .catch(function (error) {
-                    console.log(error.message);
-                    console.log(error.code);
-                    callback("none");
-                });
+            callback(path);
         });
 }
 
@@ -223,6 +218,10 @@ function add_new_task()
 	var form = document.getElementById("Task_Input");
 	var task = document.getElementById('to_do').value;
 	var time = document.getElementById('time').value;
+
+
+	var priority = 0;  //read here
+
     var militaryTimeValue = time;
     time = time.split(':');// convert to array
     // fetch
@@ -249,16 +248,16 @@ function add_new_task()
 
     var date = document.getElementById('date').value;
     if(date === "") date = date_today;
-    add_task_to_server(uid, task, date, timeValue, militaryTimeValue);
+    add_task_to_server(uid, task, date, timeValue, militaryTimeValue, priority);
 	form.reset();
 	return false;
 }
 
-function Search_To_Do() {
+function search_to_do() {
     var date = document.getElementById("Search_date").value;
     var maxTime = document.getElementById("maxTime").value;
     var minTime = document.getElementById("minTime").value;
-    search_to_do_from_server(uid,date,minTime,maxTime);
+    search_to_do_from_server(uid, date, minTime, maxTime);
     //get_to_do_from_server(uid,date);
     return false;
 }
@@ -289,7 +288,7 @@ function load()
     document.getElementById("remove_icon").onclick = deleteBackground;
     document.getElementById("Task_Input").onsubmit = add_new_task;
     document.getElementById("show_hide").onclick = toggle_visibility;
-    document.getElementById("stat_page").onclick = ShowStatPage;
+    document.getElementById("stat_page").onclick = show_stat_page;
     document.getElementById("show_hide_fav").onclick = toggle_visibility_fav;
     document.getElementById("log_out").onclick = log_out;
     document.getElementById("register_Form").style.display = 'none';
@@ -297,9 +296,9 @@ function load()
     document.getElementById("go_to_register").onclick = RegisterPage;
     document.getElementById("logIn_Form").onsubmit = logIn;
     document.getElementById("register_Form").onsubmit = register;
-    document.getElementById("search_form").onsubmit = Search_To_Do;
+    document.getElementById("search_form").onsubmit = search_to_do;
 }
-function ShowStatPage() {
+function show_stat_page() {
     window.location.href = "stat.html";
     return false;
 }
@@ -430,17 +429,13 @@ function mark_event_listener(ev) {
 
         index = events_ToDo_List.indexOf(task + " " + time);
         if (index > -1) {
-            //alert("tes");
-            if (events_ToDo_marked[index]) events_ToDo_marked[index] = false;
-            else events_ToDo_marked[index] = true;
+            events_ToDo_marked[index] = !events_ToDo_marked[index];
         }
 
         if (date_To_Do_list === date_today) {
             index = events_today.indexOf(task);
             if (index > -1) {
-                //alert(events_today_marked[index]);
-                if (events_today_marked[index]) events_today_marked[index] = false;
-                else events_today_marked[index] = true;
+                events_today_marked[index] = !events_today_marked[index];
             }
         }
 
