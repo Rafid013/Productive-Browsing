@@ -1,14 +1,24 @@
 window.onload = load;
 var marked_sites = [];
-var sites_for_bar_chart = ["www.facebook.com","www.youtube.com","stackoverflow.com","www.abc.com","a",
+var sites_for_bar_chart = ["www.facebook.com","www.youtube.com","www.stackoverflow.com","www.abc.com","a",
                             "b","c","d","e","f","g","h","i","j"];
-var site_times_in_min =[10,20,30,40,50,10,20,30,40,50,11,12,13,14];
-var daily_time = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
-var weekly_time = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+var site_times_in_min =[10, 20, 30, 40, 50, 10, 20, 30, 40, 50, 11, 12, 13, 14];
+var daily_time = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+var weekly_time = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 var total_time = 365;
 var lastSeenIndex = -1;
 var curSite;
 var currently_visible_bars = 0;
+
+var uid;
+
+function showBackground(url) {
+    var element = document.getElementById("stat_page");
+    if(url === "none") element.style.backgroundImage = "none";
+    else element.style.backgroundImage = "url(" + url + ")";
+    element.style.backgroundSize = "cover";
+}
+
 
 function load() {
     chrome.storage.sync.get(["uid", "name"], function (obj) {
@@ -16,6 +26,7 @@ function load() {
 
         }
         else {
+            uid = obj.uid;
             get_marked_sites_stat(obj.uid);
         }
     });
@@ -25,6 +36,12 @@ function load() {
     document.getElementById("next_button").onclick = nextButtonClickListener;
     document.getElementById("prev_button").onclick = prevButtonClickListener;
     document.getElementById("site_name").onclick = go_to_site;
+
+    chrome.storage.sync.get("image_url", function (item) {
+        if(item.image_url !== undefined) showBackground(item.image_url);
+        else getBackgroundDownloadURL(uid, showBackground);
+    });
+
     nextButtonClickListener();
 }
 
