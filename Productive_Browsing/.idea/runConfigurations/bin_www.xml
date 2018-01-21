@@ -3,6 +3,7 @@
     <envs>
       <env name="DEBUG" value="Productive_Browsing:*" />
     </envs>
+    <browser url="http://localhost:3000/" />
     <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
       <browser url="http://localhost:3000/" />
     </EXTENSION>

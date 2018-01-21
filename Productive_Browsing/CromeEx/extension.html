@@ -46,6 +46,9 @@
         <i id="configure_profile" class="large configure icon">
             <span class="tooltiptext">Nothing Right Now</span>
         </i>
+        <i id="invert_color" class="large adjust icon">
+            <span class="tooltiptext">Color Inversion</span>
+        </i>
     </div>
     <div id="upload_progress_bar">
         <progress id="progress" value="0" max="100">
@@ -78,9 +81,17 @@
     </form>
 
         <div id="weather">
-            <iframe src="https://www.meteoblue.com/en/weather/widget/three/dhaka_bangladesh_
+            <iframe id="white" src="https://www.meteoblue.com/en/weather/widget/three/dhaka_bangladesh_
         1185241?geoloc=detect&nocurrent=0&noforecast=0&noforecast=1&days=4&tempunit=
         CELSIUS&windunit=KILOMETER_PER_HOUR&layout=dark"
+                    frameborder="0" scrolling="NO" allowtransparency="true"
+                    sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                    style="width: 360px;height: 221px">
+
+            </iframe>
+            <iframe id="black" src="https://www.meteoblue.com/en/weather/widget/three/dhaka_bangladesh_
+        1185241?geoloc=detect&nocurrent=0&noforecast=0&noforecast=1&days=4&tempunit=
+        CELSIUS&windunit=KILOMETER_PER_HOUR&layout=bright"
                     frameborder="0" scrolling="NO" allowtransparency="true"
                     sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
                     style="width: 360px;height: 221px">

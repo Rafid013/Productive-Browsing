@@ -280,11 +280,15 @@ function load()
     e.style.display = 'none';
     e = document.getElementById("favourite_list_ul");
     e.style.display = 'none';
+    document.getElementById("white").style.display = "block";
+    document.getElementById("black").style.display = "none";
+
     document.getElementById("search_container").style.display = "none";
     document.getElementById("upload_progress_bar").style.display = "none";
     document.getElementById("MyClockDisplay").onclick = toggle;
     document.getElementById("finput").onchange = fileInput;
     document.getElementById("edit_icon").onclick = selectBackground;
+    document.getElementById("invert_color").onclick = invert_color;
     document.getElementById("remove_icon").onclick = deleteBackground;
     document.getElementById("Task_Input").onsubmit = add_new_task;
     document.getElementById("show_hide").onclick = toggle_visibility;
@@ -593,3 +597,19 @@ function priority_selection_handler() {
 
 window.onload = load;
 
+function invert_color() {
+    var body = document.getElementById("homepage_body");
+    if(body.style.color === "white")
+    {
+        body.style.color = "#000000";
+        document.getElementById("white").style.display = "none";
+        document.getElementById("black").style.display = "block";
+    }
+    else
+    {
+        body.style.color = "white";
+        document.getElementById("white").style.display = "block";
+        document.getElementById("black").style.display = "none";
+    }
+    return false;
+}
