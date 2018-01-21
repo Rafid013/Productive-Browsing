@@ -104,7 +104,7 @@ function add_task_to_server(uid, task, date, normal_time, military_time, priorit
         priority : priority,
         type : "add_task"
     };
-
+    
     var task_object = {
         task : task,
         done : false,
@@ -254,7 +254,7 @@ function get_to_do_from_server(uid, date) {
             var event_list_server = JSON.parse(senderToServer.responseText);
             event_list_server.sort(comparator);
             to_do_complete = event_list_server;
-            console.log(event_list_server);
+            console.log(to_do_complete);
             var list_size = event_list_server.length;
             if(date === date_today) {
                 events_today = [];
