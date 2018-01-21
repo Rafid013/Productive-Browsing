@@ -470,6 +470,8 @@ function get_marked_sites(uid) {
             var sites_to_be_stored = {};
             for(var i = 0; i < site_list.length; ++i) {
                 sites_to_be_stored[site_list[i].site] = 0;
+                marked_sites_complete[i] = site_list[i];
+
             }
             chrome.storage.sync.set({"marked_sites" : sites_to_be_stored},function () {
                 var tmp = {
@@ -478,12 +480,6 @@ function get_marked_sites(uid) {
                 chrome.runtime.sendMessage(tmp);
 
             });
-            /*var tmp = {
-                type :"load_marked_sites"
-            };
-            chrome.runtime.sendMessage(tmp, function(response) {
-
-            });*/
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -503,18 +499,21 @@ function get_fav_link_from_server_background(uid,url) {
             var link_list = JSON.parse(senderToServer.responseText);
             var list_size = link_list.length;
             var links = [];
+
+            var randomNumber, options;
+
             for(var i = 0; i < list_size; ++i) {
                 links.push({title:"Check this link",message:link_list[i].site});
             }
 
-            var randomNumber = Math.floor(Math.random() * list_size);
+            randomNumber = Math.floor(Math.random() * list_size);
 
             if(list_size === 0)
             {
                 //alert("inside");
                 links.push({title:"No task in To-Do List",message:""},
                             {title:"No Favourite List Found",message:""});
-                var options = {
+                options = {
                     type : "list",
                     title : "You are using " + url + " too long",
                     message : "You are using " + url + " too long",
@@ -525,9 +524,9 @@ function get_fav_link_from_server_background(uid,url) {
             }
             else
             {
-                var randomNumber = Math.floor(Math.random() * list_size);
+                randomNumber = Math.floor(Math.random() * list_size);
                 suggest_link = link_list[randomNumber].site;
-                var options = {
+                options = {
                     type : "basic",
                     title : "You are using " + url + " too long",
                     message : "You may want to visit this site",

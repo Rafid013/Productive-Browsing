@@ -1,5 +1,6 @@
 window.onload = load;
 var marked_sites = [];
+var marked_sites_complete = [];
 var sites_for_bar_chart = ["www.facebook.com","www.youtube.com","www.stackoverflow.com","www.abc.com","a",
                             "b","c","d","e","f","g","h","i","j"];
 var site_times_in_min =[10, 20, 30, 40, 50, 10, 20, 30, 40, 50, 11, 12, 13, 14];
@@ -27,7 +28,7 @@ function load() {
         }
         else {
             uid = obj.uid;
-            get_marked_sites_stat(obj.uid);
+            get_marked_sites(obj.uid);
         }
     });
     prev_next_button_controller();
@@ -114,7 +115,7 @@ function populateMarkedSites() {
 
 }
 
-function get_marked_sites_stat(uid) {
+/*function get_marked_sites_stat(uid) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
     var get_marked_sites_req = {
@@ -134,7 +135,7 @@ function get_marked_sites_stat(uid) {
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
     senderToServer.send(JSON.stringify(get_marked_sites_req));
-}
+}*/
 
 function toggle_visibility_sites() {
     var e = document.getElementById("mark_sites_ul");
