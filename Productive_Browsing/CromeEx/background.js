@@ -16,6 +16,7 @@ var marked_sites = {};
 var myNotificationId;
 var threshold = 30*60;
 var timeTillMidnight = (1440-(date.getHours()*60+date.getMinutes()))*60*1000;
+var suggest_link;
 
 setTimeout(update_date,timeTillMidnight);
 function showTaskNotification(task) {
@@ -43,6 +44,12 @@ chrome.notifications.onButtonClicked.addListener(function(Id, btnIdx) {
         if (btnIdx === 0) {
             timers[last_task] = setTimeout(showTaskNotification, 2000, last_task);
         }
+    }
+    else
+    {
+        chrome.tabs.create({url:suggest_link}, function (response) {
+
+        });
     }
 });
 

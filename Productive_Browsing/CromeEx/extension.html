@@ -59,8 +59,24 @@
             <span><input id="date" type="date" name="Date" title="Date"></span>
             <span><input class="times" type="time" id="time" value="23:59:00" title="Time"></span>
         </div>
+        <div id="priority">
+            <div></div>
+            <label>
+                <input type="radio" name="0" data-location="0" value="1">
+                <div>Low</div>
+            </label>
+            <label>
+                <input type="radio" name="calc(100% - 8px)" data-location="calc(100% - 8px)" value="2">
+                <div>Medium</div>
+            </label>
+            <label>
+                <input type="radio" name="calc(200% - 12px)" data-location="calc(200% - 12px)" value="3">
+                <div>High</div>
+            </label>
+        </div>
         <input id="input_submit" type="submit" name="Submit" value="ADD">
     </form>
+
         <div id="weather">
             <iframe src="https://www.meteoblue.com/en/weather/widget/three/dhaka_bangladesh_
         1185241?geoloc=detect&nocurrent=0&noforecast=0&noforecast=1&days=4&tempunit=
