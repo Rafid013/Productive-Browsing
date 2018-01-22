@@ -1,4 +1,4 @@
-const total_pics = 3;
+const total_pics = 5;
 
 var storageRef = firebase.storage().ref();
 
