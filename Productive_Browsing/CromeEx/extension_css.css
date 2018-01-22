@@ -70,6 +70,13 @@
     cursor: pointer;
 }
 
+.error_message
+{
+    color: red;
+    text-align: center;
+    font-size: 16px;
+}
+
 .form button:hover,.form button:active,.form button:focus {
     background: #43A047;
 }
@@ -255,6 +262,7 @@ body{
     font-size: 18px;
 }
 ul {
+    font-weight: bolder;
     margin: 0;
     padding: 0;
     list-style-type: none;
@@ -357,8 +365,8 @@ ul li.checked::before {
 }
 #to_do::placeholder
 {
-    opacity: 0.8;
     text-align: center;
+    font-weight: bold;
     text-decoration: underline;
    /* color:white;*/
     font-size: 24px;
@@ -382,6 +390,7 @@ ul li.checked::before {
     text-decoration: underline;
     background-color: rgba(0,0,0,0);
     /*color: white;*/
+    padding-left: 10px;
     border: none;
 }
 .times{
@@ -389,6 +398,7 @@ ul li.checked::before {
     background-color: rgba(0,0,0,0);
     /*color: white;*/
     border: none;
+    padding: 10px;
     font-size: 18px;
 }
 
@@ -563,14 +573,20 @@ progress::-webkit-progress-value {
     padding-right: 5px;
     padding-bottom: 10px;
     padding-left: 10px;
-    background: #4d4772;
+    background: rgba(77, 71, 114,.3);
     font-size: 18px;
 }
 
+#search_form
+{
+    padding : 10px;
+    padding-left: 5px;
+}
 
 #priority {
     width:100%;
     box-sizing:border-box;
+    font-weight: bold;
     /*color: white;*/
     /* background-color:white;*/
     box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.4);
@@ -612,9 +628,6 @@ progress::-webkit-progress-value {
     background: rgba(43, 51, 63,.2);
 }
 
-#priority label:first-child {
-    border-left:none;
-}
 
 #priority label input {
     position:absolute;
@@ -628,6 +641,68 @@ progress::-webkit-progress-value {
 }
 
 #priority label.selected {
+    color: #1a1a1a;
+}
+
+
+#search_priority {
+    width:100%;
+    box-sizing:border-box;
+    font-weight: bold;
+    /*color: white;*/
+    /* background-color:white;*/
+    box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.4);
+    text-align:center;
+    position:relative;
+    border-radius:2px;
+}
+
+#search_priority > div {
+    display:block;
+    position:absolute;
+    top:-4px;
+    left:-4px;
+    bottom:-4px;
+    width:calc(33.33% + 8px);
+    background-color: rgba(50, 150, 255,1);
+    border-radius:2px;
+    box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.4);
+    z-index:1;
+    pointer-events:none;
+    transform: translateX(calc(100% - 8px));
+    transition:transform 0.3s;
+}
+
+#search_priority::after {
+    content:"";
+    display:block;
+    clear:both;
+}
+
+#search_priority label {
+    float:left;
+    width:calc(33.333% - 1px);
+    position:relative;
+    padding:0px 0px 20px;
+    overflow:hidden;
+    cursor:pointer;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    background: rgba(43, 51, 63,.2);
+}
+
+
+#search_priority label input {
+    position:absolute;
+    top:-200%;
+}
+
+#search_priority label div {
+    z-index: 5;
+    position: absolute;
+    width: 100%;
+}
+
+#search_priority label.selected {
     color: #1a1a1a;
 }
 

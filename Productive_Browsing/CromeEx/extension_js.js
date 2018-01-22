@@ -14,12 +14,14 @@ var curLink = "";
 var uid;
 var name;
 var priority = 2;
+var search_by_priority = 2;
 
 function showBackground(url) {
     var element = document.getElementById('homepage_body');
     if(url === "none") element.style.backgroundImage = "none";
     else element.style.backgroundImage = "url(" + url + ")";
     element.style.backgroundSize = "cover";
+    document.getElementById("loading").style.display = "none";
 }
 
 function loadPage() {
@@ -214,9 +216,12 @@ function load()
     e.style.display = 'none';
     e = document.getElementById("favourite_list_ul");
     e.style.display = 'none';
+    document.getElementById("error_message_reg").style.display = "none";
+    document.getElementById("error_message_logIn").style.display = "none";
+    document.getElementById("configure_profile").style.display = "none";
     document.getElementById("white").style.display = "block";
     document.getElementById("black").style.display = "none";
-    document.getElementById("loading").style.display = "none";
+    document.getElementById("loading").style.display = "block";
     document.getElementById("search_container").style.display = "none";
     document.getElementById("upload_progress_bar").style.display = "none";
     document.getElementById("MyClockDisplay").onclick = toggle;
@@ -251,7 +256,7 @@ function newElement(isDone,curr_priority)
       }
       else if(curr_priority === 2)
       {
-          li.style.color = "#caf441";
+          li.style.color = "#e5db6b";
           li.title = "Medium Priority"
       }
       else
@@ -370,6 +375,41 @@ function populateToDoList()
 	ul.addEventListener('click',mark_event_listener,false);
 }
 
+function populateToDoListByPriority()
+{
+    var ul = document.getElementById("task_list_ul");
+    ul.removeEventListener('click',mark_event_listener,false);
+    while (ul.firstChild) {
+        ul.removeChild(ul.firstChild);
+    }
+
+    var i;
+    for (i = 0; i < events_ToDo_List.length; i++)
+    {
+        curTask = events_ToDo_List[i];
+        var curr_priority = to_do_complete[i].priority;
+        if(curr_priority === Number(search_by_priority))
+        {
+            newElement(events_ToDo_marked[i],curr_priority);
+        }
+    }
+
+    var close = document.getElementsByClassName("close");
+    for (i = 0; i < close.length; i++)
+    {
+        close[i].onclick = function() {
+            var div = this.parentElement;
+            div.style.display = "none";
+
+            var task = div.textContent.substring(0, div.textContent.lastIndexOf(" "));
+            var time = div.textContent.substring(div.textContent.lastIndexOf(" ") + 1, div.textContent.length - 1);
+
+            delete_task_from_server(uid, task, date_To_Do_list, time);
+        }
+    }
+    //var list = document.querySelector('ul');
+    ul.addEventListener('click',mark_event_listener,false);
+}
 
 function mark_event_listener(ev) {
     if (ev.target.tagName === 'LI') {
@@ -470,6 +510,7 @@ function logIn()
     var password = document.getElementById("login_password").value;
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then(function (userRecord) {
+            document.getElementById("error_message_logIn").style.display = "none";
             document.getElementById("loading").style.display = "none";
             console.log("Signed In");
             console.log("UID: " + userRecord.uid);
@@ -486,11 +527,33 @@ function logIn()
             chrome.storage.sync.set({"name": name});
         }).catch(function (error) {
             document.getElementById("loading").style.display = "none";
-            console.log("Error when signing in for email: " + email);
+            //console.log("Error when signing in for email: " + email);
             var input = document.getElementById("login_email");
+            if(error.code === "auth/invalid-email")
+            {
+                var text = "The email address is improperly formatted";
+                document.getElementById("error_message_logIn").innerText =  text;
+            }
+
+            else if(error.code === "auth/wrong-password")
+            {
+                var text = "The password is invalid";
+                document.getElementById("error_message_logIn").innerText =  text;
+            }
+            else if(error.code === "auth/user-not-found")
+            {
+                var text = "No user record found";
+                document.getElementById("error_message_logIn").innerText =  text;
+            }
+            else if(error.code === "auth/internal-error")
+            {
+                var text = "Internal Error. Try again.";
+                document.getElementById("error_message_logIn").innerText = text;
+            }
+            document.getElementById("error_message_logIn").style.display = "block";
             //input.setCustomValidity(error.message);
-            console.log(error.code);
-            console.log(error.message);
+            //console.log(error.code);
+            //console.log(error.message);
         });
     document.getElementById("logIn_Form").reset();
     return false;
@@ -512,6 +575,7 @@ function register()
             var receivedData = JSON.parse(senderToServer.responseText);
             document.getElementById("loading").style.display = "none";
             if(receivedData.message === "success") {
+                document.getElementById("error_message_reg").style.display = "none";
                 name = receivedData.name;
                 uid = receivedData.uid;
                 //store name and uid
@@ -525,6 +589,29 @@ function register()
                 firebase.auth().signInWithEmailAndPassword(register_req.email, register_req.password);
             }
             else {
+
+                if(receivedData.message === "auth/invalid-email")
+                {
+                    var text = "The email address is improperly formatted";
+                    document.getElementById("error_message_reg").innerText =  text;
+                }
+
+                else if(receivedData.message === "auth/invalid-password")
+                {
+                    var text = "The password must be a string with at least 6 characters";
+                    document.getElementById("error_message_reg").innerText =  text;
+                }
+                else if(receivedData.message === "auth/email-already-exists")
+                {
+                    var text = "The email address is already in use";
+                    document.getElementById("error_message_reg").innerText =  text;
+                }
+                else if(receivedData.message === "auth/internal-error")
+                {
+                    var text = "Internal Error. Try again.";
+                    document.getElementById("error_message_reg").innerText = text;
+                }
+                document.getElementById("error_message_reg").style.display = "block";
                 //show the error
             }
         }
@@ -548,6 +635,16 @@ function priority_selection_handler() {
             var div = document.querySelector("#priority > div");
             div.style.transform = "translateX(" + event.target.name + ")";
             priority = event.target.value;
+        },false);
+    }
+    inputs = document.querySelectorAll("#search_priority input");
+    for(var i=0; i<inputs.length ;i++)
+    {
+        inputs[i].addEventListener('click',function (event) {
+            var div = document.querySelector("#search_priority > div");
+            div.style.transform = "translateX(" + event.target.name + ")";
+            search_by_priority = event.target.value;
+            populateToDoListByPriority();
         },false);
     }
 }

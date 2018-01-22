@@ -20,6 +20,7 @@ function showBackground(url) {
     if(url === "none") element.style.backgroundImage = "none";
     else element.style.backgroundImage = "url(" + url + ")";
     element.style.backgroundSize = "cover";
+    document.getElementById("loading").style.display = "none";
 }
 
 
@@ -35,6 +36,8 @@ function load() {
     });
     prev_next_button_controller();
     nextButtonClickListener();
+    document.getElementById("site_usage").style.display = "none";
+    document.getElementById("mark_sites_ul").addEventListener('click',marked_site_onclick_handler, false);
     document.getElementById("mark_sites_ul").style.display = "none";
     document.getElementById("show_hide").onclick = toggle_visibility_sites;
     document.getElementById("next_button").onclick = nextButtonClickListener;
@@ -99,24 +102,26 @@ function populateMarkedSites() {
         }
     }
     //var list = document.querySelector('ul');
-    ul.addEventListener('click', function(ev) {
-        // noinspection JSUnresolvedVariable
-        if (ev.target.tagName === 'LI') {
-            var div = ev.target;
-            var site = div.textContent.substring(0, div.textContent.length - 1);
-            var index = sites_for_bar_chart.indexOf(site);
-            if(index !== -1)
-            {
-                document.getElementById("site_name").innerText = site;
-                document.getElementById("daily_usage").innerText = min_to_hour(daily_time[index]);
-                document.getElementById("weekly_usage").innerText = min_to_hour(weekly_time[index]);
-                document.getElementById("monthly_usage").innerText = min_to_hour(monthly_time[index]);
-            }
-        }
-    }, false);
 
 }
 
+
+function marked_site_onclick_handler(ev) {
+    // noinspection JSUnresolvedVariable
+    if (ev.target.tagName === 'LI') {
+        var div = ev.target;
+        var site = div.textContent.substring(0, div.textContent.length - 1);
+        var index = sites_for_bar_chart.indexOf(site);
+        if(index !== -1)
+        {
+            document.getElementById("site_usage").style.display = "block";
+            document.getElementById("site_name").innerText = site;
+            document.getElementById("daily_usage").innerText = min_to_hour(daily_time[index]);
+            document.getElementById("weekly_usage").innerText = min_to_hour(weekly_time[index]);
+            document.getElementById("monthly_usage").innerText = min_to_hour(monthly_time[index]);
+        }
+    }
+}
 /*function get_marked_sites_stat(uid) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);
@@ -140,11 +145,14 @@ function populateMarkedSites() {
 }*/
 
 function toggle_visibility_sites() {
+
     var e = document.getElementById("mark_sites_ul");
     if(e.style.display === 'none')
         e.style.display = 'block';
-    else
+    else {
+        document.getElementById("site_usage").style.display = "none";
         e.style.display = 'none';
+    }
     return false;
 }
 
@@ -171,10 +179,11 @@ function populate_bar_chart(bar_title_array, bar_value_array, total_min) {
         var percent = (bar_value_array[i]*100.0)/total_min;
         var round_up_value = round(percent,2);
         percent = percent.toString() + "%";
-        var text = bar_title_array[i] + " " + min_to_hour(bar_value_array[i])+ "   " + round_up_value.toString() +"%";
+        var text = bar_title_array[i] + " :: " + min_to_hour(bar_value_array[i]);
         bars[i].style.width = percent;
         bars_container[i].style.display = "block";
         labels[i].innerText = text;
+        bars[i].innerText =  round_up_value.toString() +"%";
     }
 
     prev_next_button_controller();
