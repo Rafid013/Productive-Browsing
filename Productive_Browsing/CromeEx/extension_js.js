@@ -36,6 +36,10 @@ function loadPage() {
             document.getElementById("home_page").style.display = "block";
             uid = user.uid;
             name = user.displayName;
+
+            document.getElementById("Things_To_DO").innerText = "Hello " + name
+                                + "\n Your Tasks Today";
+
             get_to_do_from_server(uid, date_today);
             get_fav_link_from_server(uid);
             get_marked_sites(uid);

@@ -430,6 +430,41 @@ function unmark_site_in_server(uid, link) {
 }
 
 
+function unmark_site_in_server_from_stat(uid, link) {
+    var senderToServer = new XMLHttpRequest();
+    senderToServer.open("POST", 'http://localhost:3000/', true);
+    var unmark_site_req = {
+        uid : uid,
+        link : link,
+        type : "unmark_site"
+    };
+    senderToServer.onreadystatechange = function () {
+        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
+            if(senderToServer.responseText === "success") {
+                //delete from storage
+                // alert("success");
+                var tmp = {
+                    type :"unmark_site",
+                    site :link
+                };
+                chrome.runtime.sendMessage(tmp, function(response) {
+
+                });
+                location.reload();
+            }
+            else {
+                //handle
+            }
+        }
+        else {
+            //handle
+        }
+    };
+    senderToServer.setRequestHeader("Content-Type", "application/json");
+    senderToServer.send(JSON.stringify(unmark_site_req));
+}
+
+
 function update_site_time_in_server(uid, site, time) {
     var senderToServer = new XMLHttpRequest();
     senderToServer.open("POST", 'http://localhost:3000/', true);

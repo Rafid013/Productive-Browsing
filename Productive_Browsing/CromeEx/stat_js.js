@@ -97,8 +97,7 @@ function populateMarkedSites() {
     {
         close[i].onclick = function() {
             var div = this.parentElement;
-            //div.style.display = "none";
-            alert("unmark: "+div.textContent.substring(0, div.textContent.length - 1)+" ?");
+            unmark_site_in_server_from_stat(uid,div.textContent.substring(0, div.textContent.length - 1));
         }
     }
     //var list = document.querySelector('ul');
@@ -174,9 +173,10 @@ function populate_bar_chart(bar_title_array, bar_value_array, total_min) {
     var bars_container = document.getElementsByClassName("progress-bar horizontal");
     var labels =document.getElementsByClassName("bar_chart_inside_text");
     var length = bar_title_array.length;
+
     for(var i = 0; i<length && i<5; i++)
     {
-        var percent = (bar_value_array[i]*100.0)/total_min;
+        var percent = (bar_value_array[i]*100.0) / total_min;
         var round_up_value = round(percent,2);
         percent = percent.toString() + "%";
         var text = bar_title_array[i] + " :: " + min_to_hour(bar_value_array[i]);
