@@ -16,6 +16,8 @@
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
     opacity: inherit;
 }
+
+
 .form input {
     font-family: "Roboto", sans-serif;
     outline: 0;
@@ -81,12 +83,14 @@
     background: #43A047;
 }
 .form .message {
+    font-weight: bold;
     margin: 15px 0 0;
-    color: #b3b3b3;
+    color: #FFFFFF;
     font-size: 16px;
 }
 .form .message a {
-    color: #4CAF50;
+    font-weight: bold;
+    color: #4ef43f;
     text-decoration: none;
     font-size: 16px;
 }

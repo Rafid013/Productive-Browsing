@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('productive-browsing:server');
+var debug = require('debug')('productive-browsing:Server');
 var http = require('http');
 
 /**
@@ -17,7 +17,7 @@ app.set('port', port);
 
 // noinspection JSUnresolvedFunction
 /**
- * Create HTTP server.
+ * Create HTTP Server.
  */
 
 var server = http.createServer(app);
@@ -51,7 +51,7 @@ function normalizePort(val) {
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * Event listener for HTTP Server "error" event.
  */
 
 function onError(error) {
@@ -79,7 +79,7 @@ function onError(error) {
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * Event listener for HTTP Server "listening" event.
  */
 
 function onListening() {

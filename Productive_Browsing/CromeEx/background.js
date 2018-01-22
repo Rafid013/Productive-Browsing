@@ -691,7 +691,7 @@ function update_per_day_stat() {
         for (var k in marked_sites){
             marked_sites[k] = 0;
         }
-        if(date_today !== obj.date)
+        if(date_today === obj.date)
         {
             chrome.storage.sync.get(["uid", "name"], function (object) {
                 if(object.uid === undefined)

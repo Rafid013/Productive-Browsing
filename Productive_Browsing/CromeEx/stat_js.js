@@ -269,8 +269,7 @@ function populate_fields(complete_list) {
         sites_for_bar_chart[i] = complete_list[i].site;
         monthly_time[i] = complete_list[i].monthly_time;
         site_times_in_min[i] = complete_list[i].monthly_time*complete_list[i].num_of_months
-                            +complete_list[i].total_time_this_month
-                            +complete_list[i].daily_time;
+                            +complete_list[i].total_time_this_month;
         daily_time[i] = complete_list[i].daily_time;
         weekly_time[i] = complete_list[i].weekly_time;
         if(total_monthly_time === 0) total_time = 1;

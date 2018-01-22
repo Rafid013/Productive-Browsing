@@ -59,7 +59,7 @@ function mark_task_in_server(uid, task, date, time) {
             }
         }
         else {
-            //server connection fault
+            //Server connection fault
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -234,7 +234,7 @@ function get_fav_link_from_server(uid) {
             //store in storage
         }
         else {
-            //server connection failed
+            //Server connection failed
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
@@ -507,8 +507,7 @@ function get_marked_sites(uid) {
                 sites_to_be_stored[site_list[i].site] = 0;
                 marked_sites_complete[i] = site_list[i];
                 total_monthly_time += (site_list[i].monthly_time * site_list[i].num_of_months)
-                                        + site_list[i].total_time_this_month
-                                        + site_list[i].daily_time;
+                                        + site_list[i].total_time_this_month;
                 //total_monthly_time += site_list[i].monthly_time;
             }
             populate_fields(marked_sites_complete);
@@ -579,7 +578,7 @@ function get_fav_link_from_server_background(uid,url) {
             //alert("inside");
         }
         else {
-            //server connection failed
+            //Server connection failed
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");

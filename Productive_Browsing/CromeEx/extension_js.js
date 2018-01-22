@@ -29,6 +29,8 @@ function loadPage() {
         var body = document.getElementById("homepage_body");
         body.style.display = "block";
         if (user) {
+            document.getElementById("error_message_reg").style.display = "none";
+            document.getElementById("error_message_logIn").style.display = "none";
             // User is signed in.
             //body.style.backgroundColor = "#6d7c62";
             body.style.color = "white";
@@ -75,7 +77,7 @@ function loadPage() {
             logInPage();
             document.getElementById("signup_page").style.display = "block";
             document.getElementById("home_page").style.display = "none";
-            showBackground("backgrounds/background1.jpeg");
+            showBackground("backgrounds/background4.jpeg");
         }
     });
 }
@@ -142,6 +144,7 @@ function fileInput() {
 	var image = document.getElementById('finput').files[0];
     document.getElementById("upload_progress_bar").style.display = "block";
     upload_image(uid, image, function (downloadURL) {
+        document.getElementById("loading").style.display = "block";
         console.log(downloadURL);
         chrome.storage.sync.set({"image_url": downloadURL});
         document.getElementById("upload_progress_bar").style.display = "none";
@@ -566,10 +569,22 @@ function logIn()
 function register()
 {
     document.getElementById("loading").style.display = "block";
+    var name = document.getElementById("reg_name").value;
+    var email = document.getElementById("reg_email").value;
+    var password = document.getElementById("reg_password").value;
+    var re_password = document.getElementById("reg_re_password").value;
+    var text;
+    if(password !== re_password) {
+        document.getElementById("loading").style.display = "none";
+        text = "Passwords don't match";
+        document.getElementById("error_message_reg").innerText =  text;
+        document.getElementById("error_message_reg").style.display = "block";
+        return false;
+    }
     var register_req = {
-        name : document.getElementById("reg_name").value,
-        email : document.getElementById("reg_email").value,
-        password : document.getElementById("reg_password").value,
+        name : name,
+        email : email,
+        password : password,
         type : "sign_up"
     };
     var senderToServer = new XMLHttpRequest();
@@ -596,23 +611,23 @@ function register()
 
                 if(receivedData.message === "auth/invalid-email")
                 {
-                    var text = "The email address is improperly formatted";
+                    text = "The email address is improperly formatted";
                     document.getElementById("error_message_reg").innerText =  text;
                 }
 
                 else if(receivedData.message === "auth/invalid-password")
                 {
-                    var text = "The password must be a string with at least 6 characters";
+                    text = "The password must be a string with at least 6 characters";
                     document.getElementById("error_message_reg").innerText =  text;
                 }
                 else if(receivedData.message === "auth/email-already-exists")
                 {
-                    var text = "The email address is already in use";
+                    text = "The email address is already in use";
                     document.getElementById("error_message_reg").innerText =  text;
                 }
                 else if(receivedData.message === "auth/internal-error")
                 {
-                    var text = "Internal Error. Try again.";
+                    text = "Internal Error. Try again.";
                     document.getElementById("error_message_reg").innerText = text;
                 }
                 document.getElementById("error_message_reg").style.display = "block";
@@ -620,7 +635,7 @@ function register()
             }
         }
         else {
-            //show there was a problem while connecting to server, try again later
+            //show there was a problem while connecting to Server, try again later
         }
     };
     senderToServer.setRequestHeader("Content-Type", "application/json");
