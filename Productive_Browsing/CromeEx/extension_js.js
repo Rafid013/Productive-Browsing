@@ -77,7 +77,7 @@ function loadPage() {
             logInPage();
             document.getElementById("signup_page").style.display = "block";
             document.getElementById("home_page").style.display = "none";
-            showBackground("backgrounds/background4.jpeg");
+            showBackground("backgrounds/login.jpeg");
         }
     });
 }
