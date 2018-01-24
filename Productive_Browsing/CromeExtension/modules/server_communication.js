@@ -304,151 +304,153 @@ function add_fav_link_in_server(uid, link) {
 }
 
 
-function mark_site_in_server(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var mark_site_req = {
-        uid : uid,
-        link : link,
-        type : "mark_site"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //store
-                var tmp ={
-                    type : "mark_site",
-                    site : link
-                };
-                chrome.runtime.sendMessage(tmp, function(response) {
+function mark_site_in_server(uid, site) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var site_obj = {
+            site : site,
+            num_of_days : 0,
+            daily_time : 0, //in minutes
+            weekly_time : 0, //in minutes
+            monthly_time : 0, //in minutes
+            total_time_this_month : 0,
+            total_time_this_week : 0,
+            num_of_months : 0,
+            num_of_weeks : 0
+        };
+        ref.child(dataSnapshot.key + '/Time Killer Sites').push(site_obj).then(function () {
+            console.log("Site: " + site + " marked for uid: " + uid);
+            var tmp = {
+                type : "mark_site",
+                site : site
+            };
+            chrome.runtime.sendMessage(tmp, function(response) {
 
-                });
-            }
-            else {
-                //handle
-            }
-        }
-        else {
-            //handle
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(mark_site_req));
+            });
+        }).catch(function (error) {
+            console.log(error.code);
+            console.log(error.message);
+        });
+    });
 }
 
-
 function unmark_site_in_server(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var unmark_site_req = {
-        uid : uid,
-        link : link,
-        type : "unmark_site"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //delete from storage
-               // alert("success");
-                var tmp = {
-                    type :"unmark_site",
-                    site :link
-                };
-                chrome.runtime.sendMessage(tmp, function(response) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var siteRef = ref.child(dataSnapshot.key + '/Time Killer Sites').orderByChild('site').equalTo(link);
+        siteRef.once("child_added").then(function (dataSnapshot1) {
+            ref.child(dataSnapshot.key + '/Time Killer Sites/' + dataSnapshot1.key).set(null)
+                .then(function () {
+                    console.log("Site: " + link + " unmarked for uid: " + uid);
+                    var tmp = {
+                        type :"unmark_site",
+                        site :link
+                    };
+                    chrome.runtime.sendMessage(tmp, function(response) {
 
-                });
-            }
-            else {
-                //handle
-            }
-        }
-        else {
-            //handle
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(unmark_site_req));
+                    });
+                }).catch(function (error) {
+                console.log(error.code);
+                console.log(error.message);
+            })
+        })
+    });
 }
 
 
 function unmark_site_in_server_from_stat(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var unmark_site_req = {
-        uid : uid,
-        link : link,
-        type : "unmark_site"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //delete from storage
-                // alert("success");
-                var tmp = {
-                    type :"unmark_site",
-                    site :link
-                };
-                chrome.runtime.sendMessage(tmp, function(response) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var siteRef = ref.child(dataSnapshot.key + '/Time Killer Sites').orderByChild('site').equalTo(link);
+        siteRef.once("child_added").then(function (dataSnapshot1) {
+            ref.child(dataSnapshot.key + '/Time Killer Sites/' + dataSnapshot1.key).set(null)
+                .then(function () {
+                    console.log("Site: " + link + " unmarked for uid: " + uid);
+                    var tmp = {
+                        type :"unmark_site",
+                        site :link
+                    };
+                    chrome.runtime.sendMessage(tmp, function(response) {
 
-                });
-                location.reload();
-            }
-            else {
-                //handle
-            }
-        }
-        else {
-            //handle
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(unmark_site_req));
+                    });
+                    location.reload();
+                }).catch(function (error) {
+                console.log(error.code);
+                console.log(error.message);
+            })
+        })
+    });
 }
 
 
-function update_site_time_in_server(uid, site, time) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    console.log(uid);
-    console.log(site);
-    console.log(time);
-    var update_site_time_req = {
-        uid : uid,
-        site : site,
-        time : time,
-        type : "update_site_time"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                console.log(senderToServer.responseText);
-            }
-            else {
-                //to be implemented
-            }
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(update_site_time_req));
+function update_site_time_in_server(uid, site, time_spent_today) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var siteRef = ref.child(dataSnapshot.key + '/Time Killer Sites').orderByChild('site').equalTo(site);
+        siteRef.once("child_added").then(function (dataSnapshot1) {
+            ref.child(dataSnapshot.key + "/Time Killer Sites/" + dataSnapshot1.key).once("value")
+            .then(function (data) {
+                var daily_time = data.val().daily_time;
+                var weekly_time = data.val().weekly_time;
+                var monthly_time = data.val().monthly_time;
+                var total_time_this_month = data.val().total_time_this_month;
+                var total_time_this_week = data.val().total_time_this_week;
+                var num_of_days = data.val().num_of_days;
+                var num_of_months = data.val().num_of_months;
+                var num_of_weeks = data.val().num_of_weeks;
+
+                //update daily time
+                daily_time = (daily_time*num_of_days + time_spent_today)/(++num_of_days);
+
+                //update weekly time
+                total_time_this_week += time_spent_today;
+                if(num_of_days%7 === 0) {
+                    weekly_time = (weekly_time*num_of_weeks + total_time_this_week)/(++num_of_weeks);
+                    total_time_this_week = 0;
+                }
+
+                //update monthly time
+                total_time_this_month += time_spent_today;
+                if(num_of_days%30 === 0) {
+                    monthly_time = (monthly_time*num_of_months + total_time_this_month)/(++num_of_months);
+                    total_time_this_month = 0;
+                }
+                ref.child(dataSnapshot.key + "/Time Killer Sites/" + dataSnapshot1.key)
+                    .update({
+                        daily_time : daily_time,
+                        num_of_days : num_of_days,
+                        weekly_time : weekly_time,
+                        num_of_weeks : num_of_weeks,
+                        total_time_this_week : total_time_this_week,
+                        monthly_time : monthly_time,
+                        num_of_months : num_of_months,
+                        total_time_this_month : total_time_this_month
+                    }).then(function () {
+                    console.log("Times updated for site: " + site);
+                }).catch(function(error){
+                    console.log(error.code);
+                    console.log(error.message);
+                });
+            })
+        })
+    });
 }
 
 function get_marked_sites(uid) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var get_marked_sites_req = {
-        uid : uid,
-        type : "get_marked_sites"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            //console.log(senderToServer.responseText);
-            var site_list = JSON.parse(senderToServer.responseText);
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var siteRef = ref.child(dataSnapshot.key + '/Time Killer Sites');
+        siteRef.once("value").then(function (data) {
+            var site_list = [];
+            data.forEach(function (index) {
+                site_list.push(index.val());
+            });
             var sites_to_be_stored = {};
             for(var i = 0; i < site_list.length; ++i) {
                 sites_to_be_stored[site_list[i].site] = 0;
                 marked_sites_complete[i] = site_list[i];
                 total_monthly_time += (site_list[i].monthly_time * site_list[i].num_of_months)
-                                        + site_list[i].total_time_this_month;
+                    + site_list[i].total_time_this_month;
                 //total_monthly_time += site_list[i].monthly_time;
             }
             populate_fields(marked_sites_complete);
@@ -459,10 +461,8 @@ function get_marked_sites(uid) {
                 chrome.runtime.sendMessage(tmp);
 
             });
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(get_marked_sites_req));
+        });
+    });
 }
 
 
