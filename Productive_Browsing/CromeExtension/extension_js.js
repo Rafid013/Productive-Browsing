@@ -47,9 +47,8 @@ function loadPage() {
             get_to_do_from_server(uid, date_today);
             get_fav_link_from_server(uid);
             get_marked_sites(uid);
-
-            chrome.storage.sync.get(["image_url","color"], function (item) {
-                getBackgroundDownloadURL(uid, showBackground);
+            getBackgroundDownloadURL(uid, showBackground);
+            chrome.storage.sync.get("color", function (item) {
                 if(item.color === undefined)
                 {
                     chrome.storage.sync.set({"color" : "white"});
