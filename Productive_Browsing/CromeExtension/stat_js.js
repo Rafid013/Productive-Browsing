@@ -96,7 +96,7 @@ function populateMarkedSites() {
     {
         close[i].onclick = function() {
             var div = this.parentElement;
-            unmark_site_in_server_from_stat(uid,div.textContent.substring(0, div.textContent.length - 1));
+            unmark_site_in_background_from_stat(uid,div.textContent.substring(0, div.textContent.length - 1));
         }
     }
     //var list = document.querySelector('ul');

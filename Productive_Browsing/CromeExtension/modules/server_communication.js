@@ -45,29 +45,29 @@ function mark_task_in_server(uid, task, date, time) {
                 .update({done: !dataSnapshot1.child("done").val()})
                 .then(function () {
                     console.log("Task: " + task + " marked for uid: " + uid + ", Date: " + date);
-                    if(date === date_today)
-                    {
-                        var hour = parseInt(time.substring(0,2));
-                        var min = parseInt(time.substring(3,5));
-                        var modifier = time.substring(5,7);
-                        if(hour ===  12) hour =0;
-                        if(modifier === "PM") hour = hour + 12;
-                        var milTime = hour + ":" + min;
-
-                        var tmp = {
-                            type : "change_Timer",
-                            task : task,
-                            time: milTime
-                        };
-                        chrome.runtime.sendMessage(tmp);
-
-                    }
                 }).catch(function (error) {
                 console.log(error.code);
                 console.log(error.message);
             });
         });
     });
+    if(date === date_today)
+    {
+        var hour = parseInt(time.substring(0,2));
+        var min = parseInt(time.substring(3,5));
+        var modifier = time.substring(5,7);
+        if(hour ===  12) hour =0;
+        if(modifier === "PM") hour = hour + 12;
+        var milTime = hour + ":" + min;
+
+        var tmp = {
+            type : "change_Timer",
+            task : task,
+            time: milTime
+        };
+        chrome.runtime.sendMessage(tmp);
+
+    }
 }
 
 
@@ -80,70 +80,72 @@ function delete_fav_link_from_server(uid, link) {
             ref.child(dataSnapshot.key + '/Favourite Sites/' + dataSnapshot1.key).set(null)
                 .then(function () {
                     console.log("Favourite Site: " + link + " deleted for uid: " + uid);
-                    var del_index = favourite_links.indexOf(link);
-                    if(del_index > -1) favourite_links.splice(del_index, 1);
-                    populateFavouriteLinks();
                 }).catch(function (error) {
                 console.log(error.code);
                 console.log(error.message);
             });
         })
     });
+
+    var del_index = favourite_links.indexOf(link);
+    if(del_index > -1) favourite_links.splice(del_index, 1);
+    populateFavouriteLinks();
 }
 
 function add_task_to_server(uid, task, date, normal_time, military_time, priority) {
+    var task_object = {
+        task : task,
+        normal_time : normal_time,
+        military_time : military_time,
+        priority : priority,
+        done : false
+    };
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added").then(function (dataSnapshot) {
-        var task_object = {
-            task : task,
-            normal_time : normal_time,
-            military_time : military_time,
-            priority : priority,
-            done : false
-        };
         var dateRef = ref.child(dataSnapshot.key + '/To_Do_List').child(date);
         dateRef.push(task_object).then(function () {
             console.log("Task: " + task_object.task +
                 " added for uid: " + uid + ", Date: " + date + ", Time: " + task_object.normal_time);
-            if(date === date_To_Do_list)
-            {
-                to_do_complete.push(task_object);
-                to_do_complete.sort(comparator);
-
-                if(date === date_today) {
-                    events_today = [];
-                    events_today_marked = [];
-                }
-
-                events_ToDo_List = [];
-                events_ToDo_marked = [];
-                for(var i = 0; i < to_do_complete.length; ++i) {
-                    var task = to_do_complete[i].task;
-                    var normal_time = to_do_complete[i].normal_time;
-                    events_ToDo_List.push(task + " " + normal_time);
-                    events_ToDo_marked[i]  = to_do_complete[i].done;
-                    if(date === date_today) {
-                        events_today.push(task);
-                        events_today_marked[i] = to_do_complete[i].done;
-                    }
-                }
-                populateToDoList();
-                if(date === date_today)
-                {
-                    Scroll_Events();
-                    var tmp = {
-                        type : "add_Timer",
-                        task : task,
-                        time: military_time
-                    };
-                    chrome.runtime.sendMessage(tmp);
-                }
-            }
         }).catch(function (error) {
             console.log(error.code);
             console.log(error.message);
         });
     });
+
+    if(date === date_To_Do_list)
+    {
+        to_do_complete.push(task_object);
+        to_do_complete.sort(comparator);
+
+        if(date === date_today) {
+            events_today = [];
+            events_today_marked = [];
+        }
+
+        events_ToDo_List = [];
+        events_ToDo_marked = [];
+        for(var i = 0; i < to_do_complete.length; ++i) {
+            var task_temp = to_do_complete[i].task;
+            var normal_time_temp = to_do_complete[i].normal_time;
+            events_ToDo_List.push(task_temp + " " + normal_time_temp);
+            events_ToDo_marked[i]  = to_do_complete[i].done;
+            if(date === date_today) {
+                events_today.push(task);
+                events_today_marked[i] = to_do_complete[i].done;
+            }
+        }
+        populateToDoList();
+        if(date === date_today)
+        {
+            Scroll_Events();
+            var tmp = {
+                type : "add_Timer",
+                task : task,
+                time: military_time
+            };
+            chrome.runtime.sendMessage(tmp);
+        }
+    }
 }
 
 function delete_task_from_server(uid, task, date, time) {
@@ -154,37 +156,38 @@ function delete_task_from_server(uid, task, date, time) {
             ref.child(dataSnapshot.key + '/To_Do_List/' + date + "/" + dataSnapshot1.key).set(null)
                 .then(function () {
                     console.log("Task: " + task + " deleted for uid: " + uid + ", Date: " + date);
-                    var index;
-                    if(date === date_To_Do_list)
-                    {
-                        index = delete_from_array(events_ToDo_List, task + " " + time);
-                        //alert(index);
-                        if(index > -1)
-                        {
-                            //events_ToDo_marked.splice(index,1);
-                        }
-                        populateToDoList();
-                        //search_to_do_from_server(uid,date_To_Do_list);
-                    }
-                    if(date === date_today) {
-                        index = delete_from_array(events_today, task);
-                        if(index > -1)
-                        {
-                            //events_today_marked.splice(index,1);
-                        }
-                        Scroll_Events();
-                        var tmp = {
-                            type : "delete_Timer",
-                            task : task
-                        };
-                        chrome.runtime.sendMessage(tmp);
-                    }
                 }).catch(function (error) {
                 console.log(error.code);
                 console.log(error.message);
             })
         })
-    })
+    });
+
+    var index;
+    if(date === date_To_Do_list)
+    {
+        index = delete_from_array(events_ToDo_List, task + " " + time);
+        //alert(index);
+        if(index > -1)
+        {
+            //events_ToDo_marked.splice(index,1);
+        }
+        populateToDoList();
+        //search_to_do_from_server(uid,date_To_Do_list);
+    }
+    if(date === date_today) {
+        index = delete_from_array(events_today, task);
+        if(index > -1)
+        {
+            //events_today_marked.splice(index,1);
+        }
+        Scroll_Events();
+        var tmp = {
+            type : "delete_Timer",
+            task : task
+        };
+        chrome.runtime.sendMessage(tmp);
+    }
 }
 
 function get_fav_link_from_server(uid) {
@@ -320,18 +323,41 @@ function mark_site_in_server(uid, site) {
         };
         ref.child(dataSnapshot.key + '/Time Killer Sites').push(site_obj).then(function () {
             console.log("Site: " + site + " marked for uid: " + uid);
-            var tmp = {
-                type : "mark_site",
-                site : site
-            };
-            chrome.runtime.sendMessage(tmp, function(response) {
-
-            });
         }).catch(function (error) {
             console.log(error.code);
             console.log(error.message);
         });
     });
+}
+
+function mark_site_in_background(uid, site) {
+    var tmp = {
+        type : "mark_site",
+        site : site,
+        uid : uid
+    };
+    chrome.runtime.sendMessage(tmp, function(response) {
+
+    });
+}
+
+
+
+function unmark_site_in_background(uid, link) {
+    var tmp = {
+        type: "unmark_site",
+        site: link,
+        uid: uid
+    };
+    chrome.runtime.sendMessage(tmp, function(response) {
+
+    });
+}
+
+
+function unmark_site_in_background_from_stat(uid, link) {
+    unmark_site_in_background(uid, link);
+    location.reload();
 }
 
 function unmark_site_in_server(uid, link) {
@@ -342,38 +368,6 @@ function unmark_site_in_server(uid, link) {
             ref.child(dataSnapshot.key + '/Time Killer Sites/' + dataSnapshot1.key).set(null)
                 .then(function () {
                     console.log("Site: " + link + " unmarked for uid: " + uid);
-                    var tmp = {
-                        type :"unmark_site",
-                        site :link
-                    };
-                    chrome.runtime.sendMessage(tmp, function(response) {
-
-                    });
-                }).catch(function (error) {
-                console.log(error.code);
-                console.log(error.message);
-            })
-        })
-    });
-}
-
-
-function unmark_site_in_server_from_stat(uid, link) {
-    var userRef = ref.orderByChild("UID").equalTo(uid);
-    userRef.once("child_added").then(function (dataSnapshot) {
-        var siteRef = ref.child(dataSnapshot.key + '/Time Killer Sites').orderByChild('site').equalTo(link);
-        siteRef.once("child_added").then(function (dataSnapshot1) {
-            ref.child(dataSnapshot.key + '/Time Killer Sites/' + dataSnapshot1.key).set(null)
-                .then(function () {
-                    console.log("Site: " + link + " unmarked for uid: " + uid);
-                    var tmp = {
-                        type :"unmark_site",
-                        site :link
-                    };
-                    chrome.runtime.sendMessage(tmp, function(response) {
-
-                    });
-                    location.reload();
                 }).catch(function (error) {
                 console.log(error.code);
                 console.log(error.message);

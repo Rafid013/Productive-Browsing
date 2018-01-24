@@ -623,6 +623,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         marked_sites[req.site] = 0;
         chrome.storage.sync.set({"marked_sites" : marked_sites});
         console.log(marked_sites);
+        mark_site_in_server(req.uid, req.site);
     }
     else if(req.type === "unmark_site")
     {
@@ -633,6 +634,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
             delete marked_sites[req.site];
             chrome.storage.sync.set({"marked_sites" : marked_sites});
             console.log(marked_sites);
+            unmark_site_in_server(req.uid, req.site);
         }
     }
 
