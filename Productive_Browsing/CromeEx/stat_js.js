@@ -45,8 +45,7 @@ function load() {
     document.getElementById("site_name").onclick = go_to_site;
 
     chrome.storage.sync.get(["image_url","color"], function (item) {
-        if(item.image_url !== undefined) showBackground(item.image_url);
-        else getBackgroundDownloadURL(uid, showBackground);
+        getBackgroundDownloadURL(uid, showBackground);
         if(item.color === undefined)
         {
             chrome.storage.sync.set({"color" : "white"});

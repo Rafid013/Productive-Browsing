@@ -38,17 +38,18 @@ function loadPage() {
             document.getElementById("home_page").style.display = "block";
             uid = user.uid;
             name = user.displayName;
-
-            document.getElementById("Things_To_DO").innerText = "Hello " + name
-                                + "\n Your Tasks Today";
-
+            chrome.storage.sync.get("name", function (items) {
+                if(items.name !== undefined) document.getElementById("Things_To_DO").innerText = "Hello " + items.name
+                    + "\n Your Tasks Today";
+                else document.getElementById("Things_To_DO").innerText = "Hello " + user.displayName
+                    + "\n Your Tasks Today";
+            });
             get_to_do_from_server(uid, date_today);
             get_fav_link_from_server(uid);
             get_marked_sites(uid);
 
             chrome.storage.sync.get(["image_url","color"], function (item) {
-                if(item.image_url !== undefined) showBackground(item.image_url);
-                else getBackgroundDownloadURL(uid, showBackground);
+                getBackgroundDownloadURL(uid, showBackground);
                 if(item.color === undefined)
                 {
                     chrome.storage.sync.set({"color" : "white"});
@@ -146,7 +147,6 @@ function fileInput() {
     upload_image(uid, image, function (downloadURL) {
         document.getElementById("loading").style.display = "block";
         console.log(downloadURL);
-        chrome.storage.sync.set({"image_url": downloadURL});
         document.getElementById("upload_progress_bar").style.display = "none";
         showBackground(downloadURL);
     });
@@ -477,7 +477,7 @@ function log_out() {
     //storage empty
     firebase.auth().signOut()
         .then(function () {
-            chrome.storage.sync.remove(["uid", "name", "image_url", "marked_sites","color"]);
+            chrome.storage.sync.remove(["uid", "name", "marked_sites", "color"]);
             events_today = [];
             events_ToDo_List = [];
             favourite_links = [];
@@ -535,26 +535,26 @@ function logIn()
         }).catch(function (error) {
             document.getElementById("loading").style.display = "none";
             //console.log("Error when signing in for email: " + email);
-            var input = document.getElementById("login_email");
+            var text;
             if(error.code === "auth/invalid-email")
             {
-                var text = "The email address is improperly formatted";
+                text = "The email address is improperly formatted";
                 document.getElementById("error_message_logIn").innerText =  text;
             }
 
             else if(error.code === "auth/wrong-password")
             {
-                var text = "The password is invalid";
+                text = "The password is invalid";
                 document.getElementById("error_message_logIn").innerText =  text;
             }
             else if(error.code === "auth/user-not-found")
             {
-                var text = "No user record found";
+                text = "No user record found";
                 document.getElementById("error_message_logIn").innerText =  text;
             }
             else if(error.code === "auth/internal-error")
             {
-                var text = "Internal Error. Try again.";
+                text = "Internal Error. Try again.";
                 document.getElementById("error_message_logIn").innerText = text;
             }
             document.getElementById("error_message_logIn").style.display = "block";
@@ -581,65 +581,53 @@ function register()
         document.getElementById("error_message_reg").style.display = "block";
         return false;
     }
-    var register_req = {
-        name : name,
-        email : email,
-        password : password,
-        type : "sign_up"
-    };
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            var receivedData = JSON.parse(senderToServer.responseText);
-            document.getElementById("loading").style.display = "none";
-            if(receivedData.message === "success") {
-                document.getElementById("error_message_reg").style.display = "none";
-                name = receivedData.name;
-                uid = receivedData.uid;
-                //store name and uid
-                var tmp = {
-                    type : "start_timer",
-                    uid:uid
-                };
-                chrome.runtime.sendMessage(tmp);
-                chrome.storage.sync.set({"uid": uid});
-                chrome.storage.sync.set({"name": name});
-                firebase.auth().signInWithEmailAndPassword(register_req.email, register_req.password);
-            }
-            else {
-
-                if(receivedData.message === "auth/invalid-email")
-                {
-                    text = "The email address is improperly formatted";
-                    document.getElementById("error_message_reg").innerText =  text;
-                }
-
-                else if(receivedData.message === "auth/invalid-password")
-                {
-                    text = "The password must be a string with at least 6 characters";
-                    document.getElementById("error_message_reg").innerText =  text;
-                }
-                else if(receivedData.message === "auth/email-already-exists")
-                {
-                    text = "The email address is already in use";
-                    document.getElementById("error_message_reg").innerText =  text;
-                }
-                else if(receivedData.message === "auth/internal-error")
-                {
-                    text = "Internal Error. Try again.";
-                    document.getElementById("error_message_reg").innerText = text;
-                }
-                document.getElementById("error_message_reg").style.display = "block";
-                //show the error
-            }
+    chrome.storage.sync.set({"name": name});
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(function () {
+        document.getElementById("error_message_reg").style.display = "none";
+        var user = firebase.auth().currentUser;
+        uid = user.uid;
+        user.updateProfile({
+            displayName: name,
+            photoURL: null
+        }).then(function () {
+            console.log("User Name Updated");
+            console.log(name);
+        }).catch(function (reason) {
+            console.log(reason.code);
+        });
+        add_UID(uid);
+        //store name and uid
+        var tmp = {
+            type : "start_timer",
+            uid:uid
+        };
+        chrome.runtime.sendMessage(tmp);
+        chrome.storage.sync.set({"uid": uid});
+    }).catch(function (error) {
+        if(error.code === "auth/invalid-email")
+        {
+            text = "The email address is improperly formatted";
+            document.getElementById("error_message_reg").innerText =  text;
         }
-        else {
-            //show there was a problem while connecting to Server, try again later
+
+        else if(error.code === "auth/invalid-password")
+        {
+            text = "The password must be a string with at least 6 characters";
+            document.getElementById("error_message_reg").innerText =  text;
         }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(register_req));
+        else if(error.code === "auth/email-already-exists")
+        {
+            text = "The email address is already in use";
+            document.getElementById("error_message_reg").innerText =  text;
+        }
+        else if(error.code === "auth/internal-error")
+        {
+            text = "Internal Error. Try again.";
+            document.getElementById("error_message_reg").innerText = text;
+        }
+        document.getElementById("error_message_reg").style.display = "block";
+        }
+    );
     document.getElementById("register_Form").reset();
     return false;
 }
@@ -648,7 +636,8 @@ function register()
 function priority_selection_handler() {
 
     var inputs = document.querySelectorAll("#priority input");
-    for(var i=0; i<inputs.length ;i++)
+    var i;
+    for(i = 0; i < inputs.length; i++)
     {
         inputs[i].addEventListener('click',function (event) {
             var div = document.querySelector("#priority > div");
@@ -657,7 +646,7 @@ function priority_selection_handler() {
         },false);
     }
     inputs = document.querySelectorAll("#search_priority input");
-    for(var i=0; i<inputs.length ;i++)
+    for(i = 0; i < inputs.length; i++)
     {
         inputs[i].addEventListener('click',function (event) {
             var div = document.querySelector("#search_priority > div");

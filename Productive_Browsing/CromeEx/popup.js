@@ -133,7 +133,7 @@ function unmark_site() {
 function log_out() {
     firebase.auth().signOut()
         .then(function () {
-            chrome.storage.sync.remove(["uid", "name", "image_url", "marked_sites"]);
+            chrome.storage.sync.remove(["uid", "name", "marked_sites"]);
         })
         .catch(function (error) {
             alert(error.message);

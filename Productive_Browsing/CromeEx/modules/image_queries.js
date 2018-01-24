@@ -69,7 +69,6 @@ function getBackgroundDownloadURL(uid, callback) {
     storageRef.child(uid + "/background.jpeg").getDownloadURL()
         .then(function (url) {
             callback(url);
-            chrome.storage.sync.set({"image_url": url});
         })
         .catch(function (error) {
             console.log(error.message);

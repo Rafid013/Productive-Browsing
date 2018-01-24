@@ -1,3 +1,7 @@
+var database = firebase.database();
+var ref = database.ref('USERS');
+
+
 function delete_from_array(array, elem) {
     var index = array.indexOf(elem);
     if(index > -1)
@@ -20,50 +24,50 @@ function comparator(a, b) {
     return a_min - b_min;
 }
 
+
+function add_UID(uid) {
+    ref.push({
+        UID : uid
+    }).then(function() {
+        console.log("UID: " + uid + " added successfully in database");
+    }).catch(function (error) {
+        console.log(error.code);
+        console.log(error.message);
+    });
+}
+
 function mark_task_in_server(uid, task, date, time) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var mark_task_req = {
-        uid : uid,
-        task : task,
-        date : date,
-        time : time,
-        type : "mark_task"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //alert("Marked");
-                //also mark in storage
-                if(date === date_today)
-                {
-                    var hour = parseInt(time.substring(0,2));
-                    var min = parseInt(time.substring(3,5));
-                    var modifier = time.substring(5,7);
-                    if(hour ===  12) hour =0;
-                    if(modifier === "PM") hour = hour + 12;
-                    var milTime = hour + ":" + min;
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var taskRef = ref.child(dataSnapshot.key + '/To_Do_List/' + date).orderByChild("task").equalTo(task);
+        taskRef.once("child_added").then(function (dataSnapshot1) {
+            ref.child(dataSnapshot.key + '/To_Do_List/' + date + "/" + dataSnapshot1.key)
+                .update({done: !dataSnapshot1.child("done").val()})
+                .then(function () {
+                    console.log("Task: " + task + " marked for uid: " + uid + ", Date: " + date);
+                    if(date === date_today)
+                    {
+                        var hour = parseInt(time.substring(0,2));
+                        var min = parseInt(time.substring(3,5));
+                        var modifier = time.substring(5,7);
+                        if(hour ===  12) hour =0;
+                        if(modifier === "PM") hour = hour + 12;
+                        var milTime = hour + ":" + min;
 
-                    var tmp = {
-                        type : "change_Timer",
-                        task : task,
-                        time: milTime
-                    };
-                    chrome.runtime.sendMessage(tmp);
+                        var tmp = {
+                            type : "change_Timer",
+                            task : task,
+                            time: milTime
+                        };
+                        chrome.runtime.sendMessage(tmp);
 
-                }
-            }
-            else {
-                //alert("Not Marked");
-                //
-            }
-        }
-        else {
-            //Server connection fault
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(mark_task_req));
+                    }
+                }).catch(function (error) {
+                console.log(error.code);
+                console.log(error.message);
+            });
+        });
+    });
 }
 
 
