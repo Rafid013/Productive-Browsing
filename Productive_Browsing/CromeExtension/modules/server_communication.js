@@ -112,6 +112,7 @@ function add_task_to_server(uid, task, date, normal_time, military_time, priorit
         });
     });
 
+
     if(date === date_To_Do_list)
     {
         to_do_complete.push(task_object);
@@ -130,7 +131,7 @@ function add_task_to_server(uid, task, date, normal_time, military_time, priorit
             events_ToDo_List.push(task_temp + " " + normal_time_temp);
             events_ToDo_marked[i]  = to_do_complete[i].done;
             if(date === date_today) {
-                events_today.push(task);
+                events_today.push(task_temp);
                 events_today_marked[i] = to_do_complete[i].done;
             }
         }
