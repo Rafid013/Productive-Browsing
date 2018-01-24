@@ -365,7 +365,7 @@ function activateHandler(activeInfo) {
 
             else if(marked_sites[lasturl] >= threshold)
             {
-                options = {
+                var options = {
                     type : "list",
                     title : "You are using " + url + " too long",
                     message : "You are using " + url + " too long",
@@ -405,9 +405,10 @@ function window_close_handler() {
         for (var k in timers){
             tasks.push({title:"Task To Do:",message:k});
         }
+        var url;
         if(tasks[0] === undefined && marked_sites[lasturl] >= threshold)
         {
-            var url = "";
+            url = "";
             url += lasturl;
             chrome.storage.sync.get(["uid", "name"], function (obj) {
                 if(obj.uid === undefined)
@@ -423,9 +424,9 @@ function window_close_handler() {
 
         else if(marked_sites[lasturl] >= threshold)
         {
-            var url = "";
+            url = "";
             url += lasturl;
-            options = {
+            var options = {
                 type : "list",
                 title : "You are using " + url + " too long",
                 message : "You are using " + url + " too long",
