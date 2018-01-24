@@ -97,127 +97,98 @@ function delete_fav_link_from_server(uid, link) {
 }
 
 function add_task_to_server(uid, task, date, normal_time, military_time, priority) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var add_task_req = {
-        uid : uid,
-        task : task,
-        date : date,
-        normal_time : normal_time,
-        military_time : military_time,
-        priority : priority,
-        type : "add_task"
-    };
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var task_object = {
+            task : task,
+            normal_time : normal_time,
+            military_time : military_time,
+            priority : priority,
+            done : false
+        };
+        var dateRef = ref.child(dataSnapshot.key + '/To_Do_List').child(date);
+        dateRef.push(task_object).then(function () {
+            console.log("Task: " + task + " added for uid: " + uid + ", Date: " + date + ", Time: " + normal_time);
+            if(date === date_To_Do_list)
+            {
+                to_do_complete.push(task_object);
+                to_do_complete.sort(comparator);
 
-    var task_object = {
-        task : task,
-        done : false,
-        priority : priority,
-        normal_time : normal_time,
-        military_time : military_time
-    };
-
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //var index;
-                if(date === date_To_Do_list)
-                {
-                    to_do_complete.push(task_object);
-
-                    to_do_complete.sort(comparator);
-
-                    if(date === date_today) {
-                        events_today = [];
-                        events_today_marked = [];
-                    }
-
-                    events_ToDo_List = [];
-                    events_ToDo_marked = [];
-                    for(var i = 0; i < to_do_complete.length; ++i) {
-                        var task = to_do_complete[i].task;
-                        var normal_time = to_do_complete[i].normal_time;
-                        events_ToDo_List.push(task + " " + normal_time);
-                        events_ToDo_marked[i]  = to_do_complete[i].done;
-                        if(date === date_today) {
-                            events_today.push(task);
-                            events_today_marked[i] = to_do_complete[i].done;
-                        }
-                    }
-                    populateToDoList();
-                    if(date === date_today)
-                    {
-                        Scroll_Events();
-                        var tmp = {
-                            type : "add_Timer",
-                            task : task,
-                            time: military_time
-                        };
-                        chrome.runtime.sendMessage(tmp);
-                    }
-                }
-            }
-            else {
-                //to be implemented
-            }
-        }
-        else {
-            //to be implemented
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(add_task_req));
-}
-
-function delete_task_from_server(uid, task, date, time) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var delete_task_req = {
-        uid : uid,
-        task : task,
-        date : date,
-        time : time,
-        type : "delete_task"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                var index;
-                if(date === date_To_Do_list)
-                {
-                    index = delete_from_array(events_ToDo_List, task + " " + time);
-                    //alert(index);
-                    if(index > -1)
-                    {
-                        //events_ToDo_marked.splice(index,1);
-                    }
-                    populateToDoList();
-                    //search_to_do_from_server(uid,date_To_Do_list);
-                }
                 if(date === date_today) {
-                    index = delete_from_array(events_today, task);
-                    if(index > -1)
-                    {
-                        //events_today_marked.splice(index,1);
+                    events_today = [];
+                    events_today_marked = [];
+                }
+
+                events_ToDo_List = [];
+                events_ToDo_marked = [];
+                for(var i = 0; i < to_do_complete.length; ++i) {
+                    var task = to_do_complete[i].task;
+                    var normal_time = to_do_complete[i].normal_time;
+                    events_ToDo_List.push(task + " " + normal_time);
+                    events_ToDo_marked[i]  = to_do_complete[i].done;
+                    if(date === date_today) {
+                        events_today.push(task);
+                        events_today_marked[i] = to_do_complete[i].done;
                     }
+                }
+                populateToDoList();
+                if(date === date_today)
+                {
                     Scroll_Events();
                     var tmp = {
-                        type : "delete_Timer",
-                        task : task
+                        type : "add_Timer",
+                        task : task,
+                        time: military_time
                     };
                     chrome.runtime.sendMessage(tmp);
                 }
             }
-            else {
-                //to be implemented
-            }
-        }
-        else {
-            //to be implemented
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(delete_task_req));
+        }).catch(function (error) {
+            console.log(error.code);
+            console.log(error.message);
+        });
+    });
+}
+
+function delete_task_from_server(uid, task, date, time) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var taskRef = ref.child(dataSnapshot.key + '/To_Do_List/' + date).orderByChild("task").equalTo(task);
+        taskRef.once("child_added").then(function (dataSnapshot1) {
+            ref.child(dataSnapshot.key + '/To_Do_List/' + date + "/" + dataSnapshot1.key).set(null)
+                .then(function () {
+                    console.log("Task: " + task + " deleted for uid: " + uid + ", Date: " + date);
+                    var index;
+                    if(date === date_To_Do_list)
+                    {
+                        index = delete_from_array(events_ToDo_List, task + " " + time);
+                        //alert(index);
+                        if(index > -1)
+                        {
+                            //events_ToDo_marked.splice(index,1);
+                        }
+                        populateToDoList();
+                        //search_to_do_from_server(uid,date_To_Do_list);
+                    }
+                    if(date === date_today) {
+                        index = delete_from_array(events_today, task);
+                        if(index > -1)
+                        {
+                            //events_today_marked.splice(index,1);
+                        }
+                        Scroll_Events();
+                        var tmp = {
+                            type : "delete_Timer",
+                            task : task
+                        };
+                        chrome.runtime.sendMessage(tmp);
+                    }
+                }).catch(function (error) {
+                console.log(error.code);
+                console.log(error.message);
+            })
+        })
+    })
 }
 
 function get_fav_link_from_server(uid) {
@@ -246,20 +217,18 @@ function get_fav_link_from_server(uid) {
 }
 
 function get_to_do_from_server(uid, date) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var getToDoReq = {
-        uid : uid,
-        date : date,
-        type : "get_to_do"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            var event_list_server = JSON.parse(senderToServer.responseText);
-            event_list_server.sort(comparator);
-            to_do_complete = event_list_server;
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var taskRef = ref.child(dataSnapshot.key).child('To_Do_List').child(date);
+        taskRef.once("value").then(function (dataSnapshot1) {
+            var tasks = [];
+            dataSnapshot1.forEach(function(indexSnapshot) {
+                tasks.push(indexSnapshot.val());
+            });
+            tasks.sort(comparator);
+            to_do_complete = tasks;
             console.log(to_do_complete);
-            var list_size = event_list_server.length;
+            var list_size = tasks.length;
             if(date === date_today) {
                 events_today = [];
                 events_today_marked = [];
@@ -267,15 +236,15 @@ function get_to_do_from_server(uid, date) {
             events_ToDo_List = [];
             events_ToDo_marked = [];
             for(var i = 0; i < list_size; ++i) {
-                var task = event_list_server[i].task;
-                var normal_time = event_list_server[i].normal_time;
+                var task = tasks[i].task;
+                var normal_time = tasks[i].normal_time;
                 events_ToDo_List.push(task + " " + normal_time);
-                events_ToDo_marked[i]  = event_list_server[i].done;
+                events_ToDo_marked[i]  = tasks[i].done;
                 //var military_time = event_list_server[i].military_time;
                 //var priority = event_list_server[i].priority;
                 if(date === date_today) {
                     events_today.push(task);
-                    events_today_marked[i] = event_list_server[i].done;
+                    events_today_marked[i] = tasks[i].done;
                 }
             }
             populateToDoList();
@@ -284,32 +253,24 @@ function get_to_do_from_server(uid, date) {
                 Scroll_Events();
             }
             date_To_Do_list = date;
-        }
-        else {
-            //to be implemented
-            //storage
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(getToDoReq));
+        })
+    });
 }
 
 function search_to_do_from_server(uid, date, minTime, maxTime) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var getToDoReq = {
-        uid : uid,
-        date : date,
-        type : "get_to_do"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            var event_list_server = JSON.parse(senderToServer.responseText);
-            var list_size = event_list_server.length;
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var taskRef = ref.child(dataSnapshot.key).child('To_Do_List').child(date);
+        taskRef.once("value").then(function (dataSnapshot1) {
+            var tasks = [];
+            dataSnapshot1.forEach(function(indexSnapshot) {
+                tasks.push(indexSnapshot.val());
+            });
+            var list_size = tasks.length;
 
-            event_list_server.sort(comparator);
+            tasks.sort(comparator);
 
-            to_do_complete = event_list_server;
+            to_do_complete = tasks;
 
             events_ToDo_List = [];
             events_ToDo_marked = [];
@@ -317,30 +278,23 @@ function search_to_do_from_server(uid, date, minTime, maxTime) {
             var max = get_Minutes(maxTime);
             var j = 0;
             for(var i = 0; i < list_size; ++i) {
-                var task_time = get_Minutes(event_list_server[i].military_time);
+                var task_time = get_Minutes(tasks[i].military_time);
                 if(task_time>=min && task_time <=max) {
-                    var task = event_list_server[i].task;
-                    var normal_time = event_list_server[i].normal_time;
+                    var task = tasks[i].task;
+                    var normal_time = tasks[i].normal_time;
                     events_ToDo_List.push(task + " " + normal_time);
-                    events_ToDo_marked[j] = event_list_server[i].done;
+                    events_ToDo_marked[j] = tasks[i].done;
                     j++;
                 }
                 //var military_time = event_list_server[i].military_time;
                 //var priority = event_list_server[i].priority;
-
             }
             console.log(events_ToDo_List);
             populateToDoList();
 
             date_To_Do_list = date;
-        }
-        else {
-            //to be implemented
-            //storage
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(getToDoReq));
+        })
+    });
 }
 
 
