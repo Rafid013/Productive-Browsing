@@ -230,7 +230,6 @@ function start_tab(tabId, changeInfo, tab) {
             for (k in timers){
                 tasks.push({title:"Task To Do:", message:k});
             }
-
             if(tasks[0] === undefined && marked_sites[lasturl] >= threshold)
             {
                 var url = "";
@@ -416,7 +415,7 @@ function window_close_handler() {
 
                 }
                 else{
-                    get_fav_link_from_server_background(obj.uid),url;
+                    get_fav_link_from_server_background(obj.uid,url);
                 }
             });
             update_per_day_stat();
@@ -539,7 +538,6 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         if(task_time > currentTime)
         {
             timers[req.task] = setTimeout(showTaskNotification, (task_time - currentTime)*60*1000, req.task);
-            //alert("set");
         }
         else
         {
@@ -597,6 +595,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
             }
         });
     }
+
     else if(req.type === "delete_all_timers")
     {
         for (var k in timers){
