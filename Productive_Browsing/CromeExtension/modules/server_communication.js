@@ -73,27 +73,22 @@ function mark_task_in_server(uid, task, date, time) {
 
 
 function delete_fav_link_from_server(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var delete_fav_link_req = {
-        uid : uid,
-        link : link,
-        type : "delete_fav_link"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                var del_index = favourite_links.indexOf(link);
-                if(del_index > -1) favourite_links.splice(del_index, 1);
-                populateFavouriteLinks();
-            }
-        }
-        else {
-
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(delete_fav_link_req));
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var siteRef = ref.child(dataSnapshot.key + '/Favourite Sites').orderByChild('site').equalTo(link);
+        siteRef.once("child_added").then(function (dataSnapshot1) {
+            ref.child(dataSnapshot.key + '/Favourite Sites/' + dataSnapshot1.key).set(null)
+                .then(function () {
+                    console.log("Favourite Site: " + link + " deleted for uid: " + uid);
+                    var del_index = favourite_links.indexOf(link);
+                    if(del_index > -1) favourite_links.splice(del_index, 1);
+                    populateFavouriteLinks();
+                }).catch(function (error) {
+                console.log(error.code);
+                console.log(error.message);
+            });
+        })
+    });
 }
 
 function add_task_to_server(uid, task, date, normal_time, military_time, priority) {
@@ -108,7 +103,8 @@ function add_task_to_server(uid, task, date, normal_time, military_time, priorit
         };
         var dateRef = ref.child(dataSnapshot.key + '/To_Do_List').child(date);
         dateRef.push(task_object).then(function () {
-            console.log("Task: " + task + " added for uid: " + uid + ", Date: " + date + ", Time: " + normal_time);
+            console.log("Task: " + task_object.task +
+                " added for uid: " + uid + ", Date: " + date + ", Time: " + task_object.normal_time);
             if(date === date_To_Do_list)
             {
                 to_do_complete.push(task_object);
@@ -192,28 +188,21 @@ function delete_task_from_server(uid, task, date, time) {
 }
 
 function get_fav_link_from_server(uid) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var get_fav_link_req = {
-        uid : uid,
-        type : "get_fav_links"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            var link_list = JSON.parse(senderToServer.responseText);
-            var list_size = link_list.length;
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var taskRef = ref.child(dataSnapshot.key + '/Favourite Sites').orderByChild("site");
+        taskRef.once("value").then(function (dataSnapshot1) {
+            var sites = [];
+            dataSnapshot1.forEach(function(indexSnapshot) {
+                sites.push(indexSnapshot.val());
+            });
+            var list_size = sites.length;
             for(var i = 0; i < list_size; ++i) {
-                favourite_links.push(link_list[i].site);
+                favourite_links.push(sites[i].site);
             }
             populateFavouriteLinks();
-            //store in storage
-        }
-        else {
-            //Server connection failed
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(get_fav_link_req));
+        })
+    });
 }
 
 function get_to_do_from_server(uid, date) {
@@ -299,25 +288,19 @@ function search_to_do_from_server(uid, date, minTime, maxTime) {
 
 
 function add_fav_link_in_server(uid, link) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var add_fav_link_req = {
-        uid : uid,
-        link : link,
-        type : "add_fav_link"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            if(senderToServer.responseText === "success") {
-                //store in storage now
-            }
-            else {
-                //to be implemented
-            }
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(add_fav_link_req));
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var tmp = {
+            site : link
+        };
+        ref.child(dataSnapshot.key + '/Favourite Sites').push(tmp)
+            .then(function () {
+                console.log("Site: " + link + " favoured for uid: " + uid);
+            }).catch(function (error) {
+            console.log(error.code);
+            console.log(error.message);
+        });
+    });
 }
 
 
@@ -483,23 +466,22 @@ function get_marked_sites(uid) {
 }
 
 
-function get_fav_link_from_server_background(uid,url) {
-    var senderToServer = new XMLHttpRequest();
-    senderToServer.open("POST", 'http://localhost:3000/', true);
-    var get_fav_link_req = {
-        uid : uid,
-        type : "get_fav_links"
-    };
-    senderToServer.onreadystatechange = function () {
-        if(senderToServer.readyState === 4 && senderToServer.status === 200) {
-            var link_list = JSON.parse(senderToServer.responseText);
-            var list_size = link_list.length;
+function get_fav_link_from_server_background(uid, url) {
+    var userRef = ref.orderByChild("UID").equalTo(uid);
+    userRef.once("child_added").then(function (dataSnapshot) {
+        var taskRef = ref.child(dataSnapshot.key + '/Favourite Sites').orderByChild("site");
+        taskRef.once("value").then(function (dataSnapshot1) {
+            var sites = [];
+            dataSnapshot1.forEach(function(indexSnapshot) {
+                sites.push(indexSnapshot.val());
+            });
+            var list_size = sites.length;
             var links = [];
 
             var randomNumber, options;
 
             for(var i = 0; i < list_size; ++i) {
-                links.push({title:"Check this link",message:link_list[i].site});
+                links.push({title: "Check this link", message: sites[i].site});
             }
 
             randomNumber = Math.floor(Math.random() * list_size);
@@ -508,7 +490,7 @@ function get_fav_link_from_server_background(uid,url) {
             {
                 //alert("inside");
                 links.push({title:"No task in To-Do List",message:""},
-                            {title:"No Favourite List Found",message:""});
+                    {title:"No Favourite List Found",message:""});
                 options = {
                     type : "list",
                     title : "You are using " + url + " too long",
@@ -521,7 +503,7 @@ function get_fav_link_from_server_background(uid,url) {
             else
             {
                 randomNumber = Math.floor(Math.random() * list_size);
-                suggest_link = link_list[randomNumber].site;
+                suggest_link = sites[randomNumber].site;
                 options = {
                     type : "basic",
                     title : "You are using " + url + " too long",
@@ -533,12 +515,7 @@ function get_fav_link_from_server_background(uid,url) {
                 };
                 chrome.notifications.create(options);
             }
-            //alert("inside");
-        }
-        else {
-            //Server connection failed
-        }
-    };
-    senderToServer.setRequestHeader("Content-Type", "application/json");
-    senderToServer.send(JSON.stringify(get_fav_link_req));
+        })
+    });
+
 }

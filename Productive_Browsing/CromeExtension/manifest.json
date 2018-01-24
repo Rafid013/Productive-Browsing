@@ -21,7 +21,7 @@
   },
 
   "background": {
-    "scripts": ["modules/server_communication.js", "background.js"],
+    "scripts": ["modules/firebase.js", "modules/app_initializer.js", "modules/server_communication.js", "background.js"],
     "persistent": true
   },
 
