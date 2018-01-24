@@ -365,7 +365,7 @@ function activateHandler(activeInfo) {
 
             else if(marked_sites[lasturl] >= threshold)
             {
-                options = {
+                var options = {
                     type : "list",
                     title : "You are using " + url + " too long",
                     message : "You are using " + url + " too long",
@@ -405,9 +405,10 @@ function window_close_handler() {
         for (var k in timers){
             tasks.push({title:"Task To Do:",message:k});
         }
+        var url;
         if(tasks[0] === undefined && marked_sites[lasturl] >= threshold)
         {
-            var url = "";
+            url = "";
             url += lasturl;
             chrome.storage.sync.get(["uid", "name"], function (obj) {
                 if(obj.uid === undefined)
@@ -423,9 +424,9 @@ function window_close_handler() {
 
         else if(marked_sites[lasturl] >= threshold)
         {
-            var url = "";
+            url = "";
             url += lasturl;
-            options = {
+            var options = {
                 type : "list",
                 title : "You are using " + url + " too long",
                 message : "You are using " + url + " too long",
@@ -622,6 +623,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
         marked_sites[req.site] = 0;
         chrome.storage.sync.set({"marked_sites" : marked_sites});
         console.log(marked_sites);
+        mark_site_in_server(req.uid, req.site);
     }
     else if(req.type === "unmark_site")
     {
@@ -632,6 +634,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
             delete marked_sites[req.site];
             chrome.storage.sync.set({"marked_sites" : marked_sites});
             console.log(marked_sites);
+            unmark_site_in_server(req.uid, req.site);
         }
     }
 

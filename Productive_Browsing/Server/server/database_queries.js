@@ -30,6 +30,7 @@ function add_UID(uid, callback) {
     });
 }*/
 
+
 function mark_site(uid, site, callback) {
     var userRef = ref.orderByChild("UID").equalTo(uid);
     userRef.once("child_added").then(function (dataSnapshot) {

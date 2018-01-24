@@ -45,8 +45,7 @@ function load() {
     document.getElementById("site_name").onclick = go_to_site;
 
     chrome.storage.sync.get(["image_url","color"], function (item) {
-        if(item.image_url !== undefined) showBackground(item.image_url);
-        else getBackgroundDownloadURL(uid, showBackground);
+        getBackgroundDownloadURL(uid, showBackground);
         if(item.color === undefined)
         {
             chrome.storage.sync.set({"color" : "white"});
@@ -97,7 +96,7 @@ function populateMarkedSites() {
     {
         close[i].onclick = function() {
             var div = this.parentElement;
-            unmark_site_in_server_from_stat(uid,div.textContent.substring(0, div.textContent.length - 1));
+            unmark_site_in_background_from_stat(uid,div.textContent.substring(0, div.textContent.length - 1));
         }
     }
     //var list = document.querySelector('ul');

@@ -96,7 +96,7 @@ function mark_site() {
         };*/
         var a = document.createElement('a');
         a.href = activeTab.url;
-        mark_site_in_server(uid, a.hostname);
+        mark_site_in_background(uid, a.hostname);
         //chrome.runtime.sendMessage(tmp);
 
     });
@@ -121,7 +121,7 @@ function unmark_site() {
         chrome.runtime.sendMessage(tmp);*/
         var a = document.createElement('a');
         a.href = activeTab.url;
-        unmark_site_in_server(uid, a.hostname);
+        unmark_site_in_background(uid, a.hostname);
 
     });
     toolbar.style.display = "block";
@@ -133,7 +133,7 @@ function unmark_site() {
 function log_out() {
     firebase.auth().signOut()
         .then(function () {
-            chrome.storage.sync.remove(["uid", "name", "image_url", "marked_sites"]);
+            chrome.storage.sync.remove(["uid", "name", "marked_sites"]);
         })
         .catch(function (error) {
             alert(error.message);
