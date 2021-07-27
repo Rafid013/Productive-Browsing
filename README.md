@@ -1,4 +1,5 @@
 # Productive Browsing
+## Project for the course CSE324: Software Development
 Chrome Browser extension using JavaScript.
 * Features:
   1. Maintains to-do list and notify users accordingly (guide procrastinators to finish their work on time)
